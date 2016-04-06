@@ -1,50 +1,44 @@
 import {timer as newTimer} from "d3-timer";
 import {dispatch as newDispatch} from "d3-dispatch";
-import {map as newMap} from "d3-collection";
 
 export default function(nodes) {
-  var alphaMax = 0.1,
-      alphaMin = 0.001,
-      alphaDecay = 0.99,
-      alpha = alphaMax,
+  var frame = 0,
+      frameMax = 300,
+      alphaDecay = -0.03,
+      velocityDecay = 0.9,
       timer = newTimer(tick),
-      force = newMap(),
-      dispatch = newDispatch("start", "tick", "end");
+      dispatch = newDispatch("start", "beforetick", "tick", "end");
 
-  function set(x) {
-    if (!((x = +x) > 0)) {
-      if (alpha > 0) {
-        alpha = 0;
-        dispatch.call("end", this);
-        timer.stop();
-      }
+  function start() {
+    if (frame < Infinity) {
+      frame = 0;
+      dispatch.call("start", this);
+      timer.restart(tick);
     } else {
-      if (!(alpha > 0)) {
-        alpha = x;
-        dispatch.call("start", this);
-        timer.restart(tick);
-      } else {
-        alpha = x;
-      }
+      frame = 0;
+    }
+  }
+
+  function stop() {
+    if (frame < Infinity) {
+      frame = Infinity;
+      dispatch.call("end", this);
+      timer.stop();
     }
   }
 
   function tick() {
-    if ((alpha *= alphaDecay) <= alphaMin) return set(0);
+    if (++frame > frameMax) return stop();
 
-    force.each(apply);
+    dispatch.call("beforetick", this, Math.exp(frame * alphaDecay));
 
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i];
-      node.x -= node.px - (node.px = node.x);
-      node.y -= node.py - (node.py = node.y);
+      node.x += node.vx *= velocityDecay;
+      node.y += node.vy *= velocityDecay;
     }
 
     dispatch.call("tick", this);
-  }
-
-  function apply(force) {
-    force(nodes, alpha);
   }
 
   return {
@@ -52,22 +46,19 @@ export default function(nodes) {
       return arguments.length ? (nodes = _, this) : nodes;
     },
     start: function() {
-      return set(alphaMax), this;
+      return start(), this;
     },
     stop: function() {
-      return set(0), this;
+      return stop(), this;
     },
-    alpha: function(_) {
-      return arguments.length ? (set(+_), this) : alpha;
-    },
-    alphaRange: function(_) {
-      return arguments.length ? (alphaMax = +_[0], alphaMin = +_[1], this) : [alphaMax, alphaMin];
+    frameMax: function(_) {
+      return arguments.length ? (frameMax = _, this) : frameMax;
     },
     alphaDecay: function(_) {
       return arguments.length ? (alphaDecay = +_, this) : alphaDecay;
     },
-    force: function(name, _) {
-      return arguments.length > 1 ? (force.set(name, _), this) : force.get(name);
+    friction: function(_) {
+      return arguments.length ? (velocityDecay = 1 - _, this) : 1 - velocityDecay;
     },
     on: function(name, _) {
       return arguments.length > 1 ? (dispatch.on(name, _), this) : dispatch.on(name);
