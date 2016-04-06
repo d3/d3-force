@@ -24,5 +24,5 @@ function custom(nodes, x, y, k) {
 }
 
 export default function(nodes) {
-  return custom(nodes, 0, 0, 0.2);
+  return custom(nodes, 0, 0, 0.1);
 }

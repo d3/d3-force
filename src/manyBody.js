@@ -94,5 +94,5 @@ function custom(nodes, strength, distance2, theta2) {
 }
 
 export default function(nodes) {
-  return custom(nodes, -30, Infinity, 0.64);
+  return custom(nodes, -100, Infinity, 0.64);
 }
