@@ -38,8 +38,12 @@ function accumulate(quad, k) {
   quad.charge = charge;
 }
 
-function custom(nodes, strength, distance2, theta2) {
-  var target;
+export default function() {
+  var nodes,
+      strength = -100, // TODO compute per-node charge on initialization
+      distance2 = Infinity,
+      theta2 = 0.64,
+      target;
 
   function force(alpha) {
     var root = nodeQuadtree(nodes);
@@ -75,24 +79,20 @@ function custom(nodes, strength, distance2, theta2) {
   }
 
   force.nodes = function(_) {
-    return custom(_, strength, distance2, theta2);
+    return arguments.length ? (nodes = _, force) : nodes;
   };
 
   force.strength = function(_) {
-    return custom(nodes, +_, distance2, theta2);
+    return arguments.length ? (strength = +_, force) : strength;
   };
 
   force.distance = function(_) {
-    return custom(nodes, strength, _ * _, theta2);
+    return arguments.length ? (distance2 = _ * _, force) : Math.sqrt(distance2);
   };
 
   force.theta = function(_) {
-    return custom(nodes, strength, distance2, _ * _);
+    return arguments.length ? (theta2 = _ * _, force) : Math.sqrt(theta2);
   };
 
   return force;
-}
-
-export default function(nodes) {
-  return custom(nodes, -100, Infinity, 0.64);
 }

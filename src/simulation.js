@@ -1,36 +1,42 @@
-import {timer as newTimer} from "d3-timer";
 import {dispatch as newDispatch} from "d3-dispatch";
+import {map as newMap} from "d3-collection";
+import {timer as newTimer} from "d3-timer";
 
 export default function(nodes) {
-  var iteration = 0,
+  var simulation,
+      iteration = 0,
+      alpha,
       alphaMin = 0.0001,
       alphaDecay = -0.02,
       velocityDecay = 0.5,
+      force = newMap(),
       timer = newTimer(tick),
-      dispatch = newDispatch("start", "beforetick", "tick", "end");
+      dispatch = newDispatch("start", "tick", "end");
 
   function start() {
     if (iteration < Infinity) {
       iteration = 0;
-      dispatch.call("start", this);
+      dispatch.call("start", simulation);
       timer.restart(tick);
     } else {
       iteration = 0;
     }
+    return simulation;
   }
 
   function stop() {
     if (iteration < Infinity) {
       iteration = Infinity;
-      dispatch.call("end", this);
+      dispatch.call("end", simulation);
       timer.stop();
     }
+    return simulation;
   }
 
   function tick() {
-    var alpha = Math.exp(++iteration * alphaDecay);
+    alpha = Math.exp(++iteration * alphaDecay);
     if (!(alpha > alphaMin)) return stop();
-    dispatch.call("beforetick", this, alpha);
+    force.each(apply);
 
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i];
@@ -38,30 +44,38 @@ export default function(nodes) {
       node.y += node.vy *= velocityDecay;
     }
 
-    dispatch.call("tick", this);
+    dispatch.call("tick", simulation);
   }
 
-  return {
+  function initialize(force) {
+    force.nodes(nodes);
+  }
+
+  function apply(force) {
+    force(alpha);
+  }
+
+  return simulation = {
+    start: start,
+    stop: stop,
+    tick: tick,
     nodes: function(_) {
-      return arguments.length ? (nodes = _, this) : nodes;
-    },
-    start: function() {
-      return start(), this;
-    },
-    stop: function() {
-      return stop(), this;
+      return arguments.length ? (nodes = _, force.each(initialize), simulation) : nodes;
     },
     alphaMin: function(_) {
-      return arguments.length ? (alphaMin = _, this) : alphaMin;
+      return arguments.length ? (alphaMin = _, simulation) : alphaMin;
     },
     alphaDecay: function(_) {
-      return arguments.length ? (alphaDecay = -_, this) : -alphaDecay;
+      return arguments.length ? (alphaDecay = -_, simulation) : -alphaDecay;
     },
     friction: function(_) {
-      return arguments.length ? (velocityDecay = 1 - _, this) : 1 - velocityDecay;
+      return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
+    },
+    force: function(name, _) {
+      return arguments.length > 1 ? (initialize(_), force.set(name, _), simulation) : force.get(name);
     },
     on: function(name, _) {
-      return arguments.length > 1 ? (dispatch.on(name, _), this) : dispatch.on(name);
+      return arguments.length > 1 ? (dispatch.on(name, _), simulation) : dispatch.on(name);
     }
   };
 }

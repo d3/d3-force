@@ -1,28 +1,36 @@
-function custom(nodes, x, y, k) {
+export default function(x, y) {
+  var strength = 0.1,
+      nodes;
 
   function force(alpha) {
-    for (var i = 0, n = nodes.length, node, ka = k * alpha; i < n; ++i) {
+    for (var i = 0, n = nodes.length, node, k = strength * alpha; i < n; ++i) {
       node = nodes[i];
-      node.vx += (x - node.x) * ka;
-      node.vy += (y - node.y) * ka;
+      node.vx += (x - node.x) * k;
+      node.vy += (y - node.y) * k;
+    }
+  }
+
+  function initialize() {
+    for (var i = 0, n = nodes.length, node; i < n; ++i) {
+      node = nodes[i];
+      if (isNaN(node.x)) node.x = x + 100 * (Math.random() - 0.5);
+      if (isNaN(node.y)) node.y = y + 100 * (Math.random() - 0.5);
+      if (isNaN(node.vx)) node.vx = 0;
+      if (isNaN(node.vy)) node.vy = 0;
     }
   }
 
   force.nodes = function(_) {
-    return custom(_, x, y, k);
-  };
-
-  force.position = function(_) {
-    return custom(nodes, +_[0], +_[1], k);
+    return arguments.length ? (nodes = _, initialize(), force) : nodes;
   };
 
   force.strength = function(_) {
-    return custom(nodes, x, y, +_);
+    return arguments.length ? (strength = +_, force) : strength;
+  };
+
+  force.position = function(_) {
+    return arguments.length ? (x = +_[0], y = +_[1], force) : [x, y];
   };
 
   return force;
-}
-
-export default function(nodes) {
-  return custom(nodes, 0, 0, 0.1);
 }
