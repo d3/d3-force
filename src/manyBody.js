@@ -7,8 +7,6 @@ var nodeQuadtree = quadtree()
 function accumulate(quad, k) {
   var cx = 0, cy = 0, charge = 0;
 
-  // quad.charge = 0;
-
   if (!quad.leaf) {
     for (var i = 0, child; i < 4; ++i) {
       child = quad.nodes[i];
@@ -21,13 +19,6 @@ function accumulate(quad, k) {
   }
 
   if (quad.data) {
-
-    // TODO Jitter internal nodes that are coincident?
-    // if (!quad.leaf) {
-    //   quad.data.x += Math.random() - 0.5;
-    //   quad.data.y += Math.random() - 0.5;
-    // }
-
     charge += quad.selfCharge = k;
     cx += k * quad.data.x;
     cy += k * quad.data.y;
