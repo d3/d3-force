@@ -5,7 +5,7 @@ import {timer as newTimer} from "d3-timer";
 export default function(nodes) {
   var simulation,
       iteration = 0,
-      alpha,
+      alpha = 1,
       alphaMin = 0.0001,
       alphaDecay = -0.02,
       velocityDecay = 0.5,
@@ -15,18 +15,18 @@ export default function(nodes) {
 
   function start() {
     if (iteration < Infinity) {
-      iteration = 0;
+      iteration = 0, alpha = 1;
+    } else {
+      iteration = 0, alpha = 1;
       dispatch.call("start", simulation);
       timer.restart(tick);
-    } else {
-      iteration = 0;
     }
     return simulation;
   }
 
   function stop() {
     if (iteration < Infinity) {
-      iteration = Infinity;
+      iteration = Infinity, alpha = 0;
       dispatch.call("end", simulation);
       timer.stop();
     }
@@ -66,7 +66,7 @@ export default function(nodes) {
       return arguments.length ? (alphaMin = _, simulation) : alphaMin;
     },
     alphaDecay: function(_) {
-      return arguments.length ? (alphaDecay = -_, simulation) : -alphaDecay;
+      return arguments.length ? (alphaDecay = -_, iteration = Math.round(Math.log(alpha) / alphaDecay), simulation) : -alphaDecay;
     },
     friction: function(_) {
       return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
