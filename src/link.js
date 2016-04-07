@@ -22,18 +22,18 @@ export default function(links) {
   }
 
   function initialize() {
-    var i, n, count;
+    var i, n, link, count;
 
     for (i = 0, n = nodes.length, count = new Array(n); i < n; ++i) {
       count[nodes[i].index = i] = 0;
     }
 
     for (i = 0, n = links.length; i < n; ++i) {
-      ++count[links[i].source.index], ++count[links[i].target.index];
+      link = links[i], ++count[link.source.index], ++count[link.target.index];
     }
 
     for (i = 0, bias = new Array(n); i < n; ++i) {
-      bias[i] = count[links[i].source.index] / (count[links[i].source.index] + count[links[i].target.index]);
+      link = links[i], bias[i] = count[link.source.index] / (count[link.source.index] + count[link.target.index]);
     }
   }
 
