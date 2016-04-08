@@ -47,6 +47,12 @@ export default function(nodes) {
     dispatch.call("tick", simulation);
   }
 
+  function index() {
+    for (var i = 0, n = nodes.length; i < n; ++i) {
+      nodes[i].index = i;
+    }
+  }
+
   function initialize(force) {
     force.nodes(nodes);
   }
@@ -55,12 +61,14 @@ export default function(nodes) {
     force(alpha);
   }
 
+  index();
+
   return simulation = {
     start: start,
     stop: stop,
     tick: tick,
     nodes: function(_) {
-      return arguments.length ? (nodes = _, force.each(initialize), simulation) : nodes;
+      return arguments.length ? (nodes = _, index(), force.each(initialize), simulation) : nodes;
     },
     alphaMin: function(_) {
       return arguments.length ? (alphaMin = _, simulation) : alphaMin;

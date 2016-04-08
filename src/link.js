@@ -22,19 +22,10 @@ export default function(links) {
   }
 
   function initialize() {
-    var i, n, link, count;
-
-    for (i = 0, n = nodes.length, count = new Array(n); i < n; ++i) {
-      count[nodes[i].index = i] = 0;
-    }
-
-    for (i = 0, n = links.length; i < n; ++i) {
-      link = links[i], ++count[link.source.index], ++count[link.target.index];
-    }
-
-    for (i = 0, bias = new Array(n); i < n; ++i) {
-      link = links[i], bias[i] = count[link.source.index] / (count[link.source.index] + count[link.target.index]);
-    }
+    var i, n = nodes.length, m = links.length, k = new Array(n), l;
+    for (i = 0; i < n; ++i) k[i] = 0;
+    for (i = 0, bias = new Array(m); i < m; ++i) l = links[i], ++k[l.source.index], ++k[l.target.index];
+    for (i = 0; i < m; ++i) l = links[i], bias[i] = k[l.source.index] / (k[l.source.index] + k[l.target.index]);
   }
 
   force.nodes = function(_) {
