@@ -22,6 +22,7 @@ export default function(links) {
   }
 
   function initialize() {
+    if (!nodes || !links) return;
     var i, n = nodes.length, m = links.length, k = new Array(n), l;
     for (i = 0; i < n; ++i) k[i] = 0;
     for (i = 0, bias = new Array(m); i < m; ++i) l = links[i], ++k[l.source.index], ++k[l.target.index];

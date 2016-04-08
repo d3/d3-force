@@ -5,19 +5,20 @@ var nodeQuadtree = quadtree()
     .x(function(d) { return d.x; })
     .y(function(d) { return d.y; });
 
-function accumulate(quad, k) {
-  var cx = 0, cy = 0, charge = 0;
+function accumulate(quad, charges) {
 
   if (quad.point) { // TODO handle coincident nodes
-    charge += quad.selfCharge = k;
-    cx += k * quad.point[0];
-    cy += k * quad.point[1];
+    quad.cx = quad.point[0];
+    quad.cy = quad.point[1];
+    quad.charge = charges[quad.point.index];
+    return;
   }
 
-  else for (var i = 0, child; i < 4; ++i) {
-    child = quad[i];
-    if (child == null) continue;
-    accumulate(child, k);
+  var cx = 0, cy = 0, charge = 0, child, i;
+
+  for (i = 0; i < 4; ++i) {
+    if (!(child = quad[i])) continue;
+    accumulate(child, charges);
     charge += child.charge;
     cx += child.charge * child.cx;
     cy += child.charge * child.cy;
@@ -30,18 +31,28 @@ function accumulate(quad, k) {
 
 export default function() {
   var nodes,
-      strength = constant(-100),
+      charge = constant(-100),
+      charges,
       distance2 = Infinity,
       theta2 = 0.64,
-      target;
+      target,
+      targetAlpha;
 
   function force(alpha) {
     var root = nodeQuadtree(nodes);
-    accumulate(root, alpha * strength()); // TODO
+    targetAlpha = alpha;
+    accumulate(root._root, charges);
     for (var i = 0, n = nodes.length; i < n; ++i) {
       target = nodes[i];
       root.each(apply);
     }
+  }
+
+  function initialize() {
+    if (!nodes) return;
+    var i, n = nodes.length;
+    charges = new Array(n);
+    for (i = 0; i < n; ++i) charges[i] = +charge(nodes[i], i, nodes);
   }
 
   function apply(quad, x1, _, x2) {
@@ -50,11 +61,11 @@ export default function() {
           dy = quad.cy - target.y,
           dw = x2 - x1,
           dn = dx * dx + dy * dy,
-          k;
+          k = targetAlpha / dn;
 
       if (dw * dw / theta2 < dn) { // Barnes-Hut criterion
         if (dn < distance2) {
-          k = quad.charge / dn;
+          k *= quad.charge;
           target.vx += dx * k;
           target.vy += dy * k;
         }
@@ -62,7 +73,7 @@ export default function() {
       }
 
       if (quad.point && dn && dn < distance2) { // TODO handle coincident nodes
-        k = quad.selfCharge / dn;
+        k *= charges[quad.point.index];
         target.vx += dx * k;
         target.vy += dy * k;
       }
@@ -72,11 +83,11 @@ export default function() {
   }
 
   force.nodes = function(_) {
-    return arguments.length ? (nodes = _, force) : nodes;
+    return arguments.length ? (nodes = _, initialize(), force) : nodes;
   };
 
-  force.strength = function(_) {
-    return arguments.length ? (strength = typeof _ === "function" ? _ : constant(+_), force) : strength;
+  force.charge = function(_) {
+    return arguments.length ? (charge = typeof _ === "function" ? _ : constant(+_), initialize(), force) : charge;
   };
 
   force.distance = function(_) {
