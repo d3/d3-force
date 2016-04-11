@@ -5,30 +5,6 @@ var nodeQuadtree = quadtree()
     .x(function(d) { return d.x; })
     .y(function(d) { return d.y; });
 
-function accumulate(quad, charges) {
-
-  if (quad.point) { // TODO handle coincident nodes
-    quad.cx = quad.point[0];
-    quad.cy = quad.point[1];
-    quad.charge = charges[quad.point.index];
-    return;
-  }
-
-  var cx = 0, cy = 0, charge = 0, child, i;
-
-  for (i = 0; i < 4; ++i) {
-    if (!(child = quad[i])) continue;
-    accumulate(child, charges);
-    charge += child.charge;
-    cx += child.charge * child.cx;
-    cy += child.charge * child.cy;
-  }
-
-  quad.cx = cx / charge;
-  quad.cy = cy / charge;
-  quad.charge = charge;
-}
-
 export default function() {
   var nodes,
       charge = constant(-100),
@@ -40,11 +16,11 @@ export default function() {
 
   function force(alpha) {
     var root = nodeQuadtree(nodes);
+    root.eachAfter(accumulate);
     targetAlpha = alpha;
-    accumulate(root._root, charges);
     for (var i = 0, n = nodes.length; i < n; ++i) {
       target = nodes[i];
-      root.each(apply);
+      root.eachBefore(apply);
     }
   }
 
@@ -53,6 +29,29 @@ export default function() {
     var i, n = nodes.length;
     charges = new Array(n);
     for (i = 0; i < n; ++i) charges[i] = +charge(nodes[i], i, nodes);
+  }
+
+  function accumulate(quad) {
+
+    if (quad.point) { // TODO handle coincident nodes
+      quad.cx = quad.point[0];
+      quad.cy = quad.point[1];
+      quad.charge = charges[quad.point.index];
+      return;
+    }
+
+    var cx = 0, cy = 0, charge = 0, child, i;
+
+    for (i = 0; i < 4; ++i) {
+      if (!(child = quad[i])) continue;
+      charge += child.charge;
+      cx += child.charge * child.cx;
+      cy += child.charge * child.cy;
+    }
+
+    quad.cx = cx / charge;
+    quad.cy = cy / charge;
+    quad.charge = charge;
   }
 
   function apply(quad, x1, _, x2) {
