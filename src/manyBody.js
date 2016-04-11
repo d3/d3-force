@@ -1,6 +1,9 @@
 import {quadtree} from "d3-quadtree";
 import constant from "./constant";
 
+var tau = 2 * Math.PI,
+    epsilon = 1;
+
 var nodeQuadtree = quadtree()
     .x(function(d) { return d.x; })
     .y(function(d) { return d.y; });
@@ -9,7 +12,8 @@ export default function() {
   var nodes,
       charge = constant(-100),
       charges,
-      distance2 = Infinity,
+      distanceMin2 = 1,
+      distanceMax2 = Infinity,
       theta2 = 0.64,
       target,
       targetAlpha;
@@ -59,22 +63,29 @@ export default function() {
       var dx = quad.cx - target.x,
           dy = quad.cy - target.y,
           dw = x2 - x1,
-          dn = dx * dx + dy * dy,
-          k = targetAlpha / dn;
+          l = dx * dx + dy * dy;
 
-      if (dw * dw / theta2 < dn) { // Barnes-Hut criterion
-        if (dn < distance2) {
-          k *= quad.charge;
-          target.vx += dx * k;
-          target.vy += dy * k;
+      if (!l) { // Randomize direction for exactly-coincident nodes.
+        l = Math.random() * tau, dx = Math.cos(l), dy = Math.sin(l), l = 1;
+      }
+
+      if (l < distanceMin2) { // Limit forces for very close nodes.
+        l = Math.sqrt(l / distanceMin2), dx /= l, dy /= l, l = distanceMin2;
+      }
+
+      if (dw * dw / theta2 < l) { // Barnes-Hut criterion
+        if (l < distanceMax2) {
+          l = quad.charge * targetAlpha / l;
+          target.vx += dx * l;
+          target.vy += dy * l;
         }
         return true;
       }
 
-      if (quad.point && dn && dn < distance2) { // TODO handle coincident nodes
-        k *= charges[quad.point.index];
-        target.vx += dx * k;
-        target.vy += dy * k;
+      if (quad.point && l < distanceMax2) { // TODO handle coincident nodes
+        l = charges[quad.point.index] * targetAlpha / l;
+        target.vx += dx * l;
+        target.vy += dy * l;
       }
     }
 
@@ -89,8 +100,12 @@ export default function() {
     return arguments.length ? (charge = typeof _ === "function" ? _ : constant(+_), initialize(), force) : charge;
   };
 
-  force.distance = function(_) {
-    return arguments.length ? (distance2 = _ * _, force) : Math.sqrt(distance2);
+  force.distanceMin = function(_) {
+    return arguments.length ? (distanceMin2 = _ * _, force) : Math.sqrt(distanceMin2);
+  };
+
+  force.distanceMax = function(_) {
+    return arguments.length ? (distanceMax2 = _ * _, force) : Math.sqrt(distanceMax2);
   };
 
   force.theta = function(_) {

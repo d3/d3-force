@@ -14,8 +14,8 @@ export default function(x, y) {
     if (!nodes) return;
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i];
-      if (isNaN(node.x)) node.x = x + 100 * (Math.random() - 0.5);
-      if (isNaN(node.y)) node.y = y + 100 * (Math.random() - 0.5);
+      if (isNaN(node.x)) node.x = x;
+      if (isNaN(node.y)) node.y = y;
       if (isNaN(node.vx)) node.vx = 0;
       if (isNaN(node.vy)) node.vy = 0;
     }
