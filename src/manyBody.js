@@ -1,8 +1,7 @@
 import {quadtree} from "d3-quadtree";
 import constant from "./constant";
 
-var tau = 2 * Math.PI,
-    epsilon = 1;
+var tau = 2 * Math.PI;
 
 var nodeQuadtree = quadtree()
     .x(function(d) { return d.x; })
