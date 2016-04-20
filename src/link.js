@@ -1,8 +1,12 @@
+import constant from "./constant";
+
 var tau = 2 * Math.PI;
 
 export default function(links) {
-  var strength = 0.5, // TODO per-link strength on initialization
-      distance = 30, // TODO per-link distance on initialization
+  var strength = constant(0.5),
+      strengths,
+      distance = constant(30),
+      distances,
       nodes,
       bias;
 
@@ -11,9 +15,9 @@ export default function(links) {
       link = links[i], source = link.source, target = link.target;
       x = target.x - source.x;
       y = target.y - source.y;
-      if (l = x * x + y * y) l = Math.sqrt(l), l = (l - distance) / l;
-      else l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = distance;
-      l *= alpha * strength, x *= l, y *= l;
+      if (l = x * x + y * y) l = Math.sqrt(l), l = (l - distances[i]) / l;
+      else l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = distances[i];
+      l *= alpha * strengths[i], x *= l, y *= l;
       target.vx -= x * (b = bias[i]);
       target.vy -= y * b;
       source.vx += x * (b = 1 - b);
@@ -27,6 +31,8 @@ export default function(links) {
     for (i = 0; i < n; ++i) k[i] = 0;
     for (i = 0, bias = new Array(m); i < m; ++i) l = links[i], ++k[l.source.index], ++k[l.target.index];
     for (i = 0; i < m; ++i) l = links[i], bias[i] = k[l.source.index] / (k[l.source.index] + k[l.target.index]);
+    if (!strengths) for (i = 0, strengths = new Array(m); i < m; ++i) strengths[i] = +strength(links[i]);
+    if (!distances) for (i = 0, distances = new Array(m); i < m; ++i) distances[i] = +distance(links[i]);
   }
 
   force.nodes = function(_) {
@@ -38,11 +44,11 @@ export default function(links) {
   };
 
   force.strength = function(_) {
-    return arguments.length ? (strength = +_, force) : strength;
+    return arguments.length ? (strength = typeof _ === "function" ? _ : constant(+_), strengths = null, initialize(), force) : strength;
   };
 
   force.distance = function(_) {
-    return arguments.length ? (distance = +_, force) : distance;
+    return arguments.length ? (distance = typeof _ === "function" ? _ : constant(+_), distances = null, initialize(), force) : distance;
   };
 
   return force;
