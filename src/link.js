@@ -1,9 +1,15 @@
+import {map} from "d3-collection";
 import constant from "./constant";
 
 var tau = 2 * Math.PI;
 
+function index(d, i) {
+  return i;
+}
+
 export default function(links) {
-  var strength = constant(0.5),
+  var id = index,
+      strength = constant(0.5),
       strengths,
       distance = constant(30),
       distances,
@@ -31,23 +37,23 @@ export default function(links) {
     var i,
         n = nodes.length,
         m = links.length,
-        count = new Array(n), l;
+        count = new Array(n),
+        nodeById = map(nodes, id),
+        link;
 
     for (i = 0; i < n; ++i) {
       count[i] = 0;
     }
 
     for (i = 0, bias = new Array(m); i < m; ++i) {
-      l = links[i], l.index = i;
-      if (typeof l.source === "number") l.source = nodes[l.source];
-      if (typeof l.target === "number") l.target = nodes[l.target];
-      ++count[l.source.index];
-      ++count[l.target.index];
+      link = links[i], link.index = i;
+      if (typeof link.source !== "object") link.source = nodeById.get(link.source);
+      if (typeof link.target !== "object") link.target = nodeById.get(link.target);
+      ++count[link.source.index], ++count[link.target.index];
     }
 
     for (i = 0; i < m; ++i) {
-      l = links[i];
-      bias[i] = count[l.source.index] / (count[l.source.index] + count[l.target.index]);
+      link = links[i], bias[i] = count[link.source.index] / (count[link.source.index] + count[link.target.index]);
     }
 
     if (!strengths) for (i = 0, strengths = new Array(m); i < m; ++i) {
@@ -65,6 +71,10 @@ export default function(links) {
 
   force.links = function(_) {
     return arguments.length ? (links = _, initialize(), force) : links;
+  };
+
+  force.id = function(_) {
+    return arguments.length ? (id = _, initialize(), force) : id;
   };
 
   force.strength = function(_) {
