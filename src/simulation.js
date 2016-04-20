@@ -54,7 +54,7 @@ export default function(nodes) {
   }
 
   function initialize(force) {
-    force.nodes(nodes);
+    if (force.nodes) force.nodes(nodes);
   }
 
   function apply(force) {
