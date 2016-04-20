@@ -3,10 +3,6 @@ import constant from "./constant";
 
 var tau = 2 * Math.PI;
 
-var nodeQuadtree = quadtree()
-    .x(function(d) { return d.x; })
-    .y(function(d) { return d.y; });
-
 export default function() {
   var nodes,
       charge = constant(-100),
@@ -18,13 +14,11 @@ export default function() {
       targetAlpha;
 
   function force(alpha) {
-    var root = nodeQuadtree(nodes);
-    root.eachAfter(accumulate);
+    var tree = quadtree(), n = nodes.length, i;
     targetAlpha = alpha;
-    for (var i = 0, n = nodes.length; i < n; ++i) {
-      target = nodes[i];
-      root.eachBefore(apply);
-    }
+    for (i = 0; i < n; ++i) tree.add(nodes[i].x, nodes[i].y).index = i;
+    tree.visitAfter(accumulate);
+    for (i = 0; i < n; ++i) target = nodes[i], tree.visit(apply);
   }
 
   function initialize() {
@@ -35,42 +29,33 @@ export default function() {
   }
 
   function accumulate(quad) {
+    if (!quad.length) return quad.charge = charges[quad.index]; // TODO sum charges of coincident nodes
 
-    if (quad.point) { // TODO handle coincident nodes
-      quad.cx = quad.point[0];
-      quad.cy = quad.point[1];
-      quad.charge = charges[quad.point.index];
-      return;
+    for (var x = 0, y = 0, charge = 0, child, i = 0; i < 4; ++i) {
+      if (child = quad[i]) {
+        charge += child.charge;
+        x += child.charge * child.x;
+        y += child.charge * child.y;
+      }
     }
 
-    var cx = 0, cy = 0, charge = 0, child, i;
-
-    for (i = 0; i < 4; ++i) {
-      if (!(child = quad[i])) continue;
-      charge += child.charge;
-      cx += child.charge * child.cx;
-      cy += child.charge * child.cy;
-    }
-
-    quad.cx = cx / charge;
-    quad.cy = cy / charge;
+    quad.x = x / charge;
+    quad.y = y / charge;
     quad.charge = charge;
   }
 
   function apply(quad, x1, _, x2) {
-    if (!quad.point || quad.point.data !== target) {
-      var dx = quad.cx - target.x,
-          dy = quad.cy - target.y,
+    if (quad.length || quad.index !== target.index) {
+      var dx = quad.x - target.x,
+          dy = quad.y - target.y,
           dw = x2 - x1,
           l = dx * dx + dy * dy;
 
-      if (!l) { // Randomize direction for exactly-coincident nodes.
-        l = Math.random() * tau, dx = Math.cos(l), dy = Math.sin(l), l = 1;
-      }
+      // Randomize direction for exactly-coincident nodes.
+      if (!l) l = Math.random() * tau, dx = Math.cos(l), dy = Math.sin(l), l = 1;
 
-      if (l < distanceMin2) { // Limit forces for very close nodes.
-        l = Math.sqrt(l / distanceMin2), dx /= l, dy /= l, l = distanceMin2;
-      }
+      // Limit forces for very close nodes.
+      if (l < distanceMin2) l = Math.sqrt(l / distanceMin2), dx /= l, dy /= l, l = distanceMin2;
 
       if (dw * dw / theta2 < l) { // Barnes-Hut criterion
         if (l < distanceMax2) {
@@ -81,8 +66,8 @@ export default function() {
         return true;
       }
 
-      if (quad.point && l < distanceMax2) { // TODO handle coincident nodes
-        l = charges[quad.point.index] * targetAlpha / l;
+      if (!quad.length && l < distanceMax2) { // TODO handle coincident nodes
+        l = charges[quad.index] * targetAlpha / l;
         target.vx += dx * l;
         target.vy += dy * l;
       }
