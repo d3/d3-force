@@ -16,7 +16,7 @@ export default function(cx, cy) {
     }
 
     for (x = x / n - cx, y = y / n - cy, i = 0; i < n; ++i) {
-      node = nodes[i], node.vx -= x, node.vy -= y;
+      node = nodes[i], node.x -= x, node.y -= y;
     }
   }
 
