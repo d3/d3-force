@@ -47,13 +47,17 @@ export default function(nodes) {
     dispatch.call("tick", simulation);
   }
 
-  function index() {
-    for (var i = 0, n = nodes.length; i < n; ++i) {
-      nodes[i].index = i;
+  function initializeNodes() {
+    for (var i = 0, n = nodes.length, node; i < n; ++i) {
+      node = nodes[i], node.index = i;
+      if (isNaN(node.x)) node.x = Math.random() * 100 - 50;
+      if (isNaN(node.y)) node.y = Math.random() * 100 - 50;
+      if (isNaN(node.vx)) node.vx = 0;
+      if (isNaN(node.vy)) node.vy = 0;
     }
   }
 
-  function initialize(force) {
+  function initializeForce(force) {
     if (force.nodes) force.nodes(nodes);
     return force;
   }
@@ -62,14 +66,14 @@ export default function(nodes) {
     force(alpha);
   }
 
-  index();
+  initializeNodes();
 
   return simulation = {
     start: start,
     stop: stop,
     tick: tick,
     nodes: function(_) {
-      return arguments.length ? (nodes = _, index(), force.each(initialize), simulation) : nodes;
+      return arguments.length ? (nodes = _, initializeNodes(), force.each(initializeForce), simulation) : nodes;
     },
     alphaMin: function(_) {
       return arguments.length ? (alphaMin = _, simulation) : alphaMin;
@@ -81,7 +85,7 @@ export default function(nodes) {
       return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
     },
     force: function(name, _) {
-      return arguments.length > 1 ? ((_ == null ? force.remove(name) : force.set(name, initialize(_))), simulation) : force.get(name);
+      return arguments.length > 1 ? ((_ == null ? force.remove(name) : force.set(name, initializeForce(_))), simulation) : force.get(name);
     },
     on: function(name, _) {
       return arguments.length > 1 ? (dispatch.on(name, _), simulation) : dispatch.on(name);

@@ -1,6 +1,9 @@
 export default function(cx, cy) {
   var nodes;
 
+  if (cx == null) cx = 0;
+  if (cy == null) cy = 0;
+
   function force() {
     var i,
         n = nodes.length,
