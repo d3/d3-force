@@ -29,51 +29,62 @@ export default function() {
   }
 
   function accumulate(quad) {
-    if (!quad.length) return quad.charge = charges[quad.index]; // TODO sum charges of coincident nodes
+    var charge = 0, q, c, x, y, i;
 
-    for (var x = 0, y = 0, charge = 0, child, i = 0; i < 4; ++i) {
-      if (child = quad[i]) {
-        charge += child.charge;
-        x += child.charge * child.x;
-        y += child.charge * child.y;
+    // For internal nodes, accumulate charges from child quadrants.
+    if (quad.length) {
+      for (x = y = i = 0; i < 4; ++i) {
+        if ((q = quad[i]) && (c = q.charge)) {
+          charge += c, x += c * q.x, y += c * q.y;
+        }
       }
+      quad.x = x / charge;
+      quad.y = y / charge;
     }
 
-    quad.x = x / charge;
-    quad.y = y / charge;
+    // For leaf nodes, accumulate charges from coincident quadrants.
+    else {
+      q = quad;
+      do charge += charges[q.index];
+      while (q = q.next);
+    }
+
     quad.charge = charge;
   }
 
   function apply(quad, x1, _, x2) {
-    if (quad.length || quad.index !== target.index) {
-      var dx = quad.x - target.x,
-          dy = quad.y - target.y,
-          dw = x2 - x1,
-          l = dx * dx + dy * dy;
+    if (!quad.charge) return true;
 
-      // Randomize direction for exactly-coincident nodes.
+    var dx = quad.x - target.x,
+        dy = quad.y - target.y,
+        w = x2 - x1,
+        l = dx * dx + dy * dy;
+
+    // Limit forces for very close nodes.
+    // Randomize direction for exactly-coincident nodes.
+    if (l < distanceMin2) {
       if (!l) l = Math.random() * tau, dx = Math.cos(l), dy = Math.sin(l), l = 1;
+      l = Math.sqrt(l / distanceMin2), dx /= l, dy /= l, l = distanceMin2;
+    }
 
-      // Limit forces for very close nodes.
-      if (l < distanceMin2) l = Math.sqrt(l / distanceMin2), dx /= l, dy /= l, l = distanceMin2;
-
-      if (dw * dw / theta2 < l) { // Barnes-Hut criterion
-        if (l < distanceMax2) {
-          l = quad.charge * targetAlpha / l;
-          target.vx += dx * l;
-          target.vy += dy * l;
-        }
-        return true;
-      }
-
-      if (!quad.length && l < distanceMax2) { // TODO handle coincident nodes
-        l = charges[quad.index] * targetAlpha / l;
+    // Apply the Barnes-Hut approximation if possible.
+    if (w * w / theta2 < l) {
+      if (l < distanceMax2) {
+        l = quad.charge * targetAlpha / l;
         target.vx += dx * l;
         target.vy += dy * l;
       }
+      return true;
     }
 
-    return !quad.charge;
+    // Otherwise, process points directly.
+    else if (quad.length || l >= distanceMax2) return;
+
+    do if (quad.index !== target.index) {
+      w = charges[quad.index] * targetAlpha / l;
+      target.vx += dx * w;
+      target.vy += dy * w;
+    } while (quad = quad.next);
   }
 
   force.nodes = function(_) {
