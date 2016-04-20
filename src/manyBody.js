@@ -5,8 +5,8 @@ var tau = 2 * Math.PI;
 
 export default function() {
   var nodes,
-      charge = constant(-100),
-      charges,
+      strength = constant(-100),
+      strengths,
       distanceMin2 = 1,
       distanceMax2 = Infinity,
       theta2 = 0.64,
@@ -24,36 +24,36 @@ export default function() {
   function initialize() {
     if (!nodes) return;
     var i, n = nodes.length;
-    charges = new Array(n);
-    for (i = 0; i < n; ++i) charges[i] = +charge(nodes[i], i, nodes);
+    strengths = new Array(n);
+    for (i = 0; i < n; ++i) strengths[i] = +strength(nodes[i], i, nodes);
   }
 
   function accumulate(quad) {
-    var charge = 0, q, c, x, y, i;
+    var strength = 0, q, c, x, y, i;
 
-    // For internal nodes, accumulate charges from child quadrants.
+    // For internal nodes, accumulate forces from child quadrants.
     if (quad.length) {
       for (x = y = i = 0; i < 4; ++i) {
-        if ((q = quad[i]) && (c = q.charge)) {
-          charge += c, x += c * q.x, y += c * q.y;
+        if ((q = quad[i]) && (c = q.strength)) {
+          strength += c, x += c * q.x, y += c * q.y;
         }
       }
-      quad.x = x / charge;
-      quad.y = y / charge;
+      quad.x = x / strength;
+      quad.y = y / strength;
     }
 
-    // For leaf nodes, accumulate charges from coincident quadrants.
+    // For leaf nodes, accumulate forces from coincident quadrants.
     else {
       q = quad;
-      do charge += charges[q.index];
+      do strength += strengths[q.index];
       while (q = q.next);
     }
 
-    quad.charge = charge;
+    quad.strength = strength;
   }
 
   function apply(quad, x1, _, x2) {
-    if (!quad.charge) return true;
+    if (!quad.strength) return true;
 
     var dx = quad.x - target.x,
         dy = quad.y - target.y,
@@ -70,7 +70,7 @@ export default function() {
     // Apply the Barnes-Hut approximation if possible.
     if (w * w / theta2 < l) {
       if (l < distanceMax2) {
-        l = quad.charge * targetAlpha / l;
+        l = quad.strength * targetAlpha / l;
         target.vx += dx * l;
         target.vy += dy * l;
       }
@@ -81,7 +81,7 @@ export default function() {
     else if (quad.length || l >= distanceMax2) return;
 
     do if (quad.index !== target.index) {
-      w = charges[quad.index] * targetAlpha / l;
+      w = strengths[quad.index] * targetAlpha / l;
       target.vx += dx * w;
       target.vy += dy * w;
     } while (quad = quad.next);
@@ -91,8 +91,8 @@ export default function() {
     return arguments.length ? (nodes = _, initialize(), force) : nodes;
   };
 
-  force.charge = function(_) {
-    return arguments.length ? (charge = typeof _ === "function" ? _ : constant(+_), initialize(), force) : charge;
+  force.strength = function(_) {
+    return arguments.length ? (strength = typeof _ === "function" ? _ : constant(+_), initialize(), force) : strength;
   };
 
   force.distanceMin = function(_) {
