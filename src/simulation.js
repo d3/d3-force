@@ -55,6 +55,7 @@ export default function(nodes) {
 
   function initialize(force) {
     if (force.nodes) force.nodes(nodes);
+    return force;
   }
 
   function apply(force) {
@@ -80,7 +81,7 @@ export default function(nodes) {
       return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
     },
     force: function(name, _) {
-      return arguments.length > 1 ? (initialize(_), force.set(name, _), simulation) : force.get(name);
+      return arguments.length > 1 ? ((_ == null ? force.remove(name) : force.set(name, initialize(_))), simulation) : force.get(name);
     },
     on: function(name, _) {
       return arguments.length > 1 ? (dispatch.on(name, _), simulation) : dispatch.on(name);
