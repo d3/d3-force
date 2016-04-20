@@ -38,7 +38,7 @@ export default function(links) {
     }
 
     for (i = 0, bias = new Array(m); i < m; ++i) {
-      l = links[i];
+      l = links[i], l.index = i;
       if (typeof l.source === "number") l.source = nodes[l.source];
       if (typeof l.target === "number") l.target = nodes[l.target];
       ++count[l.source.index];
