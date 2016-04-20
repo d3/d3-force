@@ -27,12 +27,36 @@ export default function(links) {
 
   function initialize() {
     if (!nodes || !links) return;
-    var i, n = nodes.length, m = links.length, k = new Array(n), l;
-    for (i = 0; i < n; ++i) k[i] = 0;
-    for (i = 0, bias = new Array(m); i < m; ++i) l = links[i], ++k[l.source.index], ++k[l.target.index];
-    for (i = 0; i < m; ++i) l = links[i], bias[i] = k[l.source.index] / (k[l.source.index] + k[l.target.index]);
-    if (!strengths) for (i = 0, strengths = new Array(m); i < m; ++i) strengths[i] = +strength(links[i]);
-    if (!distances) for (i = 0, distances = new Array(m); i < m; ++i) distances[i] = +distance(links[i]);
+
+    var i,
+        n = nodes.length,
+        m = links.length,
+        count = new Array(n), l;
+
+    for (i = 0; i < n; ++i) {
+      count[i] = 0;
+    }
+
+    for (i = 0, bias = new Array(m); i < m; ++i) {
+      l = links[i];
+      if (typeof l.source === "number") l.source = nodes[l.source];
+      if (typeof l.target === "number") l.target = nodes[l.target];
+      ++count[l.source.index];
+      ++count[l.target.index];
+    }
+
+    for (i = 0; i < m; ++i) {
+      l = links[i];
+      bias[i] = count[l.source.index] / (count[l.source.index] + count[l.target.index]);
+    }
+
+    if (!strengths) for (i = 0, strengths = new Array(m); i < m; ++i) {
+      strengths[i] = +strength(links[i]);
+    }
+
+    if (!distances) for (i = 0, distances = new Array(m); i < m; ++i) {
+      distances[i] = +distance(links[i]);
+    }
   }
 
   force.nodes = function(_) {
