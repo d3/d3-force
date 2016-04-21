@@ -3,7 +3,8 @@ import constant from "./constant";
 var tau = 2 * Math.PI;
 
 export default function() {
-  var nodes,
+  var simulation,
+      nodes,
       strength = constant(-100),
       strengths,
       distanceMin2 = 1,
@@ -13,7 +14,7 @@ export default function() {
       targetAlpha;
 
   function force(alpha) {
-    var tree = this.quadtree().visitAfter(accumulate), n = nodes.length, i;
+    var tree = simulation.quadtree().visitAfter(accumulate), n = nodes.length, i;
     targetAlpha = alpha;
     for (i = 0; i < n; ++i) target = nodes[i], tree.visit(apply);
   }
@@ -84,8 +85,8 @@ export default function() {
     } while (quad = quad.next);
   }
 
-  force.nodes = function(_) {
-    return arguments.length ? (nodes = _, initialize(), force) : nodes;
+  force.initialize = function(_) {
+    simulation = _, nodes = _.nodes(), initialize();
   };
 
   force.strength = function(_) {

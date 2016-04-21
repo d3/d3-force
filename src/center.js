@@ -20,8 +20,8 @@ export default function(cx, cy) {
     }
   }
 
-  force.nodes = function(_) {
-    nodes = _;
+  force.initialize = function(simulation) {
+    nodes = simulation.nodes();
   };
 
   return force;

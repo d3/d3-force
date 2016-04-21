@@ -65,8 +65,8 @@ export default function(links) {
     }
   }
 
-  force.nodes = function(_) {
-    return arguments.length ? (nodes = _, initialize(), force) : nodes;
+  force.initialize = function(simulation) {
+    nodes = simulation.nodes(), initialize();
   };
 
   force.links = function(_) {

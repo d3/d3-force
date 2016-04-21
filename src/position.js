@@ -10,8 +10,8 @@ export default function(x, y) {
     }
   }
 
-  function initialize() {
-    if (!nodes) return;
+  force.initialize = function(simulation) {
+    nodes = simulation.nodes();
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i];
       if (isNaN(node.x)) node.x = x + (Math.random() - 0.5) * 100;
@@ -19,10 +19,6 @@ export default function(x, y) {
       if (isNaN(node.vx)) node.vx = 0;
       if (isNaN(node.vy)) node.vy = 0;
     }
-  }
-
-  force.nodes = function(_) {
-    return arguments.length ? (nodes = _, initialize(), force) : nodes;
   };
 
   force.strength = function(_) {
