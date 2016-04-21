@@ -75,12 +75,22 @@ export default function(nodes) {
     start: start,
     stop: stop,
     tick: tick,
+
     nodes: function(_) {
       return arguments.length ? (nodes = _, initializeNodes(), force.each(initializeForce), simulation) : nodes;
     },
+
     quadtree: function() {
       if (tree) return tree;
-      var i, n = nodes.length, node, x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+
+      var i,
+          n = nodes.length,
+          node,
+          x0 = Infinity,
+          y0 = Infinity,
+          x1 = -Infinity,
+          y1 = -Infinity;
+
       for (i = 0; i < n; ++i) {
         node = nodes[i];
         if (node.x < x0) x0 = node.x;
@@ -88,25 +98,32 @@ export default function(nodes) {
         if (node.y < y0) y0 = node.y;
         if (node.y > y1) y1 = node.y;
       }
+
       tree = quadtree().cover(x0, y0).cover(x1, y1);
+
       for (i = 0; i < n; ++i) {
-        node = nodes[i];
-        tree.add(node.x, node.y).index = i;
+        node = nodes[i], tree.add(node.x, node.y).index = i;
       }
+
       return tree;
     },
+
     alphaMin: function(_) {
       return arguments.length ? (alphaMin = _, simulation) : alphaMin;
     },
+
     alphaDecay: function(_) {
       return arguments.length ? (alphaDecay = -_, iteration = Math.round(Math.log(alpha) / alphaDecay), simulation) : -alphaDecay;
     },
+
     friction: function(_) {
       return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
     },
+
     force: function(name, _) {
       return arguments.length > 1 ? ((_ == null ? force.remove(name) : force.set(name, initializeForce(_))), simulation) : force.get(name);
     },
+
     on: function(name, _) {
       return arguments.length > 1 ? (dispatch.on(name, _), simulation) : dispatch.on(name);
     }
