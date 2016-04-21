@@ -1,4 +1,3 @@
-import {quadtree} from "d3-quadtree";
 import constant from "./constant";
 
 var tau = 2 * Math.PI;
@@ -14,10 +13,8 @@ export default function() {
       targetAlpha;
 
   function force(alpha) {
-    var tree = quadtree(), n = nodes.length, i;
+    var tree = this.quadtree().visitAfter(accumulate), n = nodes.length, i;
     targetAlpha = alpha;
-    for (i = 0; i < n; ++i) tree.add(nodes[i].x, nodes[i].y).index = i;
-    tree.visitAfter(accumulate);
     for (i = 0; i < n; ++i) target = nodes[i], tree.visit(apply);
   }
 
