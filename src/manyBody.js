@@ -9,7 +9,7 @@ export default function() {
       strengths,
       distanceMin2 = 1,
       distanceMax2 = Infinity,
-      theta2 = 0.64,
+      theta2 = 0.81,
       target,
       targetAlpha;
 
