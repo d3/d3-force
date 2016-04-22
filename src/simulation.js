@@ -90,7 +90,7 @@ export default function(nodes) {
     },
 
     alphaDecay: function(_) {
-      return arguments.length ? (alphaDecay = -_, iteration = Math.round(Math.log(alpha) / alphaDecay), simulation) : -alphaDecay;
+      return arguments.length ? (alphaDecay = -_, iteration = alphaDecay ? Math.round(Math.log(alpha) / alphaDecay) : 0, simulation) : -alphaDecay;
     },
 
     friction: function(_) {
