@@ -1,6 +1,13 @@
 import constant from "./constant";
 import {quadtree} from "d3-quadtree";
-import {x, y} from "./simulation";
+
+function x(d) {
+  return d.x + d.vx;
+}
+
+function y(d) {
+  return d.y + d.vy;
+}
 
 export default function() {
   var nodes,
@@ -12,34 +19,38 @@ export default function() {
     var i, n = nodes.length,
         tree = quadtree(nodes, x, y),
         node,
-        r,
+        nx0,
+        ny0,
         nx1,
-        nx2,
         ny1,
-        ny2;
+        nr,
+        nx,
+        ny;
 
     for (i = 0; i < n; ++i) {
-      node = nodes[i], r = radii[i] + radiusMax;
-      nx1 = node.x - r, nx2 = node.x + r;
-      ny1 = node.y - r, ny2 = node.y + r;
+      node = nodes[i];
+      nx = node.x + node.vx; // Look into the future!
+      ny = node.y + node.vy;
+      nr = radii[i] + radiusMax;
+      nx0 = nx - nr;
+      ny0 = ny - nr;
+      nx1 = nx + nr;
+      ny1 = ny + nr;
       tree.remove(node).visit(apply).add(node);
     }
 
-    function apply(quad, x1, y1, x2, y2) {
-      if (!quad.length) {
-        var x = node.x + node.vx - quad.data.x,
-            y = node.y + node.vy - quad.data.y,
-            l = x * x + y * y,
-            r = radii[i] + radii[quad.data.index];
-        if (l < r * r) {
-          l = Math.sqrt(l), l = (l - r) / (l * 2);
-          x -= node.vx;
-          y -= node.vy;
-          node.x -= x * l;
-          node.y -= y * l;
-        }
+    function apply(quad, x0, y0, x1, y1) {
+      if (x0 > nx1 || x1 < nx0 || y0 > ny1 || y1 < ny0) return true;
+      if (quad.length) return;
+      var x = nx - quad.data.x - quad.data.vx,
+          y = ny - quad.data.y - quad.data.vy,
+          l = x * x + y * y,
+          r = radii[i] + radii[quad.data.index];
+      if (l < r * r) {
+        l = Math.sqrt(l), l = (l - r) / (l * 2);
+        node.x -= (x - node.vx) * l;
+        node.y -= (y - node.vy) * l;
       }
-      return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
     }
   }
 

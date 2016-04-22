@@ -12,13 +12,6 @@ export default function(x, y) {
 
   force.initialize = function(simulation) {
     nodes = simulation.nodes();
-    for (var i = 0, n = nodes.length, node; i < n; ++i) {
-      node = nodes[i];
-      if (isNaN(node.x)) node.x = x + (Math.random() - 0.5) * 100;
-      if (isNaN(node.y)) node.y = y + (Math.random() - 0.5) * 100;
-      if (isNaN(node.vx)) node.vx = 0;
-      if (isNaN(node.vy)) node.vy = 0;
-    }
   };
 
   force.strength = function(_) {
