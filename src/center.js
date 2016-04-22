@@ -15,7 +15,7 @@ export default function(x, y) {
       node = nodes[i], sx += node.x, sy += node.y;
     }
 
-    for (sx = sx / n - x, sy = y / n - y, i = 0; i < n; ++i) {
+    for (sx = sx / n - x, sy = sy / n - y, i = 0; i < n; ++i) {
       node = nodes[i], node.x -= sx, node.y -= sy;
     }
   }
