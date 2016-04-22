@@ -30,6 +30,7 @@ export default function() {
     var strength = 0, q, c, x, y, i;
 
     // For internal nodes, accumulate forces from child quadrants.
+    // TODO Using quad.strength could conflict with other forces!
     if (quad.length) {
       for (x = y = i = 0; i < 4; ++i) {
         if ((q = quad[i]) && (c = q.strength)) {
