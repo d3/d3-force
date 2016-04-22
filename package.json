@@ -32,7 +32,7 @@
   "dependencies": {
     "d3-collection": "0.1",
     "d3-dispatch": "0.4",
-    "d3-quadtree": "0.6",
+    "d3-quadtree": "0.7",
     "d3-timer": "0.4"
   },
   "devDependencies": {

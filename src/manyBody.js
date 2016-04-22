@@ -1,10 +1,11 @@
 import constant from "./constant";
+import {quadtree} from "d3-quadtree";
+import {x, y} from "./simulation";
 
 var tau = 2 * Math.PI;
 
 export default function() {
-  var simulation,
-      nodes,
+  var nodes,
       strength = constant(-100),
       strengths,
       distanceMin2 = 1,
@@ -14,9 +15,8 @@ export default function() {
       targetAlpha;
 
   function force(alpha) {
-    var tree = simulation.quadtree().visitAfter(accumulate), n = nodes.length, i;
-    targetAlpha = alpha;
-    for (i = 0; i < n; ++i) target = nodes[i], tree.visit(apply);
+    var tree = quadtree(nodes, x, y).visitAfter(accumulate), n = nodes.length, i;
+    for (targetAlpha = alpha, i = 0; i < n; ++i) target = nodes[i], tree.visit(apply);
   }
 
   function initialize() {
@@ -30,10 +30,9 @@ export default function() {
     var strength = 0, q, c, x, y, i;
 
     // For internal nodes, accumulate forces from child quadrants.
-    // TODO Using quad.strength could conflict with other forces!
     if (quad.length) {
       for (x = y = i = 0; i < 4; ++i) {
-        if ((q = quad[i]) && (c = q.strength)) {
+        if ((q = quad[i]) && (c = q.value)) {
           strength += c, x += c * q.x, y += c * q.y;
         }
       }
@@ -48,11 +47,11 @@ export default function() {
       while (q = q.next);
     }
 
-    quad.strength = strength;
+    quad.value = strength;
   }
 
   function apply(quad, x1, _, x2) {
-    if (!quad.strength) return true;
+    if (!quad.value) return true;
 
     var dx = quad.x - target.x,
         dy = quad.y - target.y,
@@ -69,7 +68,7 @@ export default function() {
     // Apply the Barnes-Hut approximation if possible.
     if (w * w / theta2 < l) {
       if (l < distanceMax2) {
-        l = quad.strength * targetAlpha / l;
+        l = quad.value * targetAlpha / l;
         target.vx += dx * l;
         target.vy += dy * l;
       }
@@ -87,7 +86,7 @@ export default function() {
   }
 
   force.initialize = function(_) {
-    simulation = _, nodes = _.nodes(), initialize();
+    nodes = _.nodes(), initialize();
   };
 
   force.strength = function(_) {

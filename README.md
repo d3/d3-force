@@ -9,7 +9,7 @@ If you use NPM, `npm install d3-force`. Otherwise, download the [latest release]
 ```html
 <script src="https://d3js.org/d3-collection.v0.1.min.js"></script>
 <script src="https://d3js.org/d3-dispatch.v0.4.min.js"></script>
-<script src="https://d3js.org/d3-quadtree.v0.2.min.js"></script>
+<script src="https://d3js.org/d3-quadtree.v0.7.min.js"></script>
 <script src="https://d3js.org/d3-timer.v0.4.min.js"></script>
 <script src="https://d3js.org/d3-force.v0.0.min.js"></script>
 <script>

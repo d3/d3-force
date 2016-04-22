@@ -1,7 +1,14 @@
-import {quadtree} from "d3-quadtree";
-import {dispatch as newDispatch} from "d3-dispatch";
-import {map as newMap} from "d3-collection";
-import {timer as newTimer} from "d3-timer";
+import {dispatch} from "d3-dispatch";
+import {map} from "d3-collection";
+import {timer} from "d3-timer";
+
+export function x(d) {
+  return d.x;
+}
+
+export function y(d) {
+  return d.y;
+}
 
 export default function(nodes) {
   var simulation,
@@ -10,18 +17,17 @@ export default function(nodes) {
       alphaMin = 0.0001,
       alphaDecay = -0.02,
       velocityDecay = 0.5,
-      force = newMap(),
-      tree,
-      timer = newTimer(tick),
-      dispatch = newDispatch("start", "tick", "end");
+      force = map(),
+      ticker = timer(tick),
+      event = dispatch("start", "tick", "end");
 
   function start() {
     if (iteration < Infinity) {
       iteration = 0, alpha = 1;
     } else {
       iteration = 0, alpha = 1;
-      dispatch.call("start", simulation);
-      timer.restart(tick);
+      event.call("start", simulation);
+      ticker.restart(tick);
     }
     return simulation;
   }
@@ -29,8 +35,8 @@ export default function(nodes) {
   function stop() {
     if (iteration < Infinity) {
       iteration = Infinity, alpha = 0;
-      dispatch.call("end", simulation);
-      timer.stop();
+      event.call("end", simulation);
+      ticker.stop();
     }
     return simulation;
   }
@@ -46,8 +52,7 @@ export default function(nodes) {
       node.y += node.vy *= velocityDecay;
     }
 
-    tree = null;
-    dispatch.call("tick", simulation);
+    event.call("tick", simulation);
   }
 
   function initializeNodes() {
@@ -80,34 +85,6 @@ export default function(nodes) {
       return arguments.length ? (nodes = _, initializeNodes(), force.each(initializeForce), simulation) : nodes;
     },
 
-    quadtree: function() {
-      if (tree) return tree;
-
-      var i,
-          n = nodes.length,
-          node,
-          x0 = Infinity,
-          y0 = Infinity,
-          x1 = -Infinity,
-          y1 = -Infinity;
-
-      for (i = 0; i < n; ++i) {
-        node = nodes[i];
-        if (node.x < x0) x0 = node.x;
-        if (node.x > x1) x1 = node.x;
-        if (node.y < y0) y0 = node.y;
-        if (node.y > y1) y1 = node.y;
-      }
-
-      tree = quadtree().cover(x0, y0).cover(x1, y1);
-
-      for (i = 0; i < n; ++i) {
-        node = nodes[i], tree.add(node.x, node.y).index = i;
-      }
-
-      return tree;
-    },
-
     alphaMin: function(_) {
       return arguments.length ? (alphaMin = _, simulation) : alphaMin;
     },
@@ -125,7 +102,7 @@ export default function(nodes) {
     },
 
     on: function(name, _) {
-      return arguments.length > 1 ? (dispatch.on(name, _), simulation) : dispatch.on(name);
+      return arguments.length > 1 ? (event.on(name, _), simulation) : event.on(name);
     }
   };
 }
