@@ -6,17 +6,17 @@ var tau = 2 * Math.PI;
 
 export default function() {
   var nodes,
+      node,
+      alpha,
       strength = constant(-100),
       strengths,
       distanceMin2 = 1,
       distanceMax2 = Infinity,
-      theta2 = 0.81,
-      target,
-      targetAlpha;
+      theta2 = 0.81;
 
-  function force(alpha) {
-    var tree = quadtree(nodes, x, y).visitAfter(accumulate), n = nodes.length, i;
-    for (targetAlpha = alpha, i = 0; i < n; ++i) target = nodes[i], tree.visit(apply);
+  function force(_) {
+    var i, n = nodes.length, tree = quadtree(nodes, x, y).visitAfter(accumulate);
+    for (alpha = _, i = 0; i < n; ++i) tree.remove(node = nodes[i]).visit(apply).add(node);
   }
 
   function initialize() {
@@ -43,7 +43,9 @@ export default function() {
     // For leaf nodes, accumulate forces from coincident quadrants.
     else {
       q = quad;
-      do strength += strengths[q.index];
+      q.x = q.data.x;
+      q.y = q.data.y;
+      do strength += strengths[q.data.index];
       while (q = q.next);
     }
 
@@ -53,8 +55,8 @@ export default function() {
   function apply(quad, x1, _, x2) {
     if (!quad.value) return true;
 
-    var dx = quad.x - target.x,
-        dy = quad.y - target.y,
+    var dx = quad.x - node.x,
+        dy = quad.y - node.y,
         w = x2 - x1,
         l = dx * dx + dy * dy;
 
@@ -68,9 +70,9 @@ export default function() {
     // Apply the Barnes-Hut approximation if possible.
     if (w * w / theta2 < l) {
       if (l < distanceMax2) {
-        l = quad.value * targetAlpha / l;
-        target.vx += dx * l;
-        target.vy += dy * l;
+        l = quad.value * alpha / l;
+        node.vx += dx * l;
+        node.vy += dy * l;
       }
       return true;
     }
@@ -78,10 +80,10 @@ export default function() {
     // Otherwise, process points directly.
     else if (quad.length || l >= distanceMax2) return;
 
-    do if (quad.index !== target.index) {
-      w = strengths[quad.index] * targetAlpha / l;
-      target.vx += dx * w;
-      target.vy += dy * w;
+    do {
+      w = strengths[quad.data.index] * alpha / l;
+      node.vx += dx * w;
+      node.vy += dy * w;
     } while (quad = quad.next);
   }
 

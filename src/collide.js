@@ -9,14 +9,19 @@ export default function() {
       radiusMax;
 
   function force() {
-    for (var i = 0, n = nodes.length, tree = quadtree(nodes, x, y); i < n; ++i) {
-      var node = nodes[i],
-          r = radii[i] + radiusMax,
-          nx1 = node.x - r,
-          nx2 = node.x + r,
-          ny1 = node.y - r,
-          ny2 = node.y + r;
+    var i, n = nodes.length,
+        tree = quadtree(nodes, x, y),
+        node,
+        r,
+        nx1,
+        nx2,
+        ny1,
+        ny2;
 
+    for (i = 0; i < n; ++i) {
+      node = nodes[i], r = radii[i] + radiusMax;
+      nx1 = node.x - r, nx2 = node.x + r;
+      ny1 = node.y - r, ny2 = node.y + r;
       tree.remove(node).visit(apply).add(node);
     }
 
