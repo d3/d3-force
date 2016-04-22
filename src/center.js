@@ -1,27 +1,35 @@
-export default function(cx, cy) {
+export default function(x, y) {
   var nodes;
 
-  if (cx == null) cx = 0;
-  if (cy == null) cy = 0;
+  if (x == null) x = 0;
+  if (y == null) y = 0;
 
   function force() {
     var i,
         n = nodes.length,
         node,
-        x = 0,
-        y = 0;
+        sx = 0,
+        sy = 0;
 
     for (i = 0; i < n; ++i) {
-      node = nodes[i], x += node.x, y += node.y;
+      node = nodes[i], sx += node.x, sy += node.y;
     }
 
-    for (x = x / n - cx, y = y / n - cy, i = 0; i < n; ++i) {
-      node = nodes[i], node.x -= x, node.y -= y;
+    for (sx = sx / n - x, sy = y / n - y, i = 0; i < n; ++i) {
+      node = nodes[i], node.x -= sx, node.y -= sy;
     }
   }
 
   force.initialize = function(simulation) {
     nodes = simulation.nodes();
+  };
+
+  force.x = function(_) {
+    return arguments.length ? (x = +_, force) : x;
+  };
+
+  force.y = function(_) {
+    return arguments.length ? (y = +_, force) : y;
   };
 
   return force;

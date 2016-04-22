@@ -1,25 +1,52 @@
+import constant from "./constant";
+
 export default function(x, y) {
-  var strength = 0.1,
-      nodes;
+  var strength = constant(0.1),
+      nodes,
+      strengths,
+      xz,
+      yz;
+
+  if (x == null) x = constant(0);
+  if (y == null) y = constant(0);
 
   function force(alpha) {
-    for (var i = 0, n = nodes.length, node, k = strength * alpha; i < n; ++i) {
+    for (var i = 0, n = nodes.length, node, k; i < n; ++i) {
       node = nodes[i];
-      node.vx += (x - node.x) * k;
-      node.vy += (y - node.y) * k;
+      k = strengths[i] * alpha;
+      node.vx += (xz[i] - node.x) * k;
+      node.vy += (yz[i] - node.y) * k;
+    }
+  }
+
+  function initialize() {
+    if (!nodes) return;
+    var i, n = nodes.length;
+    strengths = new Array(n);
+    xz = new Array(n);
+    yz = new Array(n);
+    for (i = 0; i < n; ++i) {
+      strengths[i] = +strength(nodes[i], i, nodes);
+      xz[i] = +x(nodes[i], i, nodes);
+      yz[i] = +y(nodes[i], i, nodes);
     }
   }
 
   force.initialize = function(simulation) {
     nodes = simulation.nodes();
+    initialize();
   };
 
   force.strength = function(_) {
-    return arguments.length ? (strength = +_, force) : strength;
+    return arguments.length ? (strength = typeof _ === "function" ? _ : constant(+_), initialize(), force) : strength;
   };
 
-  force.position = function(_) {
-    return arguments.length ? (x = +_[0], y = +_[1], force) : [x, y];
+  force.x = function(_) {
+    return arguments.length ? (x = typeof _ === "function" ? _ : constant(+_), initialize(), force) : x;
+  };
+
+  force.y = function(_) {
+    return arguments.length ? (y = typeof _ === "function" ? _ : constant(+_), initialize(), force) : y;
   };
 
   return force;
