@@ -66,7 +66,7 @@ export default function(nodes) {
     force(alpha);
   }
 
-  initializeNodes();
+  if (nodes) initializeNodes();
 
   return simulation = {
     start: start,
