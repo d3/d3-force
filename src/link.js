@@ -70,7 +70,7 @@ export default function(links) {
   };
 
   force.links = function(_) {
-    return arguments.length ? (links = _, initialize(), force) : links;
+    return arguments.length ? (links = _, strengths = distances = null, initialize(), force) : links;
   };
 
   force.id = function(_) {
