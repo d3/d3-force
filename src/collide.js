@@ -48,8 +48,8 @@ export default function() {
           r = radii[i] + radii[quad.data.index];
       if (l < r * r) {
         l = Math.sqrt(l), l = (l - r) / (l * 2);
-        node.x -= (x - node.vx) * l;
-        node.y -= (y - node.vy) * l;
+        node.vx -= x * l;
+        node.vy -= y * l;
       }
     }
   }
