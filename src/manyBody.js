@@ -23,7 +23,7 @@ export default function() {
 
   function force(_) {
     var i, n = nodes.length, tree = quadtree(nodes, x, y).visitAfter(accumulate);
-    for (alpha = _, i = 0; i < n; ++i) tree.remove(node = nodes[i]).visit(apply).add(node);
+    for (alpha = _, i = 0; i < n; ++i) node = nodes[i], tree.visit(apply);
   }
 
   function initialize() {
@@ -87,7 +87,7 @@ export default function() {
     // Otherwise, process points directly.
     else if (quad.length || l >= distanceMax2) return;
 
-    do {
+    do if (quad.data !== node) {
       w = strengths[quad.data.index] * alpha / l;
       node.vx += dx * w;
       node.vy += dy * w;
