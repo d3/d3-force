@@ -2,6 +2,14 @@ import {dispatch} from "d3-dispatch";
 import {map} from "d3-collection";
 import {timer} from "d3-timer";
 
+export function x(d) {
+  return d.x;
+}
+
+export function y(d) {
+  return d.y;
+}
+
 export default function(nodes) {
   var simulation,
       iteration = 0,

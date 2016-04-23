@@ -1,13 +1,6 @@
 import constant from "./constant";
 import {quadtree} from "d3-quadtree";
-
-function x(d) {
-  return d.x;
-}
-
-function y(d) {
-  return d.y;
-}
+import {x, y} from "./simulation";
 
 var tau = 2 * Math.PI;
 
