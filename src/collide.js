@@ -6,7 +6,8 @@ export default function() {
   var nodes,
       radius = constant(1),
       radii,
-      radiusMax;
+      radiusMax,
+      strength = 0.7;
 
   function force() {
     var i, n = nodes.length,
@@ -25,7 +26,7 @@ export default function() {
       nx0 = node.x - nr, ny0 = node.y - nr;
       nx1 = node.x + nr, ny1 = node.y + nr;
       tree.remove(node).visit(apply);
-      node.x += vx, node.y += vy;
+      node.x += vx * strength, node.y += vy * strength;
       tree.add(node);
     }
 
@@ -37,7 +38,7 @@ export default function() {
           l = x * x + y * y,
           r = radii[i] + radii[quad.data.index];
       if (l < r * r) {
-        l = Math.sqrt(l), l = (r - l) / l;
+        l = (r - (l = Math.sqrt(l))) / l;
         vx += x * l, vy += y * l;
       }
     }
@@ -52,6 +53,10 @@ export default function() {
         radiusMax = r;
       }
     }
+  };
+
+  force.strength = function(_) {
+    return arguments.length ? (strength = +_, force) : strength;
   };
 
   force.radius = function(_) {
