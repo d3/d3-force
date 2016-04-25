@@ -2,12 +2,13 @@ import constant from "./constant";
 import {quadtree} from "d3-quadtree";
 import {x, y} from "./simulation";
 
-export default function() {
+export default function(radius) {
   var nodes,
-      radius = constant(1),
       radii,
       radiusMax,
       strength = 0.7;
+
+  if (typeof radius !== "function") radius = constant(radius == null ? 1 : +radius);
 
   function force() {
     var i, n = nodes.length,
