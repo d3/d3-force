@@ -7,8 +7,8 @@ export default function(x, y) {
       xz,
       yz;
 
-  if (x == null) x = constant(0);
-  if (y == null) y = constant(0);
+  if (typeof x !== "function") x = constant(x == null ? 0 : +x);
+  if (typeof y !== "function") y = constant(y == null ? 0 : +y);
 
   function force(alpha) {
     for (var i = 0, n = nodes.length, node, k; i < n; ++i) {
