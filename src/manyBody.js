@@ -55,24 +55,24 @@ export default function() {
   function apply(quad, x1, _, x2) {
     if (!quad.value) return true;
 
-    var dx = quad.x - node.x,
-        dy = quad.y - node.y,
+    var x = quad.x - node.x,
+        y = quad.y - node.y,
         w = x2 - x1,
-        l = dx * dx + dy * dy;
+        l = x * x + y * y;
 
     // Limit forces for very close nodes.
     // Randomize direction for exactly-coincident nodes.
     if (l < distanceMin2) {
-      if (!l) l = Math.random() * tau, dx = Math.cos(l), dy = Math.sin(l), l = 1;
-      l = Math.sqrt(l / distanceMin2), dx /= l, dy /= l, l = distanceMin2;
+      if (!l) l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = 1;
+      l = Math.sqrt(l / distanceMin2), x /= l, y /= l, l = distanceMin2;
     }
 
     // Apply the Barnes-Hut approximation if possible.
     if (w * w / theta2 < l) {
       if (l < distanceMax2) {
         l = quad.value * alpha / l;
-        node.vx += dx * l;
-        node.vy += dy * l;
+        node.vx += x * l;
+        node.vy += y * l;
       }
       return true;
     }
@@ -82,8 +82,8 @@ export default function() {
 
     do if (quad.data !== node) {
       w = strengths[quad.data.index] * alpha / l;
-      node.vx += dx * w;
-      node.vy += dy * w;
+      node.vx += x * w;
+      node.vy += y * w;
     } while (quad = quad.next);
   }
 
