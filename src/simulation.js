@@ -16,7 +16,7 @@ export default function(nodes) {
       alpha = 1,
       alphaMin = 0.0001,
       alphaDecay = -0.02,
-      velocityDecay = 0.5,
+      drag = 0.5,
       force = map(),
       ticker = timer(tick),
       event = dispatch("start", "tick", "end");
@@ -48,8 +48,8 @@ export default function(nodes) {
 
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i];
-      node.x += node.vx *= velocityDecay;
-      node.y += node.vy *= velocityDecay;
+      node.x += node.vx *= drag;
+      node.y += node.vy *= drag;
     }
 
     event.call("tick", simulation);
@@ -93,8 +93,8 @@ export default function(nodes) {
       return arguments.length ? (alphaDecay = -_, iteration = alphaDecay ? Math.round(Math.log(alpha) / alphaDecay) : 0, simulation) : -alphaDecay;
     },
 
-    friction: function(_) {
-      return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
+    drag: function(_) {
+      return arguments.length ? (drag = 1 - _, simulation) : 1 - drag;
     },
 
     force: function(name, _) {
