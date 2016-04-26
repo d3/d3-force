@@ -16,7 +16,7 @@ export default function(nodes) {
       alphaMin = 0.0001,
       alphaDecay = -0.02,
       drag = 0.5,
-      force = map(),
+      forces = map(),
       ticker = timer(tick),
       event = dispatch("tick", "end");
 
@@ -42,7 +42,7 @@ export default function(nodes) {
       return;
     }
 
-    force.each(function(force) {
+    forces.each(function(force) {
       force(alpha);
     });
 
@@ -78,7 +78,7 @@ export default function(nodes) {
     tick: tick,
 
     nodes: function(_) {
-      return arguments.length ? (nodes = _, initializeNodes(), force.each(initializeForce), simulation) : nodes;
+      return arguments.length ? (nodes = _, initializeNodes(), forces.each(initializeForce), simulation) : nodes;
     },
 
     alphaMin: function(_) {
@@ -94,7 +94,7 @@ export default function(nodes) {
     },
 
     force: function(name, _) {
-      return arguments.length > 1 ? ((_ == null ? force.remove(name) : force.set(name, initializeForce(_))), simulation) : force.get(name);
+      return arguments.length > 1 ? ((_ == null ? forces.remove(name) : forces.set(name, initializeForce(_))), simulation) : forces.get(name);
     },
 
     on: function(name, _) {
