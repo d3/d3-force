@@ -49,6 +49,12 @@ var simulation = d3_force.forceSimulation(nodes);
 
 …
 
+* `index` - the node’s zero-based index into *nodes*
+* `x` - the node’s current *x*-position
+* `y` - the node’s current *y*-position
+* `vx` - the node’s current *x*-velocity
+* `vy` - the node’s current *y*-velocity
+
 <a name="simulation_alphaMin" href="#simulation_alphaMin">#</a> <i>simulation</i>.<b>alphaMin</b>([<i>alpha</i>])
 
 …
@@ -71,7 +77,16 @@ var simulation = d3_force.forceSimulation(nodes);
 
 ### Forces
 
-…
+[Simulations](#simulation) compose multiple arbitrary forces. By default, simulations have no bound forces; add or remove a force using [*simulation*.force](#simulation_force). This module provides several built-in forces:
+
+* [Centering](#centering)
+* [Circle Collision](#circle-collision)
+* [Circle Containment](#circle-containment)
+* [Links](#links)
+* [Many-Body](#many-body)
+* [Positioning](#positioning)
+
+You may also implement your own custom force. A force is simply a [function](#_force) that takes the simulation’s current *alpha* value and then modifies nodes’ positions or velocities. Forces may optionally implement [*force*.initialize](#force_initialize) to receive the simulation’s array of nodes.
 
 <a name="_force" href="#_force">#</a> <i>force</i>(<i>alpha</i>)
 
@@ -83,7 +98,7 @@ var simulation = d3_force.forceSimulation(nodes);
 
 #### Centering
 
-…
+The centering force moves nodes so that their center of mass (assuming all nodes are equal-weight) is at the given position ⟨[*x*](#center_x),[*y*](#center_y)⟩.
 
 <a name="forceCenter" href="#forceCenter">#</a> d3.<b>forceCenter</b>([<i>x</i>, <i>y</i>])
 
@@ -99,7 +114,7 @@ var simulation = d3_force.forceSimulation(nodes);
 
 #### Circle Collision
 
-…
+The circle collision force prevents circular nodes with a given [radius](#collide_radius) from overlapping. More formally, two nodes *a* and *b* are separated so that the distance between *a* and *b* is at least *radius*(*a*) + *radius*(*b*). To reduce jitter, this is by default a “soft” constraint with a configurable [strength](#collide_strength). (These parameters are only recomputed when the force is initialized, not on every application.)
 
 <a name="forceCollide" href="#forceCollide">#</a> d3.<b>forceCollide</b>([<i>radius</i>])
 
@@ -113,9 +128,9 @@ var simulation = d3_force.forceSimulation(nodes);
 
 …
 
-#### Containment
+#### Circle Containment
 
-…
+The circle containment force constrains nodes to fit within a circle of a given [*radius*](#contain_radius) and center ⟨[*x*](#contain_x),[*y*](#contain_y)⟩. The radius and center can be specified on a per-node basis. (These parameters are only recomputed when the force is initialized, not on every application.)
 
 <a name="forceContain" href="#forceContain">#</a> d3.<b>forceContain</b>([<i>radius</i>[, <i>x</i>, <i>y</i>]])
 
@@ -135,7 +150,7 @@ var simulation = d3_force.forceSimulation(nodes);
 
 #### Links
 
-…
+The link force pushes linked nodes closer together or farther apart according to the desired [link distance](#link_distance), which may be specified on a per-node basis. (These parameters are only recomputed when the force is initialized, not on every application.)
 
 <a name="forceLink" href="#forceLink">#</a> d3.<b>forceLink</b>([<i>links</i>])
 
@@ -144,6 +159,12 @@ var simulation = d3_force.forceSimulation(nodes);
 <a name="link_links" href="#link_links">#</a> <i>link</i>.<b>links</b>([<i>links</i>])
 
 …
+
+* `index` - the zero-based index into *links*
+* `source` - the link’s source node; see [*simulation*.nodes](#simulation_nodes)
+* `target` - the link’s target node; see [*simulation*.nodes](#simulation_nodes)
+
+The source and target properties may be initialized using [*link*.id](#link_id).
 
 <a name="link_id" href="#link_id">#</a> <i>link</i>.<b>id</b>([<i>id</i>])
 
@@ -159,7 +180,7 @@ var simulation = d3_force.forceSimulation(nodes);
 
 #### Many-Body
 
-…
+The many-body (or *n*-body) force applies mutally amongst all [nodes](#simulation_nodes). It can be used to simulate gravity (attraction) if the [strength](#manyBody_strength) is positive, or eletrical charge (repulsion) if the strength is negative. This implementation uses quadtrees and the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation) to greatly improve performance; the accuracy can be customized using the [theta](#manyBody_theta) parameter.
 
 <a name="forceManyBody" href="#forceManyBody">#</a> d3.<b>forceManyBody</b>()
 
@@ -183,7 +204,7 @@ var simulation = d3_force.forceSimulation(nodes);
 
 #### Positioning
 
-…
+The positioning force pushes nodes towards a desired position ⟨[*x*](#position_x),[*y*](#position_y)⟩. The position and [strength](#position_strength) can be specified on a per-node basis. (These parameters are only recomputed when the force is initialized, not on every application.)
 
 <a name="forcePosition" href="#forcePosition">#</a> d3.<b>forcePosition</b>([<i>x</i>, <i>y</i>])
 
