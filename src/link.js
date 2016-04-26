@@ -16,6 +16,8 @@ export default function(links) {
       nodes,
       bias;
 
+  if (links == null) links = [];
+
   function force(alpha) {
     for (var i = 0, n = links.length, link, source, target, x, y, l, b; i < n; ++i) {
       link = links[i], source = link.source, target = link.target;

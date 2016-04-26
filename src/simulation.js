@@ -21,6 +21,8 @@ export default function(nodes) {
       ticker = timer(tick),
       event = dispatch("start", "tick", "end");
 
+  if (nodes == null) nodes = [];
+
   function start() {
     if (iteration < Infinity) {
       iteration = 0, alpha = 1;
@@ -74,7 +76,7 @@ export default function(nodes) {
     force(alpha);
   }
 
-  if (nodes) initializeNodes();
+  initializeNodes();
 
   return simulation = {
     start: start,
