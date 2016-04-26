@@ -98,7 +98,7 @@ You may also implement your own custom force. A force is simply a [function](#_f
 
 #### Centering
 
-The centering force moves nodes so that their center of mass (assuming all nodes are equal-weight) is at the given position ⟨[*x*](#center_x),[*y*](#center_y)⟩.
+The centering force moves nodes so that their center of mass (assuming all nodes are equal-weight) is at the given position ⟨[*x*](#center_x),[*y*](#center_y)⟩. (These parameters are only recomputed when the force is initialized, not on every application.)
 
 <a name="forceCenter" href="#forceCenter">#</a> d3.<b>forceCenter</b>([<i>x</i>, <i>y</i>])
 
@@ -180,7 +180,7 @@ The source and target properties may be initialized using [*link*.id](#link_id).
 
 #### Many-Body
 
-The many-body (or *n*-body) force applies mutally amongst all [nodes](#simulation_nodes). It can be used to simulate gravity (attraction) if the [strength](#manyBody_strength) is positive, or eletrical charge (repulsion) if the strength is negative. This implementation uses quadtrees and the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation) to greatly improve performance; the accuracy can be customized using the [theta](#manyBody_theta) parameter.
+The many-body (or *n*-body) force applies mutally amongst all [nodes](#simulation_nodes). It can be used to simulate gravity (attraction) if the [strength](#manyBody_strength) is positive, or eletrical charge (repulsion) if the strength is negative. This implementation uses quadtrees and the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation) to greatly improve performance; the accuracy can be customized using the [theta](#manyBody_theta) parameter. The strength can be specified on a per-node basis. (This parameter is only recomputed when the force is initialized, not on every application.)
 
 <a name="forceManyBody" href="#forceManyBody">#</a> d3.<b>forceManyBody</b>()
 
