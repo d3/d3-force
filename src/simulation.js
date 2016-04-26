@@ -13,40 +13,38 @@ export function y(d) {
 export default function(nodes) {
   var simulation,
       iteration = 0,
-      alpha = 1,
       alphaMin = 0.0001,
       alphaDecay = -0.02,
       drag = 0.5,
       force = map(),
       ticker = timer(tick),
-      event = dispatch("start", "tick", "end");
+      event = dispatch("tick", "end");
 
   if (nodes == null) nodes = [];
 
   function start() {
-    if (iteration < Infinity) {
-      iteration = 0, alpha = 1;
-    } else {
-      iteration = 0, alpha = 1;
-      event.call("start", simulation);
-      ticker.restart(tick);
-    }
+    iteration = 0;
+    ticker.restart(tick);
     return simulation;
   }
 
   function stop() {
-    if (iteration < Infinity) {
-      iteration = Infinity, alpha = 0;
-      event.call("end", simulation);
-      ticker.stop();
-    }
+    ticker.stop();
     return simulation;
   }
 
   function tick() {
-    alpha = Math.exp(++iteration * alphaDecay);
-    if (!(alpha > alphaMin)) return stop();
-    force.each(apply);
+    var alpha = Math.exp(++iteration * alphaDecay);
+
+    if (!(alpha > alphaMin)) {
+      ticker.stop();
+      event.call("end", simulation);
+      return;
+    }
+
+    force.each(function(force) {
+      force(alpha);
+    });
 
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i];
@@ -72,10 +70,6 @@ export default function(nodes) {
     return force;
   }
 
-  function apply(force) {
-    force(alpha);
-  }
-
   initializeNodes();
 
   return simulation = {
@@ -92,7 +86,7 @@ export default function(nodes) {
     },
 
     alphaDecay: function(_) {
-      return arguments.length ? (alphaDecay = -_, iteration = alphaDecay ? Math.round(Math.log(alpha) / alphaDecay) : 0, simulation) : -alphaDecay;
+      return arguments.length ? (iteration = +_ ? Math.round(iteration * alphaDecay / -_) : 0, alphaDecay = -_, simulation) : -alphaDecay;
     },
 
     drag: function(_) {
