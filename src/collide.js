@@ -46,9 +46,9 @@ export default function(radius) {
   }
 
   force.initialize = function(_) {
-    nodes = _.nodes();
-    var i, n = nodes.length, r;
-    radii = new Array(n), radiusMax = 0;
+    var i, n = (nodes = _).length, r;
+    radii = new Array(n);
+    radiusMax = 0;
     for (i = 0; i < n; ++i) {
       if ((radii[i] = r = +radius(nodes[i], i, nodes)) > radiusMax) {
         radiusMax = r;

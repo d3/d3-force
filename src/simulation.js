@@ -68,7 +68,7 @@ export default function(nodes) {
   }
 
   function initializeForce(force) {
-    if (force.initialize) force.initialize(simulation);
+    if (force.initialize) force.initialize(nodes);
     return force;
   }
 

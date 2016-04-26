@@ -88,7 +88,8 @@ export default function() {
   }
 
   force.initialize = function(_) {
-    nodes = _.nodes(), initialize();
+    nodes = _;
+    initialize();
   };
 
   force.strength = function(_) {
