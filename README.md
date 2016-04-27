@@ -31,7 +31,7 @@ var simulation = d3_force.forceSimulation(nodes);
 
 <a name="forceSimulation" href="#forceSimulation">#</a> d3.<b>forceSimulation</b>([<i>nodes</i>])
 
-Creates a new velocity Verlet simulator with the specified array of [*nodes*](#simulation_nodes). If *nodes* is not specified, it defaults to the empty array. The simulator [starts](#simulation_restart) automatically; if you want to run the simulation manually, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired.
+Creates a new velocity Verlet simulator with the specified array of [*nodes*](#simulation_nodes) and no [forces](#simulation_force). If *nodes* is not specified, it defaults to the empty array. The simulator [starts](#simulation_restart) automatically; if you wish to run the simulation manually, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired.
 
 <a name="simulation_restart" href="#simulation_restart">#</a> <i>simulation</i>.<b>restart</b>()
 
@@ -43,9 +43,9 @@ Creates a new velocity Verlet simulator with the specified array of [*nodes*](#s
 
 <a name="simulation_tick" href="#simulation_tick">#</a> <i>simulation</i>.<b>tick</b>()
 
-Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the position of each [node](#simulation_nodes) according to the following formula: *position* += *velocity* × (1 - [*drag*](#simulation_drag)). Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop, and false otherwise.
+Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the ⟨*x*,*y*⟩ position of each [node](#simulation_nodes) according to the following formula: *position* += *velocity* × (1 - [*drag*](#simulation_drag)). Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop after this tick, and false otherwise.
 
-The current *alpha* is defined as exp(*iteration* × [*alphaDecay*](#simulation_alphaDecay)) where *iteration* is the number of times this method can be called since the simulation started. The exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example:
+The current *alpha* is defined as exp(*iteration* × [*alphaDecay*](#simulation_alphaDecay)) where *iteration* is the number of times this method can be called since the simulation started. Thus, the exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example:
 
 ```js
 for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / -simulation.alphaDecay()); i < n; ++i) {
@@ -53,9 +53,9 @@ for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / -simulation.alph
 }
 ```
 
-Manual invocation is useful for computing [static force-directed layouts](http://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16), such as in a background web worker or on the server.
+Manual invocation is useful for computing [static layouts](http://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16), such as in a background web worker or on the server.
 
-This method does not dispatch a *tick* or *end* [event](#simulation_on); events are only dispatched by the internal timer when the simulation is started automatically upon creation or by calling [*simulation*.restart](#simulation_restart).
+This method does not dispatch [events](#simulation_on); events are only dispatched by the internal timer when the simulation is started automatically upon [creation](#forceSimulation) or by calling [*simulation*.restart](#simulation_restart).
 
 <a name="simulation_nodes" href="#simulation_nodes">#</a> <i>simulation</i>.<b>nodes</b>([<i>nodes</i>])
 
@@ -89,7 +89,7 @@ This method does not dispatch a *tick* or *end* [event](#simulation_on); events 
 
 ### Forces
 
-[Simulations](#simulation) compose multiple arbitrary forces. By default, simulations have no bound forces; add or remove a force using [*simulation*.force](#simulation_force). This module provides several built-in forces:
+[Simulations](#simulation) apply arbitrary forces. This module provides several built-in forces for your enjoyment:
 
 * [Centering](#centering)
 * [Circle Collision](#circle-collision)
@@ -98,7 +98,7 @@ This method does not dispatch a *tick* or *end* [event](#simulation_on); events 
 * [Many-Body](#many-body)
 * [Positioning](#positioning)
 
-You may also implement your own custom force. A force is simply a [function](#_force) that takes the simulation’s current *alpha* value and then modifies nodes’ positions or velocities. Forces may optionally implement [*force*.initialize](#force_initialize) to receive the simulation’s array of nodes.
+You may also implement your own custom force. A force is simply a [function](#_force) that takes the simulation’s current *alpha* and modifies nodes’ positions or velocities. Forces may optionally implement [*force*.initialize](#force_initialize) to receive the simulation’s array of nodes.
 
 <a name="_force" href="#_force">#</a> <i>force</i>(<i>alpha</i>)
 
