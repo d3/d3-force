@@ -9,27 +9,30 @@ function index(d, i) {
 
 export default function(links) {
   var id = index,
-      strength = constant(0.5),
+      strength = constant(0.7),
       strengths,
       distance = constant(30),
       distances,
       nodes,
-      bias;
+      bias,
+      iterations = 1;
 
   if (links == null) links = [];
 
   function force(alpha) {
-    for (var i = 0, n = links.length, link, source, target, x, y, l, b; i < n; ++i) {
-      link = links[i], source = link.source, target = link.target;
-      x = target.x + target.vx - source.x - source.vx;
-      y = target.y + target.vy - source.y - source.vy;
-      if (l = x * x + y * y) l = Math.sqrt(l), l = (l - distances[i]) / l;
-      else l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = distances[i];
-      l *= alpha * strengths[i], x *= l, y *= l;
-      target.vx -= x * (b = bias[i]);
-      target.vy -= y * b;
-      source.vx += x * (b = 1 - b);
-      source.vy += y * b;
+    for (var k = 0, n = links.length; k < iterations; ++k) {
+      for (var i = 0, link, source, target, x, y, l, b; i < n; ++i) {
+        link = links[i], source = link.source, target = link.target;
+        x = target.x + target.vx - source.x - source.vx;
+        y = target.y + target.vy - source.y - source.vy;
+        if (l = x * x + y * y) l = Math.sqrt(l), l = (l - distances[i]) / l;
+        else l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = distances[i];
+        l *= alpha * strengths[i], x *= l, y *= l;
+        target.vx -= x * (b = bias[i]);
+        target.vy -= y * b;
+        source.vx += x * (b = 1 - b);
+        source.vy += y * b;
+      }
     }
   }
 
@@ -78,6 +81,10 @@ export default function(links) {
 
   force.id = function(_) {
     return arguments.length ? (id = _, initialize(), force) : id;
+  };
+
+  force.iterations = function(_) {
+    return arguments.length ? (iterations = +_, force) : iterations;
   };
 
   force.strength = function(_) {

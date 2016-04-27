@@ -13,7 +13,8 @@ export default function(radius) {
   var nodes,
       radii,
       radiusMax,
-      strength = 0.7;
+      strength = 0.7,
+      iterations = 1;
 
   if (typeof radius !== "function") radius = constant(radius == null ? 1 : +radius);
 
@@ -31,13 +32,15 @@ export default function(radius) {
         nx1,
         ny1;
 
-    for (i = 0; i < n; ++i) {
-      node = nodes[i], nr = radii[i] + radiusMax, vx = vy = 0;
-      nx = node.x + node.vx, nx0 = nx - nr, nx1 = nx + nr;
-      ny = node.y + node.vy, ny0 = ny - nr, ny1 = ny + nr;
-      tree.remove(node).visit(apply);
-      node.vx += vx * strength, node.vy += vy * strength;
-      tree.add(node);
+    for (var k = 0; k < iterations; ++k) {
+      for (i = 0; i < n; ++i) {
+        node = nodes[i], nr = radii[i] + radiusMax, vx = vy = 0;
+        nx = node.x + node.vx, nx0 = nx - nr, nx1 = nx + nr;
+        ny = node.y + node.vy, ny0 = ny - nr, ny1 = ny + nr;
+        tree.remove(node).visit(apply);
+        node.vx += vx * strength, node.vy += vy * strength;
+        tree.add(node);
+      }
     }
 
     function apply(quad, x0, y0, x1, y1) {
@@ -63,6 +66,10 @@ export default function(radius) {
         radiusMax = r;
       }
     }
+  };
+
+  force.iterations = function(_) {
+    return arguments.length ? (iterations = +_, force) : iterations;
   };
 
   force.strength = function(_) {
