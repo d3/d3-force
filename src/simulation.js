@@ -25,7 +25,7 @@ export default function(nodes) {
 
   if (nodes == null) nodes = [];
 
-  function start() {
+  function restart() {
     iteration = 0;
     stepper.restart(step);
     return simulation;
@@ -83,7 +83,7 @@ export default function(nodes) {
   initializeNodes();
 
   return simulation = {
-    start: start,
+    restart: restart,
     stop: stop,
     tick: tick,
 

@@ -33,7 +33,7 @@ var simulation = d3_force.forceSimulation(nodes);
 
 …
 
-<a name="simulation_start" href="#simulation_start">#</a> <i>simulation</i>.<b>start</b>()
+<a name="simulation_restart" href="#simulation_restart">#</a> <i>simulation</i>.<b>restart</b>()
 
 …
 
