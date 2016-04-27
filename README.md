@@ -89,7 +89,7 @@ This method does not dispatch [events](#simulation_on); events are only dispatch
 
 ### Forces
 
-A *force* is simply a function that modifies nodes’ positions or velocities; in this context, a *force* can apply a classical physical force such as electrical charge or gravity, or it can resolve a geometric constraint, such as keeping a node within a bounding box or a fixed distance from a linked node. For example, a simple positioning force that moves nodes towards the origin ⟨0,0⟩ might be implemented as:
+A *force* is simply a function that modifies nodes’ positions or velocities; in this context, a *force* can apply a classical physical force such as electrical charge or gravity, or it can resolve a geometric constraint, such as keeping nodes within a bounding box or keeping links nodes a fixed distance apart. For example, a simple positioning force that moves nodes towards the origin ⟨0,0⟩ might be implemented as:
 
 ```js
 function force(alpha) {
@@ -101,9 +101,9 @@ function force(alpha) {
 }
 ```
 
-Forces typically read the node’s position ⟨*x*,*y*⟩ and then add to (or subtract from) the node’s velocity ⟨*vx*,*vy*⟩. However, forces may also “peek ahead” to the predicted new position of the node, ⟨*x* + *vx*,*y* + *vy*⟩, which is useful for geometric constraints that are resolved through [iterative relaxation](https://en.wikipedia.org/wiki/Relaxation_\(iterative_method\)). Forces may also modify the position directly, which is sometimes useful to avoid adding energy (instability) to the simulation, such as when recentering the simulation in the viewport.
+Forces typically read the node’s current position ⟨*x*,*y*⟩ and then add to (or subtract from) the node’s current velocity ⟨*vx*,*vy*⟩. However, forces may also “peek ahead” to the predicted next position of the node, ⟨*x* + *vx*,*y* + *vy*⟩, which is useful for geometric constraints that are resolved through [iterative relaxation](https://en.wikipedia.org/wiki/Relaxation_\(iterative_method\)). Forces may also modify the position directly, which is sometimes useful to avoid adding energy (instability) to the simulation, such as when recentering the simulation in the viewport.
 
-Simulations typically compose multiple forces (or constraints) as desired. This module provides several forces for your enjoyment:
+Simulations typically compose multiple forces as desired. This module provides several for your enjoyment:
 
 * [Centering](#centering)
 * [Circle Collision](#circle-collision)
@@ -112,7 +112,7 @@ Simulations typically compose multiple forces (or constraints) as desired. This 
 * [Many-Body](#many-body)
 * [Positioning](#positioning)
 
-Of course you may also implement your own custom force function. Forces may optionally implement [*force*.initialize](#force_initialize) to receive the simulation’s array of nodes.
+Forces may optionally implement [*force*.initialize](#force_initialize) to receive the simulation’s array of nodes.
 
 <a name="_force" href="#_force">#</a> <i>force</i>(<i>alpha</i>)
 
