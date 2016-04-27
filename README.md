@@ -31,7 +31,7 @@ var simulation = d3_force.forceSimulation(nodes);
 
 <a name="forceSimulation" href="#forceSimulation">#</a> d3.<b>forceSimulation</b>([<i>nodes</i>])
 
-…
+Creates a new velocity Verlet simulator with the specified array of [*nodes*](#simulation_nodes). If *nodes* is not specified, it defaults to the empty array. The simulator [starts](#simulation_restart) automatically; if you want to run the simulation manually, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired.
 
 <a name="simulation_restart" href="#simulation_restart">#</a> <i>simulation</i>.<b>restart</b>()
 
@@ -43,9 +43,9 @@ var simulation = d3_force.forceSimulation(nodes);
 
 <a name="simulation_tick" href="#simulation_tick">#</a> <i>simulation</i>.<b>tick</b>()
 
-…
+Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the position of each [node](#simulation_nodes) according to the following formula: *position* += *velocity* × (1 - [*drag*](#simulation_drag)). Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop, and false otherwise.
 
-The exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example, to run the simulation manually:
+The current *alpha* is defined as exp(*iteration* × [*alphaDecay*](#simulation_alphaDecay)) where *iteration* is the number of times this method can be called since the simulation started. The exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example:
 
 ```js
 for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / -simulation.alphaDecay()); i < n; ++i) {
@@ -53,7 +53,9 @@ for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / -simulation.alph
 }
 ```
 
-This may be useful for computing [static force-directed layouts](http://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16), such as in a background web worker or on the server.
+Manual invocation is useful for computing [static force-directed layouts](http://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16), such as in a background web worker or on the server.
+
+This method does not dispatch a *tick* or *end* [event](#simulation_on); events are only dispatched by the internal timer when the simulation is started automatically upon creation or by calling [*simulation*.restart](#simulation_restart).
 
 <a name="simulation_nodes" href="#simulation_nodes">#</a> <i>simulation</i>.<b>nodes</b>([<i>nodes</i>])
 
