@@ -94,14 +94,14 @@ var simulation = d3.forceSimulation(nodes)
 
 <a name="simulation_on" href="#simulation_on">#</a> <i>simulation</i>.<b>on</b>(<i>typenames</i>, [<i>listener</i>])
 
-If *listener* is specified, sets the event *listener* for the specified *type* and returns this simulation. If an event listener was already registered for the same type, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event *listener* for the specified *type* (if any) instead. If *listener* is not specified, returns the currently-assigned listener for the specified type, if any. When a specified event is dispatched, each *listener* will be invoked with the `this` context as the simulation.
+If *listener* is specified, sets the event *listener* for the specified *typenames* and returns this simulation. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the `this` context as the simulation.
 
-The type must be one of the following:
+Each *typename* is a *type* followed by an optional *name*, such as `tick.foo` and `tick.bar`; the name allows multiple listeners to be registered for the same *type*. The *type* must be one of the following:
 
 * `tick` - after each [tick](#simulation_tick) of the simulation.
 * `end` - after the simulation ends, when *alpha* < [*alphaMin*](#simulation_alphaMin).
 
-To register multiple listeners for the same *type*, the type may be followed by an optional name, such as `tick.foo` and `tick.bar`. See [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) for details.
+See [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) for details.
 
 ### Forces
 
