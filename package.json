@@ -27,7 +27,7 @@
     "pretest": "rm -rf build && mkdir build && json2module package.json > build/package.js && rollup -g d3-collection:d3_collection,d3-dispatch:d3_dispatch,d3-quadtree:d3_quadtree,d3-timer:d3_timer -f umd -n d3_force -o build/d3-force.js -- index.js",
     "test": "tape 'test/**/*-test.js' && eslint index.js src",
     "prepublish": "npm run test && uglifyjs build/d3-force.js -c -m -o build/d3-force.min.js",
-    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git push --tags && cp build/d3-force.js ../d3.github.com/d3-force.v0.2.js && cp build/d3-force.min.js ../d3.github.com/d3-force.v0.2.min.js && cd ../d3.github.com && git add d3-force.v0.2.js d3-force.v0.2.min.js && git commit -m \"d3-force ${VERSION}\" && git push && cd - && zip -j build/d3-force.zip -- LICENSE README.md build/d3-force.js build/d3-force.min.js"
+    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git push --tags && cp build/d3-force.js ../d3.github.com/d3-force.v0.3.js && cp build/d3-force.min.js ../d3.github.com/d3-force.v0.3.min.js && cd ../d3.github.com && git add d3-force.v0.3.js d3-force.v0.3.min.js && git commit -m \"d3-force ${VERSION}\" && git push && cd - && zip -j build/d3-force.zip -- LICENSE README.md build/d3-force.js build/d3-force.min.js"
   },
   "dependencies": {
     "d3-collection": "0.1",
