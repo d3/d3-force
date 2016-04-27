@@ -75,19 +75,33 @@ If *alpha* is specified, sets the minimum alpha to the specified number and retu
 
 <a name="simulation_alphaDecay" href="#simulation_alphaDecay">#</a> <i>simulation</i>.<b>alphaDecay</b>([<i>decay</i>])
 
-…
+If *decay* is specified, sets the [exponential decay](https://en.wikipedia.org/wiki/Exponential_decay) rate constant λ to the specified number and returns this simulation. If *decay* is not specified, returns the current alpha decay rate, which defaults to 0.02. The alpha decay rate determines how quickly the simulation stabilizes. Higher values cause the simulation to stabilize more quickly, but risk getting stuck in a local minimum; lower values cause the simulation to take longer to run, but typically converge on a better layout. To have the simulation run forever, set the *decay* rate to zero.
 
 <a name="simulation_drag" href="#simulation_drag">#</a> <i>simulation</i>.<b>drag</b>([<i>drag</i>])
 
-…
+If *drag* is specified, sets the drag factor to the specified number in the range [0,1] and returns this simulation. If *drag* is not specified, returns the current drag factor, which defaults to 0.4. The drag factor affects how quickly nodes’ velocities decay; at each [tick](#simulation_tick), the velocities are updated according to the following formula: *velocity* \*= 1 - *drag*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less drag may converge on a better solution, but it also risks numerical instabilities and oscillations.
 
 <a name="simulation_force" href="#simulation_force">#</a> <i>simulation</i>.<b>force</b>(<i>name</i>[, <i>force</i>])
 
-…
+If *force* is specified, assigns the [force](#forces) for the specified *name* and returns this simulation. If *force* is not specified, returns the force with the specified name, or undefined if there is no such force. (By default, new simulations have no forces.) For example, to create a new simulation to layout a graph, you might say:
 
-<a name="simulation_on" href="#simulation_on">#</a> <i>simulation</i>.<b>on</b>(<i>typenames</i>, [<i>callback</i>])
+```js
+var simulation = d3.forceSimulation(nodes)
+    .force("charge", d3.forceManyBody())
+    .force("link", d3.forceLink(links))
+    .force("center", d3.forceCenter());
+```
 
-…
+<a name="simulation_on" href="#simulation_on">#</a> <i>simulation</i>.<b>on</b>(<i>typenames</i>, [<i>listener</i>])
+
+If *listener* is specified, sets the event *listener* for the specified *type* and returns this simulation. If an event listener was already registered for the same type, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event *listener* for the specified *type* (if any) instead. If *listener* is not specified, returns the currently-assigned listener for the specified type, if any. When a specified event is dispatched, each *listener* will be invoked with the `this` context as the simulation.
+
+The type must be one of the following:
+
+* `tick` - after each [tick](#simulation_tick) of the simulation.
+* `end` - after the simulation ends, when *alpha* < [*alphaMin*](#simulation_alphaMin).
+
+To register multiple listeners for the same *type*, the type may be followed by an optional name, such as `tick.foo` and `tick.bar`. See [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) for details.
 
 ### Forces
 
