@@ -138,6 +138,10 @@ The circle collision force prevents circular nodes with a given [radius](#collid
 
 …
 
+<a name="collide_iterations" href="#collide_iterations">#</a> <i>collide</i>.<b>iterations</b>([<i>iterations</i>])
+
+…
+
 #### Circle Containment
 
 The circle containment force constrains nodes to fit within a circle of a given [*radius*](#contain_radius) and center ⟨[*x*](#contain_x),[*y*](#contain_y)⟩. The radius and center can be specified on a per-node basis. (These parameters are only recomputed when the force is initialized, not on every application.)
@@ -180,11 +184,15 @@ The source and target properties may be initialized using [*link*.id](#link_id).
 
 …
 
+<a name="link_distance" href="#link_distance">#</a> <i>link</i>.<b>distance</b>([<i>distance</i>])
+
+…
+
 <a name="link_strength" href="#link_strength">#</a> <i>link</i>.<b>strength</b>([<i>strength</i>])
 
 …
 
-<a name="link_distance" href="#link_distance">#</a> <i>link</i>.<b>distance</b>([<i>distance</i>])
+<a name="link_iterations" href="#link_iterations">#</a> <i>link</i>.<b>iterations</b>([<i>iterations</i>])
 
 …
 
