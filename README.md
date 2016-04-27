@@ -43,7 +43,7 @@ Creates a new velocity Verlet simulator with the specified array of [*nodes*](#s
 
 <a name="simulation_tick" href="#simulation_tick">#</a> <i>simulation</i>.<b>tick</b>()
 
-Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the positions and velocities of each [node](#simulation_nodes) according to the following formula: *velocity* *= 1 - [*drag*](#simulation_drag), *position* += *velocity*. Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop after this tick, and false otherwise.
+Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the positions and velocities of each [node](#simulation_nodes) according to the following formula: *velocity* \*= 1 - [*drag*](#simulation_drag), *position* += *velocity*. Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop after this tick, and false otherwise.
 
 The current *alpha* is defined as exp(*iteration* × [*alphaDecay*](#simulation_alphaDecay)) where *iteration* is the number of times this method can be called since the simulation started. Thus, the exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example:
 
