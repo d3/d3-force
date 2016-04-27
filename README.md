@@ -96,7 +96,7 @@ var simulation = d3.forceSimulation(nodes)
 
 If *listener* is specified, sets the event *listener* for the specified *typenames* and returns this simulation. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the `this` context as the simulation.
 
-The *typenames* is a string containing one or more *typename* separated by whitespace. Each *typename* is a *type* followed by an optional *name*, such as `tick.foo` and `tick.bar`; the name allows multiple listeners to be registered for the same *type*. The *type* must be one of the following:
+The *typenames* is a string containing one or more *typename* separated by whitespace. Each *typename* is a *type*, optionally followed by a period (`.`) and a *name*, such as `tick.foo` and `tick.bar`; the name allows multiple listeners to be registered for the same *type*. The *type* must be one of the following:
 
 * `tick` - after each [tick](#simulation_tick) of the simulation.
 * `end` - after the simulation ends, when *alpha* < [*alphaMin*](#simulation_alphaMin).
