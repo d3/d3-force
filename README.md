@@ -57,7 +57,7 @@ This method does not dispatch [events](#simulation_on); events are only dispatch
 
 <a name="simulation_nodes" href="#simulation_nodes">#</a> <i>simulation</i>.<b>nodes</b>([<i>nodes</i>])
 
-…
+If *nodes* is specified, sets the simulation’s nodes to the specified array, initializing their positions and velocities if necessary, and then [re-initializes](#force_initialize) any bound [forces](#simulation_force); returns the simulation. If *nodes* is not specified, returns the simulation’s array of nodes as specified to the [constructor](#forceSimulation). Each *node* must be an object; the following properties are initialized by the simulation:
 
 * `index` - the node’s zero-based index into *nodes*
 * `x` - the node’s current *x*-position
@@ -65,9 +65,13 @@ This method does not dispatch [events](#simulation_on); events are only dispatch
 * `vx` - the node’s current *x*-velocity
 * `vy` - the node’s current *y*-velocity
 
+The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modified by [forces](#forces) and by the simulation.
+
+If the specified array of *nodes* is modified, such as when nodes are added to or removed from the simulation, this method must be called again with the new (or changed) array to notify the simulation and bound forces of the change; the simulation does not make a defensive copy of the specified array.
+
 <a name="simulation_alphaMin" href="#simulation_alphaMin">#</a> <i>simulation</i>.<b>alphaMin</b>([<i>alpha</i>])
 
-…
+If *alpha* is specified, sets the minimum alpha to the specified number and returns this simulation. If *alpha* is not specified, returns the current minimum alpha value, which defaults to 0.001. The minimum alpha value determines when the simulation will stop automatically: when the current alpha is less than the minimum alpha. Assuming the default [alpha decay rate](#simulation_alphaDecay) of 0.02, this corresponds to 346 iterations.
 
 <a name="simulation_alphaDecay" href="#simulation_alphaDecay">#</a> <i>simulation</i>.<b>alphaDecay</b>([<i>decay</i>])
 

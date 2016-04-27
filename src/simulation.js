@@ -16,7 +16,7 @@ var initialRadius = 10,
 export default function(nodes) {
   var simulation,
       iteration = 0,
-      alphaMin = 0.0001,
+      alphaMin = 0.001,
       alphaDecay = -0.02,
       drag = 0.6,
       forces = map(),
