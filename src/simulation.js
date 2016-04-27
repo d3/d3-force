@@ -18,7 +18,7 @@ export default function(nodes) {
       iteration = 0,
       alphaMin = 0.0001,
       alphaDecay = -0.02,
-      drag = 0.5,
+      drag = 0.6,
       forces = map(),
       stepper = timer(step),
       event = dispatch("tick", "end");
