@@ -45,6 +45,16 @@ var simulation = d3_force.forceSimulation(nodes);
 
 …
 
+The exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example, to run the simulation manually:
+
+```js
+for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / -simulation.alphaDecay()); i < n; ++i) {
+  simulation.tick();
+}
+```
+
+This may be useful for computing [static force-directed layouts](http://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16), such as in a background web worker or on the server.
+
 <a name="simulation_nodes" href="#simulation_nodes">#</a> <i>simulation</i>.<b>nodes</b>([<i>nodes</i>])
 
 …
