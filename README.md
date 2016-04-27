@@ -45,15 +45,13 @@ Creates a new velocity Verlet simulator with the specified array of [*nodes*](#s
 
 Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the positions and velocities of each [node](#simulation_nodes) according to the following formula: *velocity* \*= 1 - [*drag*](#simulation_drag), *position* += *velocity*. Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop after this tick, and false otherwise.
 
-The current *alpha* is defined as exp(*iteration* × [*alphaDecay*](#simulation_alphaDecay)) where *iteration* is the number of times this method can be called since the simulation started. Thus, the exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example:
+The current *alpha* is defined as exp(*iteration* × [*alphaDecay*](#simulation_alphaDecay)) where *iteration* is the number of times this method has been called since the simulation started. Thus, the exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example, to run the simulation manually, as when computing a [static layout](http://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16) in a background web worker or on the server:
 
 ```js
 for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / -simulation.alphaDecay()); i < n; ++i) {
   simulation.tick();
 }
 ```
-
-Manual invocation is useful for computing [static layouts](http://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16), such as in a background web worker or on the server.
 
 This method does not dispatch [events](#simulation_on); events are only dispatched by the internal timer when the simulation is started automatically upon [creation](#forceSimulation) or by calling [*simulation*.restart](#simulation_restart).
 
