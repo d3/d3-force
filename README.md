@@ -43,7 +43,7 @@ Creates a new velocity Verlet simulator with the specified array of [*nodes*](#s
 
 <a name="simulation_tick" href="#simulation_tick">#</a> <i>simulation</i>.<b>tick</b>()
 
-Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the ⟨*x*,*y*⟩ position of each [node](#simulation_nodes) according to the following formula: *position* += *velocity* × (1 - [*drag*](#simulation_drag)). Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop after this tick, and false otherwise.
+Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the positions and velocities of each [node](#simulation_nodes) according to the following formula: *velocity* *= 1 - [*drag*](#simulation_drag), *position* += *velocity*. Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop after this tick, and false otherwise.
 
 The current *alpha* is defined as exp(*iteration* × [*alphaDecay*](#simulation_alphaDecay)) where *iteration* is the number of times this method can be called since the simulation started. Thus, the exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example:
 
@@ -89,7 +89,21 @@ This method does not dispatch [events](#simulation_on); events are only dispatch
 
 ### Forces
 
-[Simulations](#simulation) apply arbitrary forces. This module provides several built-in forces for your enjoyment:
+A *force* is simply a function that modifies nodes’ positions or velocities; in this context, a *force* can apply a classical physical force such as electrical charge or gravity, or it can resolve a geometric constraint, such as keeping a node within a bounding box or a fixed distance from a linked node. For example, a simple positioning force that moves nodes towards the origin ⟨0,0⟩ might be implemented as:
+
+```js
+function force(alpha) {
+  for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
+    node = nodes[i];
+    node.vx -= node.x * k;
+    node.vy -= node.y * k;
+  }
+}
+```
+
+Forces typically read the node’s position ⟨*x*,*y*⟩ and then add to (or subtract from) the node’s velocity ⟨*vx*,*vy*⟩. However, forces may also “peek ahead” to the predicted new position of the node, ⟨*x* + *vx*,*y* + *vy*⟩, which is useful for geometric constraints that are resolved through [iterative relaxation](https://en.wikipedia.org/wiki/Relaxation_\(iterative_method\)). Forces may also modify the position directly, which is sometimes useful to avoid adding energy (instability) to the simulation, such as when recentering the simulation in the viewport.
+
+Simulations typically compose multiple forces (or constraints) as desired. This module provides several forces for your enjoyment:
 
 * [Centering](#centering)
 * [Circle Collision](#circle-collision)
@@ -98,15 +112,15 @@ This method does not dispatch [events](#simulation_on); events are only dispatch
 * [Many-Body](#many-body)
 * [Positioning](#positioning)
 
-You may also implement your own custom force. A force is simply a [function](#_force) that takes the simulation’s current *alpha* and modifies nodes’ positions or velocities. Forces may optionally implement [*force*.initialize](#force_initialize) to receive the simulation’s array of nodes.
+Of course you may also implement your own custom force function. Forces may optionally implement [*force*.initialize](#force_initialize) to receive the simulation’s array of nodes.
 
 <a name="_force" href="#_force">#</a> <i>force</i>(<i>alpha</i>)
 
-…
+Applies this force, optionally observing the specified *alpha*. Typically, the force is applied to the array of nodes previously passed to [*force*.initialize](#force_initialize), however, some forces may apply to a subset of nodes, or behave differently. For example, [d3.forceLink](#links) applies to the source and target of each link.
 
 <a name="force_initialize" href="#force_initialize">#</a> <i>force</i>.<b>initialize</b>(<i>nodes</i>)
 
-…
+… This method is called when a force is bound to a simulation via [*simulation*.force](#simulation_force) and when the simulation’s nodes change via [*simulation*.nodes](#simulation_nodes). A force may perform any necessary work during initialization, such as evaluating per-node parameters, rather than performing that work for each application of the force.
 
 #### Centering
 
