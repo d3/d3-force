@@ -10,6 +10,9 @@ export function y(d) {
   return d.y;
 }
 
+var initialRadius = 10,
+    initialAngle = Math.PI * (3 - Math.sqrt(5));
+
 export default function(nodes) {
   var simulation,
       iteration = 0,
@@ -58,10 +61,14 @@ export default function(nodes) {
   function initializeNodes() {
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i], node.index = i;
-      if (isNaN(node.x)) node.x = Math.random() * 100 - 50;
-      if (isNaN(node.y)) node.y = Math.random() * 100 - 50;
-      if (isNaN(node.vx)) node.vx = 0;
-      if (isNaN(node.vy)) node.vy = 0;
+      if (isNaN(node.x) || isNaN(node.y)) {
+        var radius = initialRadius * Math.sqrt(i), angle = i * initialAngle;
+        node.x = radius * Math.cos(angle);
+        node.y = radius * Math.sin(angle);
+      }
+      if (isNaN(node.vx) || isNaN(node.vy)) {
+        node.vx = node.vy = 0;
+      }
     }
   }
 

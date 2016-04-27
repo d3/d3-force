@@ -60,16 +60,11 @@ export default function() {
         w = x2 - x1,
         l = x * x + y * y;
 
-    // Limit forces for very close nodes.
-    // Randomize direction for exactly-coincident nodes.
-    if (l < distanceMin2) {
-      if (!l) l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = 1;
-      l = Math.sqrt(l / distanceMin2), x /= l, y /= l, l = distanceMin2;
-    }
-
     // Apply the Barnes-Hut approximation if possible.
+    // Limit forces for very close nodes.
     if (w * w / theta2 < l) {
       if (l < distanceMax2) {
+        if (l < distanceMin2) l = Math.sqrt(l / distanceMin2), x /= l, y /= l, l = distanceMin2;
         l = quad.value * alpha / l;
         node.vx += x * l;
         node.vy += y * l;
@@ -79,6 +74,13 @@ export default function() {
 
     // Otherwise, process points directly.
     else if (quad.length || l >= distanceMax2) return;
+
+    // Limit forces for very close nodes.
+    // Randomize direction for exactly-coincident nodes.
+    if (l < distanceMin2) {
+      if (!l) l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = 1;
+      l = Math.sqrt(l / distanceMin2), x /= l, y /= l, l = distanceMin2;
+    }
 
     do if (quad.data !== node) {
       w = strengths[quad.data.index] * alpha / l;
