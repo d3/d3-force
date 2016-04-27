@@ -1,6 +1,13 @@
 import constant from "./constant";
 import {quadtree} from "d3-quadtree";
-import {x, y} from "./simulation";
+
+function x(d) {
+  return d.x + d.vx;
+}
+
+function y(d) {
+  return d.y + d.vy;
+}
 
 export default function(radius) {
   var nodes,
@@ -14,28 +21,30 @@ export default function(radius) {
     var i, n = nodes.length,
         tree = quadtree(nodes, x, y),
         node,
+        nx,
+        ny,
+        nr,
+        vx,
+        vy,
         nx0,
         ny0,
         nx1,
-        ny1,
-        vx,
-        vy,
-        nr;
+        ny1;
 
     for (i = 0; i < n; ++i) {
       node = nodes[i], nr = radii[i] + radiusMax, vx = vy = 0;
-      nx0 = node.x - nr, ny0 = node.y - nr;
-      nx1 = node.x + nr, ny1 = node.y + nr;
+      nx = node.x + node.vx, nx0 = nx - nr, nx1 = nx + nr;
+      ny = node.y + node.vy, ny0 = ny - nr, ny1 = ny + nr;
       tree.remove(node).visit(apply);
-      node.x += vx * strength, node.y += vy * strength;
+      node.vx += vx * strength, node.vy += vy * strength;
       tree.add(node);
     }
 
     function apply(quad, x0, y0, x1, y1) {
       if (x0 > nx1 || x1 < nx0 || y0 > ny1 || y1 < ny0) return true;
       if (quad.length) return;
-      var x = node.x - quad.data.x,
-          y = node.y - quad.data.y,
+      var x = nx - quad.data.x - quad.data.vx,
+          y = ny - quad.data.y - quad.data.vy,
           l = x * x + y * y,
           r = radii[i] + radii[quad.data.index];
       if (l < r * r) {

@@ -21,8 +21,8 @@ export default function(links) {
   function force(alpha) {
     for (var i = 0, n = links.length, link, source, target, x, y, l, b; i < n; ++i) {
       link = links[i], source = link.source, target = link.target;
-      x = target.x - source.x;
-      y = target.y - source.y;
+      x = target.x + target.vx - source.x - source.vx;
+      y = target.y + target.vy - source.y - source.vy;
       if (l = x * x + y * y) l = Math.sqrt(l), l = (l - distances[i]) / l;
       else l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = distances[i];
       l *= alpha * strengths[i], x *= l, y *= l;
