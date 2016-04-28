@@ -118,8 +118,7 @@ Forces typically read the node’s current position ⟨*x*,*y*⟩ and then add t
 Simulations typically compose multiple forces as desired. This module provides several for your enjoyment:
 
 * [Centering](#centering)
-* [Circle Collision](#circle-collision)
-* [Circle Containment](#circle-containment)
+* [Collision](#collision)
 * [Links](#links)
 * [Many-Body](#many-body)
 * [Positioning](#positioning)
@@ -136,7 +135,7 @@ Assigns the array of *nodes* to this force. This method is called when a force i
 
 #### Centering
 
-The centering force moves nodes so that their mean position (their center of mass assuming all nodes have equal weight) is at the given position ⟨[*x*](#center_x),[*y*](#center_y)⟩. This force modifies the positions of nodes on each application; it does not modify velocities, as doing so would typically cause the nodes to overshoot and oscillate around the desired center.
+The centering force translates nodes uniformly so that the mean position of all nodes (the center of mass if all nodes have equal weight) is at the given position ⟨[*x*](#center_x),[*y*](#center_y)⟩. This force modifies the positions of nodes on each application; it does not modify velocities, as doing so would typically cause the nodes to overshoot and oscillate around the desired center. This force helps keeps nodes in the center of the viewport, and unlike the [positioning force](#positioning), it does not distort their relative positions.
 
 <a name="forceCenter" href="#forceCenter">#</a> d3.<b>forceCenter</b>([<i>x</i>, <i>y</i>])
 
@@ -150,9 +149,9 @@ If *x* is specified, sets the *x*-coordinate of the centering position to the sp
 
 If *y* is specified, sets the *y*-coordinate of the centering position to the specified number and returns this force. If *y* is not specified, returns the current *y*-coordinate, which defaults to zero.
 
-#### Circle Collision
+#### Collision
 
-The circle collision force treats nodes as circles with a given [radius](#collide_radius), rather than points, and prevents nodes from overlapping. More formally, two nodes *a* and *b* are separated so that the distance between *a* and *b* is at least *radius*(*a*) + *radius*(*b*). To reduce jitter, this is by default a “soft” constraint with a configurable [strength](#collide_strength) and [iteration count](#collide_iterations).
+The collision force treats nodes as circles with a given [radius](#collide_radius), rather than points, and prevents nodes from overlapping. More formally, two nodes *a* and *b* are separated so that the distance between *a* and *b* is at least *radius*(*a*) + *radius*(*b*). To reduce jitter, this is by default a “soft” constraint with a configurable [strength](#collide_strength) and [iteration count](#collide_iterations).
 
 <a name="forceCollide" href="#forceCollide">#</a> d3.<b>forceCollide</b>([<i>radius</i>])
 
@@ -179,26 +178,6 @@ Overlapping nodes are resolved through iterative relaxation. For each node, the 
 <a name="collide_iterations" href="#collide_iterations">#</a> <i>collide</i>.<b>iterations</b>([<i>iterations</i>])
 
 If *iterations* is specified, sets the number of iterations per application to the specified number and returns this force. If *iterations* is not specified, returns the current iteration count which defaults to 1. Increasing the number of iterations greatly increases the rigidity of the constraint and avoids partial overlap of nodes, but also increases the runtime cost to evaluate the force.
-
-#### Circle Containment
-
-The circle containment force constrains nodes to fit within a circle of a given [*radius*](#contain_radius) and center ⟨[*x*](#contain_x),[*y*](#contain_y)⟩. The radius and center can be specified on a per-node basis. (These parameters are only recomputed when the force is initialized, not on every application.)
-
-<a name="forceContain" href="#forceContain">#</a> d3.<b>forceContain</b>([<i>radius</i>[, <i>x</i>, <i>y</i>]])
-
-…
-
-<a name="contain_radius" href="#contain_radius">#</a> <i>contain</i>.<b>radius</b>([<i>radius</i>])
-
-…
-
-<a name="contain_x" href="#contain_x">#</a> <i>contain</i>.<b>x</b>([<i>x</i>])
-
-…
-
-<a name="contain_y" href="#contain_y">#</a> <i>contain</i>.<b>y</b>([<i>y</i>])
-
-…
 
 #### Links
 
