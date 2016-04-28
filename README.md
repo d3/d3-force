@@ -65,7 +65,7 @@ If *nodes* is specified, sets the simulation’s nodes to the specified array, i
 * `vx` - the node’s current *x*-velocity
 * `vy` - the node’s current *y*-velocity
 
-The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modified by [forces](#forces) and by the simulation. If either *vx* or *vy* is NaN, the velocity is initialized to ⟨0,0⟩. If either *x* or *y* is NaN, the position is initialized to with radius 10 * √*index* and angle π * (3 - √5), resulting in a [phyllotaxis arrangement](https://www.jasondavies.com/sunflower-phyllotaxis/), so chosen because nodes are distributed deterministically with uniform density around the origin.
+The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modified by [forces](#forces) and by the simulation. If either *vx* or *vy* is NaN, the velocity is initialized to ⟨0,0⟩. If either *x* or *y* is NaN, the position is initialized to with radius 10 * √*index* and angle π * (3 - √5), resulting in a [phyllotaxis arrangement](http://bl.ocks.org/mbostock/11478058), so chosen because nodes are distributed deterministically with uniform density around the origin.
 
 If the specified array of *nodes* is modified, such as when nodes are added to or removed from the simulation, this method must be called again with the new (or changed) array to notify the simulation and bound forces of the change; the simulation does not make a defensive copy of the specified array.
 
