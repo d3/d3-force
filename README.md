@@ -23,23 +23,19 @@ var simulation = d3_force.forceSimulation(nodes);
 
 ## API Reference
 
-…
-
 ### Simulation
-
-…
 
 <a name="forceSimulation" href="#forceSimulation">#</a> d3.<b>forceSimulation</b>([<i>nodes</i>])
 
-Creates a new velocity Verlet simulator with the specified array of [*nodes*](#simulation_nodes) and no [forces](#simulation_force). If *nodes* is not specified, it defaults to the empty array. The simulator [starts](#simulation_restart) automatically; if you wish to run the simulation manually, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired.
+Creates a new simulation with the specified array of [*nodes*](#simulation_nodes) and no [forces](#simulation_force). If *nodes* is not specified, it defaults to the empty array. The simulator [starts](#simulation_restart) automatically; use [*simulation*.on](#simulation_on) to listen for tick events as the simulation runs. If you wish to run the simulation manually instead, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired.
 
 <a name="simulation_restart" href="#simulation_restart">#</a> <i>simulation</i>.<b>restart</b>()
 
-…
+Resets the current iteration count, setting the current alpha to one, restarts the simulation‘s internal timer, and returns the simulation. This method can be used to “reheat” the simulation after interaction, such as when dragging a node, or to resume the simulation after temporarily pausing it with [*simulation*.stop](#simulation_stop).
 
 <a name="simulation_stop" href="#simulation_stop">#</a> <i>simulation</i>.<b>stop</b>()
 
-…
+Stops the simulation‘s internal timer, if it is running, and returns the simulation. If the timer is already stopped, this method does nothing. This method is useful for running the simulation manually; see [*simulation*.tick](#simulation_tick).
 
 <a name="simulation_tick" href="#simulation_tick">#</a> <i>simulation</i>.<b>tick</b>()
 
@@ -140,39 +136,49 @@ Assigns the array of *nodes* to this force. This method is called when a force i
 
 #### Centering
 
-The centering force moves nodes so that their center of mass (assuming all nodes are equal-weight) is at the given position ⟨[*x*](#center_x),[*y*](#center_y)⟩. (These parameters are only recomputed when the force is initialized, not on every application.)
+The centering force moves nodes so that their mean position (their center of mass assuming all nodes have equal weight) is at the given position ⟨[*x*](#center_x),[*y*](#center_y)⟩. This force modifies the positions of nodes on each application; it does not modify velocities, as doing so would typically cause the nodes to overshoot and oscillate around the desired center.
 
 <a name="forceCenter" href="#forceCenter">#</a> d3.<b>forceCenter</b>([<i>x</i>, <i>y</i>])
 
-…
+Creates a new centering force with the specified [*x*-](#center_x) and [*y*-](#center_y) coordinates. If *x* and *y* are not specified, they default to ⟨0,0⟩.
 
 <a name="center_x" href="#center_x">#</a> <i>center</i>.<b>x</b>([<i>x</i>])
 
-…
+If *x* is specified, sets the *x*-coordinate of the centering position to the specified number and returns this force. If *x* is not specified, returns the current *x*-coordinate, which defaults to zero.
 
 <a name="center_y" href="#center_y">#</a> <i>center</i>.<b>y</b>([<i>y</i>])
 
-…
+If *y* is specified, sets the *y*-coordinate of the centering position to the specified number and returns this force. If *y* is not specified, returns the current *y*-coordinate, which defaults to zero.
 
 #### Circle Collision
 
-The circle collision force prevents circular nodes with a given [radius](#collide_radius) from overlapping. More formally, two nodes *a* and *b* are separated so that the distance between *a* and *b* is at least *radius*(*a*) + *radius*(*b*). To reduce jitter, this is by default a “soft” constraint with a configurable [strength](#collide_strength). (These parameters are only recomputed when the force is initialized, not on every application.)
+The circle collision force treats nodes as circles with a given [radius](#collide_radius), rather than points, and prevents nodes from overlapping. More formally, two nodes *a* and *b* are separated so that the distance between *a* and *b* is at least *radius*(*a*) + *radius*(*b*). To reduce jitter, this is by default a “soft” constraint with a configurable [strength](#collide_strength) and [iteration count](#collide_iterations).
 
 <a name="forceCollide" href="#forceCollide">#</a> d3.<b>forceCollide</b>([<i>radius</i>])
 
-…
+Creates a new circle collision force with the specified [*radius*](#collide_radius). If *radius* is not specified, it defaults to the constant one for all nodes.
 
 <a name="collide_radius" href="#collide_radius">#</a> <i>collide</i>.<b>radius</b>([<i>radius</i>])
 
-…
+If *radius* is specified, sets the radius accessor to the specified number or function, re-evaluates the radius accessor for each node, and returns this force. If *radius* is not specified, returns the current radius accessor, which defaults to:
+
+```js
+function radius() {
+  return 1;
+}
+```
+
+The radius accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the radius of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
 <a name="collide_strength" href="#collide_strength">#</a> <i>collide</i>.<b>strength</b>([<i>strength</i>])
 
-…
+If *strength* is specified, sets the force strength to the specified number in [0,1] and returns this force. If *strength* is not specified, returns the current strength which defaults to 0.7.
+
+Overlapping nodes are resolved through iterative relaxation. For each node, the other nodes that are anticipated to overlap at the the at the next tick (using the anticipated positions ⟨*x* + *vx*,*y* + *vy*⟩) are determined; the node’s velocity is then modified to push the node out of each overlapping node. The change in velocity is dampened by the force’s strength such that the resolution of simultaneous overlaps can be blended together to find a stable solution.
 
 <a name="collide_iterations" href="#collide_iterations">#</a> <i>collide</i>.<b>iterations</b>([<i>iterations</i>])
 
-…
+If *iterations* is specified, sets the number of iterations per application to the specified number and returns this force. If *iterations* is not specified, returns the current iteration count which defaults to 1. Increasing the number of iterations greatly increases the rigidity of the constraint and avoids partial overlap of nodes, but also increases the runtime cost to evaluate the force.
 
 #### Circle Containment
 
