@@ -275,7 +275,7 @@ Creates a new positioning force towards the given position ⟨[*x*](#position_x)
 
 <a name="position_strength" href="#position_strength">#</a> <i>position</i>.<b>strength</b>([<i>strength</i>])
 
-If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* corresponds to the a scaling factor of the vector between the node’s position and the force’s target position. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current position to the desired position with each application. Higher values moves nodes more quickly to the desired target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
+If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* corresponds to the proportion of the vector from the node’s position to the force’s target position that should be added to the node’s velocity: *velocity* += (*target* - *position*) × *strength*. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current position to the target position with each application. Higher values moves nodes more quickly to the target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
 
 If *strength* is not specified, returns the current strength accessor, which defaults to:
 
