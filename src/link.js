@@ -66,12 +66,16 @@ export default function(links) {
   }
 
   function initializeStrength() {
+    if (!nodes) return;
+
     for (var i = 0, n = links.length; i < n; ++i) {
       strengths[i] = +strength(links[i]);
     }
   }
 
   function initializeDistance() {
+    if (!nodes) return;
+
     for (var i = 0, n = links.length; i < n; ++i) {
       distances[i] = +distance(links[i]);
     }
