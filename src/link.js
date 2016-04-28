@@ -37,7 +37,7 @@ export default function(links) {
   }
 
   function initialize() {
-    if (!nodes || !links) return;
+    if (!nodes) return;
 
     var i,
         n = nodes.length,
@@ -61,11 +61,18 @@ export default function(links) {
       link = links[i], bias[i] = count[link.source.index] / (count[link.source.index] + count[link.target.index]);
     }
 
-    if (!strengths) for (i = 0, strengths = new Array(m); i < m; ++i) {
+    strengths = new Array(m), initializeStrength();
+    distances = new Array(m), initializeDistance();
+  }
+
+  function initializeStrength() {
+    for (var i = 0, n = links.length; i < n; ++i) {
       strengths[i] = +strength(links[i]);
     }
+  }
 
-    if (!distances) for (i = 0, distances = new Array(m); i < m; ++i) {
+  function initializeDistance() {
+    for (var i = 0, n = links.length; i < n; ++i) {
       distances[i] = +distance(links[i]);
     }
   }
@@ -76,11 +83,11 @@ export default function(links) {
   };
 
   force.links = function(_) {
-    return arguments.length ? (links = _, strengths = distances = null, initialize(), force) : links;
+    return arguments.length ? (links = _, initialize(), force) : links;
   };
 
   force.id = function(_) {
-    return arguments.length ? (id = _, initialize(), force) : id;
+    return arguments.length ? (id = _, force) : id;
   };
 
   force.iterations = function(_) {
@@ -88,11 +95,11 @@ export default function(links) {
   };
 
   force.strength = function(_) {
-    return arguments.length ? (strength = typeof _ === "function" ? _ : constant(+_), strengths = null, initialize(), force) : strength;
+    return arguments.length ? (strength = typeof _ === "function" ? _ : constant(+_), initializeStrength(), force) : strength;
   };
 
   force.distance = function(_) {
-    return arguments.length ? (distance = typeof _ === "function" ? _ : constant(+_), distances = null, initialize(), force) : distance;
+    return arguments.length ? (distance = typeof _ === "function" ? _ : constant(+_), initializeDistance(), force) : distance;
   };
 
   return force;
