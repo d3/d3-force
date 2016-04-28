@@ -181,7 +181,7 @@ If *iterations* is specified, sets the number of iterations per application to t
 
 #### Links
 
-The link force pushes linked nodes closer together or farther apart according to the desired [link distance](#link_distance), which may be specified on a per-node basis. (These parameters are only recomputed when the force is initialized, not on every application.)
+The link force pushes linked nodes closer together or farther apart according to the desired [link distance](#link_distance).
 
 <a name="forceLink" href="#forceLink">#</a> d3.<b>forceLink</b>([<i>links</i>])
 
@@ -203,56 +203,110 @@ The source and target properties may be initialized using [*link*.id](#link_id).
 
 <a name="link_distance" href="#link_distance">#</a> <i>link</i>.<b>distance</b>([<i>distance</i>])
 
-…
+If *distance* is specified, sets the distance accessor to the specified number or function, re-evaluates the distance accessor for each link, and returns this force. If *distance* is not specified, returns the current distance accessor, which defaults to:
+
+```js
+function distance() {
+  return 30;
+}
+```
+
+The distance accessor is invoked for each [link](#link_links), being passed the *link* and its zero-based *index*. The resulting number is then stored internally, such that the distance of each link is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
 <a name="link_strength" href="#link_strength">#</a> <i>link</i>.<b>strength</b>([<i>strength</i>])
 
-…
+If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each link, and returns this force. If *strength* is not specified, returns the current strength accessor, which defaults to:
+
+```js
+function strength() {
+  return 0.7;
+}
+```
+
+The strength accessor is invoked for each [link](#link_links), being passed the *link* and its zero-based *index*. The resulting number is then stored internally, such that the strength of each link is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
 <a name="link_iterations" href="#link_iterations">#</a> <i>link</i>.<b>iterations</b>([<i>iterations</i>])
 
-…
+If *iterations* is specified, sets the number of iterations per application to the specified number and returns this force. If *iterations* is not specified, returns the current iteration count which defaults to 1. Increasing the number of iterations greatly increases the rigidity of the constraint and is useful for [complex structures such as lattices](http://bl.ocks.org/mbostock/1b64ec067fcfc51e7471d944f51f1611), but also increases the runtime cost to evaluate the force.
 
 #### Many-Body
 
-The many-body (or *n*-body) force applies mutally amongst all [nodes](#simulation_nodes). It can be used to simulate gravity (attraction) if the [strength](#manyBody_strength) is positive, or eletrical charge (repulsion) if the strength is negative. This implementation uses quadtrees and the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation) to greatly improve performance; the accuracy can be customized using the [theta](#manyBody_theta) parameter. The strength can be specified on a per-node basis. (This parameter is only recomputed when the force is initialized, not on every application.)
+The many-body (or *n*-body) force applies mutally amongst all [nodes](#simulation_nodes). It can be used to simulate gravity (attraction) if the [strength](#manyBody_strength) is positive, or electrostatic charge (repulsion) if the strength is negative. This implementation uses quadtrees and the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation) to greatly improve performance; the accuracy can be customized using the [theta](#manyBody_theta) parameter.
+
+Unlike links, which only affect two linked nodes, the charge force is global: every node affects every other node, even if they are on disconnected subgraphs.
 
 <a name="forceManyBody" href="#forceManyBody">#</a> d3.<b>forceManyBody</b>()
 
-…
+Creates a new many-body force with the default parameters.
 
 <a name="manyBody_strength" href="#manyBody_strength">#</a> <i>manyBody</i>.<b>strength</b>([<i>strength</i>])
 
-…
+If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. A positive value causes nodes to attract each other, similar to gravity, while a negative value causes nodes to repel each other, similar to electrostic charge. If *strength* is not specified, returns the current strength accessor, which defaults to:
+
+```js
+function strength() {
+  return -100;
+}
+```
+
+The strength accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the strength of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
 <a name="manyBody_theta" href="#manyBody_theta">#</a> <i>manyBody</i>.<b>theta</b>([<i>theta</i>])
 
-…
+If *theta* is specified, sets the Barnes–Hut approximation criterion to the specified number and returns this force. If *theta* is not specified, returns the current value, which defaults to 0.9.
+
+To accelerate computation, this force implements the [Barnes–Hut approximation](http://en.wikipedia.org/wiki/Barnes–Hut_simulation) which takes O(*n* log *n*) per application where *n* is the number of [nodes](#simulation_nodes). For each application, a [quadtree](https://github.com/d3/d3-quadtree) stores the current node positions; then for each node, the combined force of all other nodes on the given node is computed. For a cluster of nodes that is far away, the charge force can be approximated by treating the cluster as a single, larger node. The *theta* parameter determines the accuracy of the approximation: if the ratio of the area of the quadtree cell to the distance from the node to the cell’s center of mass is less than *theta*, all nodes in the given cell are treated as a single node rather than computed individually.
 
 <a name="manyBody_distanceMin" href="#manyBody_distanceMin">#</a> <i>manyBody</i>.<b>distanceMin</b>([<i>distance</i>])
 
-…
+If *distance* is specified, sets the minimum distance between nodes over which this force is considered. If *distance* is not specified, returns the current minimum distance, which defaults to 1. A minimum distance establishes an upper bound on the strength of the force between two nearby nodes, avoiding instability. In particular, it avoids an infinitely-strong force if two nodes are exactly coincident; in this case, the direction of the force is random.
 
 <a name="manyBody_distanceMax" href="#manyBody_distanceMax">#</a> <i>manyBody</i>.<b>distanceMax</b>([<i>distance</i>])
 
-…
+If *distance* is specified, sets the maximum distance between nodes over which this force is considered. If *distance* is not specified, returns the current maximum distance, which defaults to infinity. Specifying a finite maximum distance improves performance and produces a more localized layout.
 
 #### Positioning
 
-The positioning force pushes nodes towards a desired position ⟨[*x*](#position_x),[*y*](#position_y)⟩. The position and [strength](#position_strength) can be specified on a per-node basis. (These parameters are only recomputed when the force is initialized, not on every application.)
+The positioning force pushes nodes towards a desired position ⟨[*x*](#position_x),[*y*](#position_y)⟩ with a configurable [strength](#position_strength). The strength of the force is proportional to the distance between the node’s position and the target position, similar to a spring force.
 
 <a name="forcePosition" href="#forcePosition">#</a> d3.<b>forcePosition</b>([<i>x</i>, <i>y</i>])
 
-…
+Creates a new positioning force towards the given position ⟨[*x*](#position_x),[*y*](#position_y)⟩. If *x* and *y* are not specified, the position defaults to ⟨0,0⟩.
 
 <a name="position_strength" href="#position_strength">#</a> <i>position</i>.<b>strength</b>([<i>strength</i>])
 
-…
+If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* corresponds to the a scaling factor of the vector between the node’s position and the force’s target position. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current position to the desired position with each application. Higher values moves nodes more quickly to the desired target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
+
+If *strength* is not specified, returns the current strength accessor, which defaults to:
+
+```js
+function strength() {
+  return 0.1;
+}
+```
+
+The strength accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the strength of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
 <a name="position_x" href="#position_x">#</a> <i>position</i>.<b>x</b>([<i>x</i>])
 
-…
+If *x* is specified, sets the *x*-coordinate accessor to the specified number or function, re-evaluates the *x*-accessor for each node, and returns this force. If *x* is not specified, returns the current *x*-accessor, which defaults to:
+
+```js
+function x() {
+  return 0;
+}
+```
+
+The *x*-accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target *x*-coordinate of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
 <a name="position_y" href="#position_y">#</a> <i>position</i>.<b>y</b>([<i>y</i>])
 
-…
+If *y* is specified, sets the *y*-coordinate accessor to the specified number or function, re-evaluates the *y*-accessor for each node, and returns this force. If *y* is not specified, returns the current *y*-accessor, which defaults to:
+
+```js
+function y() {
+  return 0;
+}
+```
+
+The *y*-accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target *y*-coordinate of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
