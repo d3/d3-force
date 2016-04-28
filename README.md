@@ -1,6 +1,18 @@
 # d3-force
 
-…
+This module implements a simplified [velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration) numerical integrator for simulating physical forces on particles. For information visualization, this is most often useful for studying graphs and hierarchies!
+
+[<img alt="Force-Directed Graph" src="https://raw.githubusercontent.com/d3/d3-force/master/img/graph.png" width="480" height="250">](http://bl.ocks.org/mbostock/f584aa36df54c451c94a9d0798caed35)[<img alt="Force-Directed Tree" src="https://raw.githubusercontent.com/d3/d3-force/master/img/graph.png" width="480" height="250">](http://bl.ocks.org/mbostock/95aa92e2f4e8345aaa55a4a94d41ce37)
+
+You can also simulate circles (disks) with collision, such as for [bubble charts](http://www.nytimes.com/interactive/2012/09/06/us/politics/convention-word-counts.html):
+
+[<img alt="Collision Detection" src="https://raw.githubusercontent.com/d3/d3-force/master/img/collide.png" width="480" height="250">](http://bl.ocks.org/mbostock/31ce330646fa8bcb7289ff3b97aab3f5)
+
+You can even use it as a rudimentary physics engine, such as to simulate cloth:
+
+[<img alt="Force-Directed Lattice" src="https://raw.githubusercontent.com/d3/d3-force/master/img/lattice.png" width="480" height="250">](http://bl.ocks.org/mbostock/1b64ec067fcfc51e7471d944f51f1611)
+
+To use this module, create a [simulation](#simulation) for an array of [nodes](#simulation_nodes), and compose the desired [forces](#simulation_force). Then [listen](#simulation_on) for tick events to render the nodes as they update in your preferred graphics system, such as Canvas or SVG.
 
 ## Installing
 
