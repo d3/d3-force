@@ -8,7 +8,7 @@ You can also simulate circles (disks) with collision, such as for [bubble charts
 
 [<img alt="Collision Detection" src="https://raw.githubusercontent.com/d3/d3-force/master/img/collide.png" width="480" height="250">](http://bl.ocks.org/mbostock/31ce330646fa8bcb7289ff3b97aab3f5)
 
-You can even use it as a rudimentary physics engine, such as to simulate cloth:
+You can even use it as a rudimentary physics engine, say to simulate cloth:
 
 [<img alt="Force-Directed Lattice" src="https://raw.githubusercontent.com/d3/d3-force/master/img/lattice.png" width="480" height="250">](http://bl.ocks.org/mbostock/1b64ec067fcfc51e7471d944f51f1611)
 
