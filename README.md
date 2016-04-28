@@ -181,25 +181,77 @@ If *iterations* is specified, sets the number of iterations per application to t
 
 #### Links
 
-The link force pushes linked nodes closer together or farther apart according to the desired [link distance](#link_distance).
+The link force pushes linked nodes closer together or farther apart according to the desired [link distance](#link_distance). The strength of the force is proportional to the distance between the linked nodes’ separation distance and the target distance, similar to a spring force.
 
 <a name="forceLink" href="#forceLink">#</a> d3.<b>forceLink</b>([<i>links</i>])
 
-…
+Creates a new link force with the specified *links* and default parameters. If *links* is not specified, it defaults to the empty array.
 
 <a name="link_links" href="#link_links">#</a> <i>link</i>.<b>links</b>([<i>links</i>])
 
-…
+If *links* is specified, sets the array of links associated with this force, recomputes the [distance](#link_distance) and [strength](#link_strength) parameters for each link, and returns this force. If *links* is not specified, returns the current array of links, which defaults to the empty array.
 
-* `index` - the zero-based index into *links*
+Each link is an object with the following properties:
+
 * `source` - the link’s source node; see [*simulation*.nodes](#simulation_nodes)
 * `target` - the link’s target node; see [*simulation*.nodes](#simulation_nodes)
+* `index` - the zero-based index into *links*, assigned by this method
 
-The source and target properties may be initialized using [*link*.id](#link_id).
+For convenience, a link’s source and target properties may be initialized using numeric or string identifiers rather than object references; see [*link*.id](#link_id).
+
+If the specified array of *links* is modified, such as when links are added to or removed from the simulation, this method must be called again with the new (or changed) array to notify the force of the change; the force does not make a defensive copy of the specified array.
 
 <a name="link_id" href="#link_id">#</a> <i>link</i>.<b>id</b>([<i>id</i>])
 
-…
+If *id* is specified, sets the node id accessor to the specified function and returns this force. If *id* is not specified, returns the current node id accessor, which defaults to the numeric index of the node:
+
+```js
+function id(d, i) {
+  return i;
+}
+```
+
+The default id accessor allows each link’s source and target to be specified as a zero-based index into the [nodes](#simulation_nodes) array. For example:
+
+```js
+var nodes = [
+  {"id": "Alice"},
+  {"id": "Bob"},
+  {"id": "Carol"}
+];
+
+var links = [
+  {"source": 0, "target": 1}, // Alice → Bob
+  {"source": 1, "target": 2} // Bob → Carol
+];
+```
+
+Now consider a different id accessor that returns a string:
+
+```js
+function id(d) {
+  return d.id;
+}
+```
+
+With this accessor, you can use named sources and targets:
+
+```js
+var nodes = [
+  {"id": "Alice"},
+  {"id": "Bob"},
+  {"id": "Carol"}
+];
+
+var links = [
+  {"source": "Alice", "target": "Bob"},
+  {"source": "Bob", "target": "Carol"}
+];
+```
+
+This is particularly useful when representing graphs in JSON, as JSON does not allow references. See [this example](http://bl.ocks.org/mbostock/f584aa36df54c451c94a9d0798caed35).
+
+The id accessor is invoked for each node whenever the force is initialized, as when the [nodes](#simulation_nodes) or [links](#link_links) change, being passed the node and its zero-based index.
 
 <a name="link_distance" href="#link_distance">#</a> <i>link</i>.<b>distance</b>([<i>distance</i>])
 
