@@ -200,7 +200,12 @@ The link force pushes linked nodes closer together or farther apart according to
 
 <a name="forceLink" href="#forceLink">#</a> d3.<b>forceLink</b>([<i>links</i>])
 
-…
+If *links* is specified, sets the layout's associated links to the specified array. If *links* is not specified, returns the current array, which defaults to the empty array. Each link has the following attributes:
+
+* source - the source node (an element in *nodes*).
+* target - the target node (an element in *nodes*).
+
+Note: the values of the source and target attributes may be initially specified as indexes into the *nodes* array; these will be replaced by references after the call to [start](#start). Link objects may have additional fields that you specify; this data can be used to compute link [strength](Force-Layout#linkStrength) and [distance](Force-Layout#linkDistance) on a per-link basis using an accessor function.
 
 <a name="link_links" href="#link_links">#</a> <i>link</i>.<b>links</b>([<i>links</i>])
 
@@ -214,7 +219,7 @@ The source and target properties may be initialized using [*link*.id](#link_id).
 
 <a name="link_id" href="#link_id">#</a> <i>link</i>.<b>id</b>([<i>id</i>])
 
-…
+If *id* is specified, sets the string identifier of linking to the specified value.
 
 <a name="link_distance" href="#link_distance">#</a> <i>link</i>.<b>distance</b>([<i>distance</i>])
 
@@ -222,11 +227,14 @@ The source and target properties may be initialized using [*link*.id](#link_id).
 
 <a name="link_strength" href="#link_strength">#</a> <i>link</i>.<b>strength</b>([<i>strength</i>])
 
-…
+If *strength* is specified, sets the strength (rigidity) of links to the specified value in the range [0,1]. If *strength* is not specified, returns the layout's current link strength, which defaults to 1. If *strength* is a constant, then all links have the same strength. Otherwise, if *strength* is a function, then the function is evaluated for each link (in order), being passed the link and its index, with the `this` context as the force layout; the function's return value is then used to set each link's strength. The function is evaluated whenever the layout [starts](Force-Layout#start).
 
 <a name="link_iterations" href="#link_iterations">#</a> <i>link</i>.<b>iterations</b>([<i>iterations</i>])
 
-…
+If *distance* is specified, sets the target distance between linked nodes to the specified value. If *distance* is not specified, returns the layout's current link distance, which defaults to 20. If *distance* is a constant, then all links are the same distance. Otherwise, if *distance* is a function, then the function is evaluated for each link (in order), being passed the link and its index, with the `this` context as the force layout; the function's return value is then used to set each link's distance. The function is evaluated whenever the layout [starts](Force-Layout#start).
+
+Links are not implemented as "spring forces", as is common in other force-directed layouts, but as weak geometric constraints. For each tick of the layout, the distance between each pair of linked nodes is computed and compared to the target distance; the links are then moved towards each other, or away from each other, so as to converge on the desired distance. This method of constraints relaxation on top of position Verlet integration is vastly more stable than previous methods using spring forces, and also allows for the flexible implementation of [other constraints](http://www.csse.monash.edu.au/~tdwyer/Dwyer2009FastConstraints.pdf) in the tick event listener, such as hierarchical layering.
+
 
 #### Many-Body
 
