@@ -1,6 +1,6 @@
 # d3-force
 
-This simplified, extensible [velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration) numerical integrator simulates physical forces on particles. For information visualization, this is most often useful for studying graphs and hierarchies!
+This simplified, extensible [velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration) numerical integrator simulates physical forces on particles. In the domain of information visualization, this is most often useful for studying graphs and hierarchies!
 
 [<img alt="Force-Directed Graph" src="https://raw.githubusercontent.com/d3/d3-force/master/img/graph.png" width="420" height="219">](http://bl.ocks.org/mbostock/f584aa36df54c451c94a9d0798caed35)[<img alt="Force-Directed Tree" src="https://raw.githubusercontent.com/d3/d3-force/master/img/tree.png" width="420" height="219">](http://bl.ocks.org/mbostock/95aa92e2f4e8345aaa55a4a94d41ce37)
 
