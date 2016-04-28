@@ -181,7 +181,7 @@ If *iterations* is specified, sets the number of iterations per application to t
 
 #### Links
 
-The link force pushes linked nodes together or apart according to the desired [link distance](#link_distance). The strength of the force is proportional to the difference between linked nodes’ distance and the target distance, similar to a spring force.
+The link force pushes linked nodes together or apart according to the desired [link distance](#link_distance). The strength of the force is proportional to the difference between the linked nodes’ distance and the target distance, similar to a spring force.
 
 <a name="forceLink" href="#forceLink">#</a> d3.<b>forceLink</b>([<i>links</i>])
 
