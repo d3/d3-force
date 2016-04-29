@@ -4,9 +4,9 @@ This simplified, extensible [velocity Verlet](https://en.wikipedia.org/wiki/Verl
 
 [<img alt="Force-Directed Graph" src="https://raw.githubusercontent.com/d3/d3-force/master/img/graph.png" width="420" height="219">](http://bl.ocks.org/mbostock/f584aa36df54c451c94a9d0798caed35)[<img alt="Force-Directed Tree" src="https://raw.githubusercontent.com/d3/d3-force/master/img/tree.png" width="420" height="219">](http://bl.ocks.org/mbostock/95aa92e2f4e8345aaa55a4a94d41ce37)
 
-You can also simulate circles (disks) with collision, such as for [bubble charts](http://www.nytimes.com/interactive/2012/09/06/us/politics/convention-word-counts.html):
+You can also simulate circles (disks) with collision, such as for [bubble charts](http://www.nytimes.com/interactive/2012/09/06/us/politics/convention-word-counts.html) or [beeswam plots](http://bl.ocks.org/mbostock/6526445e2b44303eebf21da3b6627320):
 
-[<img alt="Collision Detection" src="https://raw.githubusercontent.com/d3/d3-force/master/img/collide.png" width="480" height="250">](http://bl.ocks.org/mbostock/31ce330646fa8bcb7289ff3b97aab3f5)
+[<img alt="Collision Detection" src="https://raw.githubusercontent.com/d3/d3-force/master/img/collide.png" width="480" height="250">](http://bl.ocks.org/mbostock/31ce330646fa8bcb7289ff3b97aab3f5)[<img alt="Beeswarm" src="https://raw.githubusercontent.com/d3/d3-force/master/img/beeswarm.png" width="480" height="250">](http://bl.ocks.org/mbostock/6526445e2b44303eebf21da3b6627320)
 
 You can even use it as a rudimentary physics engine, say to simulate cloth:
 
