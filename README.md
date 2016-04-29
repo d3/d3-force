@@ -331,15 +331,15 @@ If *distance* is specified, sets the maximum distance between nodes over which t
 
 #### Positioning
 
-The positioning force pushes nodes towards a desired position ⟨[*x*](#position_x),[*y*](#position_y)⟩ with a configurable [strength](#position_strength). The strength of the force is proportional to the distance between the node’s position and the target position, similar to a spring force.
+The positioning forces pushes nodes towards a desired [*x*](#forceX)- or [*y*](#forceY)-position with a configurable strength. The strength of the force is proportional to the one-dimensional distance between the node’s position and the target position.
 
-<a name="forcePosition" href="#forcePosition">#</a> d3.<b>forcePosition</b>([<i>x</i>, <i>y</i>])
+<a name="forceX" href="#forceX">#</a> d3.<b>forceX</b>([<i>x</i>])
 
-Creates a new positioning force towards the given position ⟨[*x*](#position_x),[*y*](#position_y)⟩. If *x* and *y* are not specified, the position defaults to ⟨0,0⟩.
+Creates a new positioning force along the *x*-axis towards the given position [*x*](#x_x). If *x* is not specified, it defaults to 0.
 
-<a name="position_strength" href="#position_strength">#</a> <i>position</i>.<b>strength</b>([<i>strength</i>])
+<a name="x_strength" href="#x_strength">#</a> <i>x</i>.<b>strength</b>([<i>strength</i>])
 
-If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* corresponds to the proportion of the vector from the node’s position to the force’s target position that should be added to the node’s velocity: *velocity* += (*target* - *position*) × *strength*. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current position to the target position with each application. Higher values moves nodes more quickly to the target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
+If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* determines how to modify the node’s *x*-velocity according to the following formula: *node*.vx += ([*x*](#x_x) - *node*.x) × *strength*. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current *x*-position to the target *x*-position with each application. Higher values moves nodes more quickly to the target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
 
 If *strength* is not specified, returns the current strength accessor, which defaults to:
 
@@ -351,7 +351,7 @@ function strength() {
 
 The strength accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the strength of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
-<a name="position_x" href="#position_x">#</a> <i>position</i>.<b>x</b>([<i>x</i>])
+<a name="x_x" href="#x_x">#</a> <i>x</i>.<b>x</b>([<i>x</i>])
 
 If *x* is specified, sets the *x*-coordinate accessor to the specified number or function, re-evaluates the *x*-accessor for each node, and returns this force. If *x* is not specified, returns the current *x*-accessor, which defaults to:
 
@@ -363,7 +363,25 @@ function x() {
 
 The *x*-accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target *x*-coordinate of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
-<a name="position_y" href="#position_y">#</a> <i>position</i>.<b>y</b>([<i>y</i>])
+<a name="forceY" href="#forceY">#</a> d3.<b>forceY</b>([<i>y</i>])
+
+Creates a new positioning force along the *y*-axis towards the given position [*y*](#y_y). If *y* is not specified, it defaults to 0.
+
+<a name="y_strength" href="#y_strength">#</a> <i>y</i>.<b>strength</b>([<i>strength</i>])
+
+If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* determines how to modify the node’s *y*-velocity according to the following formula: *node*.vy += ([*y*](#y_y) - *node*.y) × *strength*. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current *y*-position to the target *y*-position with each application. Higher values moves nodes more quickly to the target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
+
+If *strength* is not specified, returns the current strength accessor, which defaults to:
+
+```js
+function strength() {
+  return 0.1;
+}
+```
+
+The strength accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the strength of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
+
+<a name="y_y" href="#y_y">#</a> <i>y</i>.<b>y</b>([<i>y</i>])
 
 If *y* is specified, sets the *y*-coordinate accessor to the specified number or function, re-evaluates the *y*-accessor for each node, and returns this force. If *y* is not specified, returns the current *y*-accessor, which defaults to:
 
