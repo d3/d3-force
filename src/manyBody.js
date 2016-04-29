@@ -1,8 +1,7 @@
 import constant from "./constant";
 import {quadtree} from "d3-quadtree";
 import {x, y} from "./simulation";
-
-var tau = 2 * Math.PI;
+import {tau} from "./math";
 
 export default function() {
   var nodes,

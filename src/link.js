@@ -1,7 +1,6 @@
 import {map} from "d3-collection";
 import constant from "./constant";
-
-var tau = 2 * Math.PI;
+import {tau} from "./math";
 
 function index(d, i) {
   return i;

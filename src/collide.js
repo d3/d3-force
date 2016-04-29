@@ -1,5 +1,6 @@
 import constant from "./constant";
 import {quadtree} from "d3-quadtree";
+import {tau} from "./math";
 
 function x(d) {
   return d.x + d.vx;
@@ -51,7 +52,7 @@ export default function(radius) {
           l = x * x + y * y,
           r = radii[i] + radii[quad.data.index];
       if (l < r * r) {
-        l = (r - (l = Math.sqrt(l))) / l;
+        l = l ? (r - (l = Math.sqrt(l))) / l : (l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), r - 1);
         vx += x * l, vy += y * l;
       }
     }
