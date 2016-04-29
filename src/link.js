@@ -1,6 +1,6 @@
-import {map} from "d3-collection";
 import constant from "./constant";
-import {tau} from "./math";
+import jiggle from "./jiggle";
+import {map} from "d3-collection";
 
 function index(d, i) {
   return i;
@@ -22,11 +22,11 @@ export default function(links) {
     for (var k = 0, n = links.length; k < iterations; ++k) {
       for (var i = 0, link, source, target, x, y, l, b; i < n; ++i) {
         link = links[i], source = link.source, target = link.target;
-        x = target.x + target.vx - source.x - source.vx;
-        y = target.y + target.vy - source.y - source.vy;
-        if (l = x * x + y * y) l = Math.sqrt(l), l = (l - distances[i]) / l;
-        else l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = distances[i];
-        l *= alpha * strengths[i], x *= l, y *= l;
+        x = target.x + target.vx - source.x - source.vx || jiggle();
+        y = target.y + target.vy - source.y - source.vy || jiggle();
+        l = Math.sqrt(x * x + y * y);
+        l = (l - distances[i]) / l * alpha * strengths[i];
+        x *= l, y *= l;
         target.vx -= x * (b = bias[i]);
         target.vy -= y * b;
         source.vx += x * (b = 1 - b);

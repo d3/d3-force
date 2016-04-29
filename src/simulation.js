@@ -1,7 +1,6 @@
 import {dispatch} from "d3-dispatch";
 import {map} from "d3-collection";
 import {timer} from "d3-timer";
-import {pi} from "./math";
 
 export function x(d) {
   return d.x;
@@ -12,7 +11,7 @@ export function y(d) {
 }
 
 var initialRadius = 10,
-    initialAngle = pi * (3 - Math.sqrt(5));
+    initialAngle = Math.PI * (3 - Math.sqrt(5));
 
 export default function(nodes) {
   var simulation,

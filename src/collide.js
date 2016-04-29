@@ -1,6 +1,6 @@
 import constant from "./constant";
+import jiggle from "./jiggle";
 import {quadtree} from "d3-quadtree";
-import {tau} from "./math";
 
 function x(d) {
   return d.x + d.vx;
@@ -47,12 +47,13 @@ export default function(radius) {
     function apply(quad, x0, y0, x1, y1) {
       if (x0 > nx1 || x1 < nx0 || y0 > ny1 || y1 < ny0) return true;
       if (quad.length) return;
-      var x = nx - quad.data.x - quad.data.vx,
-          y = ny - quad.data.y - quad.data.vy,
+      var x = nx - quad.data.x - quad.data.vx || jiggle(),
+          y = ny - quad.data.y - quad.data.vy || jiggle(),
           l = x * x + y * y,
           r = radii[i] + radii[quad.data.index];
       if (l < r * r) {
-        l = l ? (r - (l = Math.sqrt(l))) / l : (l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), r - 1);
+        l = Math.sqrt(l);
+        l = (r - l) / l;
         vx += x * l, vy += y * l;
       }
     }

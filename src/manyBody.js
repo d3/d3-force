@@ -1,7 +1,7 @@
 import constant from "./constant";
+import jiggle from "./jiggle";
 import {quadtree} from "d3-quadtree";
 import {x, y} from "./simulation";
-import {tau} from "./math";
 
 export default function() {
   var nodes,
@@ -60,13 +60,14 @@ export default function() {
         l = x * x + y * y;
 
     // Apply the Barnes-Hut approximation if possible.
-    // Limit forces for very close nodes.
+    // Limit forces for very close nodes; randomize direction if coincident.
     if (w * w / theta2 < l) {
       if (l < distanceMax2) {
-        if (l < distanceMin2) l = Math.sqrt(l / distanceMin2), x /= l, y /= l, l = distanceMin2;
-        l = quad.value * alpha / l;
-        node.vx += x * l;
-        node.vy += y * l;
+        if (x === 0) x = jiggle(), l += x * x;
+        if (y === 0) y = jiggle(), l += y * y;
+        if (l < distanceMin2) l = Math.sqrt(distanceMin2 * l);
+        node.vx += x * quad.value * alpha / l;
+        node.vy += y * quad.value * alpha / l;
       }
       return true;
     }
@@ -74,11 +75,11 @@ export default function() {
     // Otherwise, process points directly.
     else if (quad.length || l >= distanceMax2) return;
 
-    // Limit forces for very close nodes.
-    // Randomize direction for exactly-coincident nodes.
-    if (l < distanceMin2) {
-      if (!l) l = Math.random() * tau, x = Math.cos(l), y = Math.sin(l), l = 1;
-      l = Math.sqrt(l / distanceMin2), x /= l, y /= l, l = distanceMin2;
+    // Limit forces for very close nodes; randomize direction if coincident.
+    if (quad.data !== node || quad.next) {
+      if (x === 0) x = jiggle(), l += x * x;
+      if (y === 0) y = jiggle(), l += y * y;
+      if (l < distanceMin2) l = Math.sqrt(distanceMin2 * l);
     }
 
     do if (quad.data !== node) {
