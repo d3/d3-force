@@ -13,61 +13,76 @@ function y(d) {
 export default function(radius) {
   var nodes,
       radii,
-      radiusMax,
       strength = 0.7,
-      iterations = 1;
+      iterations = 1,
+      vx,
+      vy;
 
   if (typeof radius !== "function") radius = constant(radius == null ? 1 : +radius);
 
   function force() {
     var i, n = nodes.length,
-        tree = quadtree(nodes, x, y),
+        tree,
         node,
-        nx,
-        ny,
-        nr,
-        vx,
-        vy,
-        nx0,
-        ny0,
-        nx1,
-        ny1;
+        xi,
+        yi,
+        ri,
+        ri2;
 
     for (var k = 0; k < iterations; ++k) {
+      tree = quadtree(nodes, x, y).visitAfter(prepare);
       for (i = 0; i < n; ++i) {
-        node = nodes[i], nr = radii[i] + radiusMax, vx = vy = 0;
-        nx = node.x + node.vx, nx0 = nx - nr, nx1 = nx + nr;
-        ny = node.y + node.vy, ny0 = ny - nr, ny1 = ny + nr;
-        tree.remove(node).visit(apply);
-        node.vx += vx * strength, node.vy += vy * strength;
-        tree.add(node);
+        vx[i] = vy[i] = 0;
+      }
+      for (i = 0; i < n; ++i) {
+        node = nodes[i];
+        ri = radii[i], ri2 = ri * ri;
+        xi = node.x + node.vx;
+        yi = node.y + node.vy;
+        tree.visit(apply);
+      }
+      for (i = 0; i < n; ++i) {
+        node = nodes[i];
+        node.vx += vx[i];
+        node.vy += vy[i];
       }
     }
 
     function apply(quad, x0, y0, x1, y1) {
-      if (x0 > nx1 || x1 < nx0 || y0 > ny1 || y1 < ny0) return true;
-      if (quad.length) return;
-      var x = nx - quad.data.x - quad.data.vx || jiggle(),
-          y = ny - quad.data.y - quad.data.vy || jiggle(),
+      if (x0 > xi + (r = ri + (rj = quad.r)) || x1 < xi - r || y0 > yi + r || y1 < yi - r) return true;
+      if (quad.length || (j = (data = quad.data).index) <= i) return;
+      var data,
+          j,
+          x = xi - data.x - data.vx,
+          y = yi - data.y - data.vy,
           l = x * x + y * y,
-          r = radii[i] + radii[quad.data.index];
+          r,
+          rj;
       if (l < r * r) {
-        l = Math.sqrt(l);
-        l = (r - l) / l;
-        vx += x * l, vy += y * l;
+        if (x === 0) x = jiggle(), l += x * x;
+        if (y === 0) y = jiggle(), l += y * y;
+        l = (r - (l = Math.sqrt(l))) / l * strength;
+        vx[i] += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
+        vy[i] += (y *= l) * r;
+        vx[j] -= x * (r = 1 - r);
+        vy[j] -= y * r;
+      }
+    }
+  }
+
+  function prepare(quad) {
+    if (quad.data) return quad.r = radii[quad.data.index];
+    for (var i = quad.r = 0; i < 4; ++i) {
+      if (quad[i] && quad[i].r > quad.r) {
+        quad.r = quad[i].r;
       }
     }
   }
 
   force.initialize = function(_) {
-    var i, n = (nodes = _).length, r;
-    radii = new Array(n);
-    radiusMax = 0;
-    for (i = 0; i < n; ++i) {
-      if ((radii[i] = r = +radius(nodes[i], i, nodes)) > radiusMax) {
-        radiusMax = r;
-      }
-    }
+    var i, n = (nodes = _).length;
+    radii = new Array(n), vx = new Array(n), vy = new Array(n);
+    for (i = 0; i < n; ++i) radii[i] = +radius(nodes[i], i, nodes);
   };
 
   force.iterations = function(_) {
