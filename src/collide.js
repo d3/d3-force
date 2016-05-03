@@ -32,9 +32,6 @@ export default function(radius) {
     for (var k = 0; k < iterations; ++k) {
       tree = quadtree(nodes, x, y).visitAfter(prepare);
       for (i = 0; i < n; ++i) {
-        vx[i] = vy[i] = 0;
-      }
-      for (i = 0; i < n; ++i) {
         node = nodes[i];
         ri = radii[i], ri2 = ri * ri;
         xi = node.x + node.vx;
@@ -43,8 +40,8 @@ export default function(radius) {
       }
       for (i = 0; i < n; ++i) {
         node = nodes[i];
-        node.vx += vx[i];
-        node.vy += vy[i];
+        node.vx += vx[i], vx[i] = 0;
+        node.vy += vy[i], vy[i] = 0;
       }
     }
 
@@ -82,7 +79,7 @@ export default function(radius) {
   force.initialize = function(_) {
     var i, n = (nodes = _).length;
     radii = new Array(n), vx = new Array(n), vy = new Array(n);
-    for (i = 0; i < n; ++i) radii[i] = +radius(nodes[i], i, nodes);
+    for (i = 0; i < n; ++i) radii[i] = +radius(nodes[i], i, nodes), vx[i] = vy[i] = 0;
   };
 
   force.iterations = function(_) {
