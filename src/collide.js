@@ -40,8 +40,8 @@ export default function(radius) {
       }
       for (i = 0; i < n; ++i) {
         node = nodes[i];
-        node.vx += vx[i], vx[i] = 0;
-        node.vy += vy[i], vy[i] = 0;
+        node.vx += vx[i] * strength, vx[i] = 0;
+        node.vy += vy[i] * strength, vy[i] = 0;
       }
     }
 
@@ -58,7 +58,7 @@ export default function(radius) {
       if (l < r * r) {
         if (x === 0) x = jiggle(), l += x * x;
         if (y === 0) y = jiggle(), l += y * y;
-        l = (r - (l = Math.sqrt(l))) / l * strength;
+        l = (r - (l = Math.sqrt(l))) / l;
         vx[i] += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
         vy[i] += (y *= l) * r;
         vx[j] -= x * (r = 1 - r);
