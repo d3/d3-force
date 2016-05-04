@@ -46,13 +46,13 @@ export default function(nodes) {
   }
 
   function tick() {
-    var alpha = Math.exp(++iteration * alphaDecay);
+    var i, n = nodes.length, node, alpha = Math.exp(++iteration * alphaDecay);
 
     forces.each(function(force) {
       force(alpha);
     });
 
-    for (var i = 0, n = nodes.length, node; i < n; ++i) {
+    for (i = 0; i < n; ++i) {
       node = nodes[i];
       node.x += node.vx *= drag;
       node.y += node.vy *= drag;
