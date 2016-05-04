@@ -39,23 +39,25 @@ export default function(radius) {
     }
 
     function apply(quad, x0, y0, x1, y1) {
-      if (x0 > xi + (r = ri + (rj = quad.r)) || x1 < xi - r || y0 > yi + r || y1 < yi - r) return true;
-      if (quad.length || (data = quad.data).index <= i) return;
-      var data,
-          x = xi - data.x - data.vx,
-          y = yi - data.y - data.vy,
-          l = x * x + y * y,
-          r,
-          rj;
-      if (l < r * r) {
-        if (x === 0) x = jiggle(), l += x * x;
-        if (y === 0) y = jiggle(), l += y * y;
-        l = (r - (l = Math.sqrt(l))) / l * strength;
-        node.vx += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
-        node.vy += (y *= l) * r;
-        data.vx -= x * (r = 1 - r);
-        data.vy -= y * r;
+      var data = quad.data, rj = quad.r, r = ri + rj;
+      if (data) {
+        if (data.index > i) {
+          var x = xi - data.x - data.vx,
+              y = yi - data.y - data.vy,
+              l = x * x + y * y;
+          if (l < r * r) {
+            if (x === 0) x = jiggle(), l += x * x;
+            if (y === 0) y = jiggle(), l += y * y;
+            l = (r - (l = Math.sqrt(l))) / l * strength;
+            node.vx += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
+            node.vy += (y *= l) * r;
+            data.vx -= x * (r = 1 - r);
+            data.vy -= y * r;
+          }
+        }
+        return;
       }
+      return x0 > xi + r || x1 < xi - r || y0 > yi + r || y1 < yi - r;
     }
   }
 
