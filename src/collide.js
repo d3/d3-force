@@ -13,10 +13,8 @@ function y(d) {
 export default function(radius) {
   var nodes,
       radii,
-      strength = 0.7,
-      iterations = 1,
-      vx,
-      vy;
+      strength = 1,
+      iterations = 1;
 
   if (typeof radius !== "function") radius = constant(radius == null ? 1 : +radius);
 
@@ -38,18 +36,12 @@ export default function(radius) {
         yi = node.y + node.vy;
         tree.visit(apply);
       }
-      for (i = 0; i < n; ++i) {
-        node = nodes[i];
-        node.vx += vx[i] * strength, vx[i] = 0;
-        node.vy += vy[i] * strength, vy[i] = 0;
-      }
     }
 
     function apply(quad, x0, y0, x1, y1) {
       if (x0 > xi + (r = ri + (rj = quad.r)) || x1 < xi - r || y0 > yi + r || y1 < yi - r) return true;
-      if (quad.length || (j = (data = quad.data).index) <= i) return;
+      if (quad.length || (data = quad.data).index <= i) return;
       var data,
-          j,
           x = xi - data.x - data.vx,
           y = yi - data.y - data.vy,
           l = x * x + y * y,
@@ -58,11 +50,11 @@ export default function(radius) {
       if (l < r * r) {
         if (x === 0) x = jiggle(), l += x * x;
         if (y === 0) y = jiggle(), l += y * y;
-        l = (r - (l = Math.sqrt(l))) / l;
-        vx[i] += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
-        vy[i] += (y *= l) * r;
-        vx[j] -= x * (r = 1 - r);
-        vy[j] -= y * r;
+        l = (r - (l = Math.sqrt(l))) / l * strength;
+        node.vx += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
+        node.vy += (y *= l) * r;
+        data.vx -= x * (r = 1 - r);
+        data.vy -= y * r;
       }
     }
   }
@@ -77,9 +69,8 @@ export default function(radius) {
   }
 
   force.initialize = function(_) {
-    var i, n = (nodes = _).length;
-    radii = new Array(n), vx = new Array(n), vy = new Array(n);
-    for (i = 0; i < n; ++i) radii[i] = +radius(nodes[i], i, nodes), vx[i] = vy[i] = 0;
+    var i, n = (nodes = _).length; radii = new Array(n);
+    for (i = 0; i < n; ++i) radii[i] = +radius(nodes[i], i, nodes);
   };
 
   force.iterations = function(_) {
