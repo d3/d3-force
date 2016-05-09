@@ -45,7 +45,7 @@ Creates a new simulation with the specified array of [*nodes*](#simulation_nodes
 
 <a name="simulation_restart" href="#simulation_restart">#</a> <i>simulation</i>.<b>restart</b>()
 
-Resets the current iteration count, setting the current alpha to one, restarts the simulation‘s internal timer, and returns the simulation. This method can be used to “reheat” the simulation after interaction, such as when dragging a node, or to resume the simulation after temporarily pausing it with [*simulation*.stop](#simulation_stop).
+Restarts the simulation‘s internal timer, and returns the simulation. In conjunction with [*simulation*.alphaTarget](#simulation_alphaTarget) or [*simulation*.alpha](#simulation_alpha), this method can be used to “reheat” the simulation during interaction, such as when dragging a node, or to resume the simulation after temporarily pausing it with [*simulation*.stop](#simulation_stop).
 
 <a name="simulation_stop" href="#simulation_stop">#</a> <i>simulation</i>.<b>stop</b>()
 
@@ -53,15 +53,7 @@ Stops the simulation‘s internal timer, if it is running, and returns the simul
 
 <a name="simulation_tick" href="#simulation_tick">#</a> <i>simulation</i>.<b>tick</b>()
 
-Invokes each registered [force](#simulation_force), passing the current *alpha*; then updates the positions and velocities of each [node](#simulation_nodes) according to the following formula: *velocity* \*= 1 - [*drag*](#simulation_drag), *position* += *velocity*. Returns true if the current alpha is less than [*alphaMin*](#simulation_alphaMin), indicating that the simulation would normally stop after this tick, and false otherwise.
-
-The current *alpha* is defined as exp(*iteration* × [*alphaDecay*](#simulation_alphaDecay)) where *iteration* is the number of times this method has been called since the simulation started. Thus, the exact number of iterations needed to terminate the simulation naturally is ⌈log([*alphaMin*](#simulation_alphaMin)) / -[*alphaDecay*](#simulation_alphaDecay)⌉. For example, to run the simulation manually, as when computing a [static layout](http://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16) in a background web worker or on the server:
-
-```js
-for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / -simulation.alphaDecay()); i < n; ++i) {
-  simulation.tick();
-}
-```
+Increments the current [*alpha*](#simulation_alpha) by ([*alphaTarget*](#simulation_alphaTarget) - *alpha*) × [*alphaDecay*](#simulation_alphaDecay); then invokes each registered [force](#simulation_force), passing the new *alpha*; then updates the positions and velocities of each [node](#simulation_nodes) as follows: *velocity* \*= 1 - [*drag*](#simulation_drag), *position* += *velocity*.
 
 This method does not dispatch [events](#simulation_on); events are only dispatched by the internal timer when the simulation is started automatically upon [creation](#forceSimulation) or by calling [*simulation*.restart](#simulation_restart).
 
@@ -79,17 +71,27 @@ The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modi
 
 If the specified array of *nodes* is modified, such as when nodes are added to or removed from the simulation, this method must be called again with the new (or changed) array to notify the simulation and bound forces of the change; the simulation does not make a defensive copy of the specified array.
 
-<a name="simulation_alphaMin" href="#simulation_alphaMin">#</a> <i>simulation</i>.<b>alphaMin</b>([<i>alpha</i>])
+<a name="simulation_alpha" href="#simulation_alpha">#</a> <i>simulation</i>.<b>alpha</b>([<i>alpha</i>])
 
-If *alpha* is specified, sets the minimum alpha to the specified number and returns this simulation. If *alpha* is not specified, returns the current minimum alpha value, which defaults to 0.001. The minimum alpha value determines when the simulation will stop automatically: when the current alpha is less than the minimum alpha. Assuming the default [alpha decay rate](#simulation_alphaDecay) of 0.02, this corresponds to 346 iterations.
+If *alpha* is specified, sets the current alpha to the specified number in [0,1] and returns this simulation. If *alpha* is not specified, returns the current alpha value, which defaults to 1.
+
+<a name="simulation_alphaMin" href="#simulation_alphaMin">#</a> <i>simulation</i>.<b>alphaMin</b>([<i>min</i>])
+
+If *min* is specified, sets the minimum *alpha* to the specified number in [0,1] and returns this simulation. If *min* is not specified, returns the current minimum *alpha* value, which defaults to 0.001. The simulation’s internal timer stops when the current [*alpha*](#simulation_alpha) is less than the minimum *alpha*. The default [alpha decay rate](#simulation_alphaDecay) of ~0.0228 corresponds to 300 iterations.
 
 <a name="simulation_alphaDecay" href="#simulation_alphaDecay">#</a> <i>simulation</i>.<b>alphaDecay</b>([<i>decay</i>])
 
-If *decay* is specified, sets the [exponential decay](https://en.wikipedia.org/wiki/Exponential_decay) rate constant λ to the specified number and returns this simulation. If *decay* is not specified, returns the current alpha decay rate, which defaults to 0.02. The alpha decay rate determines how quickly the simulation stabilizes. Higher values cause the simulation to stabilize more quickly, but risk getting stuck in a local minimum; lower values cause the simulation to take longer to run, but typically converge on a better layout. To have the simulation run forever, set the *decay* rate to zero.
+If *decay* is specified, sets the [*alpha*](#simulation_alpha) decay rate to the specified number in [0,1] and returns this simulation. If *decay* is not specified, returns the current *alpha* decay rate, which defaults to 0.0228… = 1 - *pow*(0.001, 1 / 300).
+
+The alpha decay rate determines how quickly the current alpha interpolates towards the desired [target *alpha*](#simulation_alphaTarget); since the default target *alpha* is zero, by default this controls how quickly the simulation cools. Higher decay rates cause the simulation to stabilize more quickly, but risk getting stuck in a local minimum; lower values cause the simulation to take longer to run, but typically converge on a better layout. To have the simulation run forever at the current *alpha*, set the *decay* rate to zero; alternatively, set a [target *alpha](#simulation_alphaTarget) greater than the [minimum *alpha*](#simulation_alphaMin).
+
+<a name="simulation_alphaTarget" href="#simulation_alphaTarget">#</a> <i>simulation</i>.<b>alphaTarget</b>([<i>target</i>])
+
+If *target* is specified, sets the current target [*alpha*](#simulation_alpha) to the specified number in [0,1] and returns this simulation. If *target* is not specified, returns the current target alpha value, which defaults to 0.
 
 <a name="simulation_drag" href="#simulation_drag">#</a> <i>simulation</i>.<b>drag</b>([<i>drag</i>])
 
-If *drag* is specified, sets the drag factor to the specified number in the range [0,1] and returns this simulation. If *drag* is not specified, returns the current drag factor, which defaults to 0.4. The drag factor affects how quickly nodes’ velocities decay; at each [tick](#simulation_tick), the velocities are updated according to the following formula: *velocity* \*= 1 - *drag*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less drag may converge on a better solution, but it also risks numerical instabilities and oscillations.
+If *drag* is specified, sets the drag factor to the specified number in [0,1] and returns this simulation. If *drag* is not specified, returns the current drag factor, which defaults to 0.4. The drag factor affects how quickly nodes’ velocities decay; at each [tick](#simulation_tick), the velocities are updated according to the following formula: *velocity* \*= 1 - *drag*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less drag may converge on a better solution, but it also risks numerical instabilities and oscillations.
 
 <a name="simulation_force" href="#simulation_force">#</a> <i>simulation</i>.<b>force</b>(<i>name</i>[, <i>force</i>])
 
