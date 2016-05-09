@@ -15,9 +15,10 @@ var initialRadius = 10,
 
 export default function(nodes) {
   var simulation,
-      iteration = 0,
+      alpha = 1,
       alphaMin = 0.001,
-      alphaDecay = -0.02,
+      alphaDecay = 1 - Math.pow(alphaMin, 1 / 300),
+      alphaTarget = 0,
       drag = 0.6,
       forces = map(),
       stepper = timer(step),
@@ -25,28 +26,19 @@ export default function(nodes) {
 
   if (nodes == null) nodes = [];
 
-  function restart() {
-    iteration = 0;
-    stepper.restart(step);
-    return simulation;
-  }
-
-  function stop() {
-    stepper.stop();
-    return simulation;
-  }
-
   function step() {
-    var stop = tick();
+    tick();
     event.call("tick", simulation);
-    if (stop) {
+    if (alpha < alphaMin) {
       stepper.stop();
       event.call("end", simulation);
     }
   }
 
   function tick() {
-    var i, n = nodes.length, node, alpha = Math.exp(++iteration * alphaDecay);
+    var i, n = nodes.length, node;
+
+    alpha += (alphaTarget - alpha) * alphaDecay;
 
     forces.each(function(force) {
       force(alpha);
@@ -57,8 +49,6 @@ export default function(nodes) {
       node.x += node.vx *= drag;
       node.y += node.vy *= drag;
     }
-
-    return alpha < alphaMin;
   }
 
   function initializeNodes() {
@@ -83,20 +73,34 @@ export default function(nodes) {
   initializeNodes();
 
   return simulation = {
-    restart: restart,
-    stop: stop,
     tick: tick,
+
+    restart: function() {
+      return stepper.restart(step), simulation;
+    },
+
+    stop: function() {
+      return stepper.stop(), simulation;
+    },
 
     nodes: function(_) {
       return arguments.length ? (nodes = _, initializeNodes(), forces.each(initializeForce), simulation) : nodes;
     },
 
+    alpha: function(_) {
+      return arguments.length ? (alpha = +_, simulation) : alpha;
+    },
+
     alphaMin: function(_) {
-      return arguments.length ? (alphaMin = _, simulation) : alphaMin;
+      return arguments.length ? (alphaMin = +_, simulation) : alphaMin;
     },
 
     alphaDecay: function(_) {
-      return arguments.length ? (iteration = +_ ? Math.round(iteration * alphaDecay / -_) : 0, alphaDecay = -_, simulation) : -alphaDecay;
+      return arguments.length ? (alphaDecay = +_, simulation) : +alphaDecay;
+    },
+
+    alphaTarget: function(_) {
+      return arguments.length ? (alphaTarget = +_, simulation) : alphaTarget;
     },
 
     drag: function(_) {
