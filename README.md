@@ -106,7 +106,7 @@ var simulation = d3.forceSimulation(nodes)
 
 <a name="simulation_fix" href="#simulation_fix">#</a> <i>simulation</i>.<b>fix</b>(<i>node</i>[, <i>x</i>, <i>y</i>])
 
-Fixes the given *node*’s position to ⟨*x*,*y*⟩ and the velocity to zero, and returns this simulation. If *x* and *y* are not specified, the fixed position defaults to the node’s current position. When a node is fixed, its position is reset to ⟨*x*,*y*⟩ and the velocity is reset to zero at the end of each tick, after the application of any forces. This method is intended to temporarily freeze the position of one or more nodes during interaction, such as when dragging or hovering. After the interaction completes, use [*simulation*.unfix](#simulation_unfix) to release the node.
+Fixes the given *node*’s position to ⟨*x*,*y*⟩ and the velocity to zero, and returns this simulation. If *x* and *y* are not specified, the fixed position defaults to the node’s current position. When a node is fixed, its position is reset to ⟨*x*,*y*⟩ and its velocity is reset to zero at the end of each tick, after the application of any forces. This method is intended to temporarily freeze the position of one or more nodes during interaction, such as when dragging or hovering. After the interaction completes, use [*simulation*.unfix](#simulation_unfix) to release the node.
 
 <a name="simulation_unfix" href="#simulation_unfix">#</a> <i>simulation</i>.<b>unfix</b>(<i>node</i>)
 
