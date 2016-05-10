@@ -91,7 +91,7 @@ If *target* is specified, sets the current target [*alpha*](#simulation_alpha) t
 
 <a name="simulation_drag" href="#simulation_drag">#</a> <i>simulation</i>.<b>drag</b>([<i>drag</i>])
 
-If *drag* is specified, sets the drag factor to the specified number in [0,1] and returns this simulation. If *drag* is not specified, returns the current drag factor, which defaults to 0.4. The drag factor affects how quickly nodes’ velocities decay; at each [tick](#simulation_tick), the velocities are updated according to the following formula: *velocity* \*= 1 - *drag*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less drag may converge on a better solution, but it also risks numerical instabilities and oscillations.
+If *drag* is specified, sets the drag factor to the specified number in [0,1] and returns this simulation. If *drag* is not specified, returns the current drag factor, which defaults to 0.4. The drag factor affects how quickly nodes’ velocities decay; at each [tick](#simulation_tick), each node’s velocity is multiplied by 1 - *drag*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less drag may converge on a better solution, but it also risks numerical instabilities and oscillations.
 
 <a name="simulation_force" href="#simulation_force">#</a> <i>simulation</i>.<b>force</b>(<i>name</i>[, <i>force</i>])
 
@@ -351,7 +351,7 @@ Creates a new positioning force along the *x*-axis towards the given position [*
 
 <a name="x_strength" href="#x_strength">#</a> <i>x</i>.<b>strength</b>([<i>strength</i>])
 
-If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* determines how to modify the node’s *x*-velocity according to the following formula: *node*.vx += ([*x*](#x_x) - *node*.x) × *strength*. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current *x*-position to the target *x*-position with each application. Higher values moves nodes more quickly to the target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
+If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* determines how much to increment the node’s *x*-velocity: ([*x*](#x_x) - *node*.x) × *strength*. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current *x*-position to the target *x*-position with each application. Higher values moves nodes more quickly to the target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
 
 If *strength* is not specified, returns the current strength accessor, which defaults to:
 
@@ -381,7 +381,7 @@ Creates a new positioning force along the *y*-axis towards the given position [*
 
 <a name="y_strength" href="#y_strength">#</a> <i>y</i>.<b>strength</b>([<i>strength</i>])
 
-If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* determines how to modify the node’s *y*-velocity according to the following formula: *node*.vy += ([*y*](#y_y) - *node*.y) × *strength*. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current *y*-position to the target *y*-position with each application. Higher values moves nodes more quickly to the target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
+If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each node, and returns this force. The *strength* determines how much to increment the node’s *y*-velocity: ([*y*](#y_y) - *node*.y) × *strength*. For example, a value of 0.1 indicates that the node should move a tenth of the way from its current *y*-position to the target *y*-position with each application. Higher values moves nodes more quickly to the target position, often at the expense of other forces or constraints. A value outside the range [0,1] is not recommended.
 
 If *strength* is not specified, returns the current strength accessor, which defaults to:
 
