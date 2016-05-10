@@ -104,6 +104,14 @@ var simulation = d3.forceSimulation(nodes)
     .force("center", d3.forceCenter());
 ```
 
+<a name="simulation_fix" href="#simulation_fix">#</a> <i>simulation</i>.<b>fix</b>(<i>node</i>, <i>x</i>, <i>y</i>)
+
+Fixes the given *node*’s position to ⟨*x*,*y*⟩ and the velocity to zero, and returns this simulation. When a node is fixed, its position is reset to ⟨*x*,*y*⟩ and the velocity is reset to zero at the end of each tick after the application of any forces. This method is intended to temporarily freeze the position of one or more nodes during interaction, such as when dragging or hovering. After the interaction completes, use [*simulation*.unfix](#simulation_unfix) to release the node.
+
+<a name="simulation_unfix" href="#simulation_unfix">#</a> <i>simulation</i>.<b>unfix</b>(<i>node</i>)
+
+If the given *node* is currently [fixed](#simulation_fix), unfixes (frees) the *node*’s position and returns this simulation.
+
 <a name="simulation_on" href="#simulation_on">#</a> <i>simulation</i>.<b>on</b>(<i>typenames</i>, [<i>listener</i>])
 
 If *listener* is specified, sets the event *listener* for the specified *typenames* and returns this simulation. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the `this` context as the simulation.
@@ -335,11 +343,11 @@ If *distance* is specified, sets the maximum distance between nodes over which t
 
 #### Positioning
 
-The [*x*](#forceX)- and [*y*](#forceY)-positioning forces push nodes towards a desired position along the given dimension with a configurable strength; the strength of the force is proportional to the one-dimensional distance between the node’s position and the target position. The [fixed positioning](#forceFix) force fixes a single node to the given position ⟨*x*,*y*⟩ and sets the velocity to zero; it is intended to be used during interaction to keep the node under an active pointer (mouse, touch or stylus).
+The [*x*](#forceX)- and [*y*](#forceY)-positioning forces push nodes towards a desired position along the given dimension with a configurable strength. The strength of the force is proportional to the one-dimensional distance between the node’s position and the target position.
 
 <a name="forceX" href="#forceX">#</a> d3.<b>forceX</b>([<i>x</i>])
 
-Creates a new global positioning force along the *x*-axis towards the given position [*x*](#x_x). If *x* is not specified, it defaults to 0.
+Creates a new positioning force along the *x*-axis towards the given position [*x*](#x_x). If *x* is not specified, it defaults to 0.
 
 <a name="x_strength" href="#x_strength">#</a> <i>x</i>.<b>strength</b>([<i>strength</i>])
 
@@ -369,7 +377,7 @@ The *x*-accessor is invoked for each [node](#simulation_nodes) in the simulation
 
 <a name="forceY" href="#forceY">#</a> d3.<b>forceY</b>([<i>y</i>])
 
-Creates a new global positioning force along the *y*-axis towards the given position [*y*](#y_y). If *y* is not specified, it defaults to 0.
+Creates a new positioning force along the *y*-axis towards the given position [*y*](#y_y). If *y* is not specified, it defaults to 0.
 
 <a name="y_strength" href="#y_strength">#</a> <i>y</i>.<b>strength</b>([<i>strength</i>])
 
@@ -396,15 +404,3 @@ function y() {
 ```
 
 The *y*-accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target *y*-coordinate of each node is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
-
-<a name="forceFix" href="#forceFix">#</a> d3.<b>forceFix</b>(<i>node</i>[, <i>x</i>, <i>y</i>])
-
-Creates a new fixed positioning force for the given [*node*](#simulation_nodes) at the position ⟨*x*,*y*⟩. If *x* and *y* are not specified, the position defaults to the origin ⟨0,0⟩.
-
-<a name="fix_x" href="#fix_x">#</a> <i>fix</i>.<b>x</b>([<i>x</i>])
-
-If *x* is specified, sets the *x*-coordinate of the fixed position to the specified number and returns this force. If *x* is not specified, returns the current *x*-position, which defaults to zero.
-
-<a name="fix_y" href="#fix_y">#</a> <i>fix</i>.<b>y</b>([<i>y</i>])
-
-If *y* is specified, sets the *y*-coordinate of the fixed position to the specified number and returns this force. If *y* is not specified, returns the current *y*-position, which defaults to zero.
