@@ -91,7 +91,7 @@ If *target* is specified, sets the current target [*alpha*](#simulation_alpha) t
 
 <a name="simulation_drag" href="#simulation_drag">#</a> <i>simulation</i>.<b>drag</b>([<i>drag</i>])
 
-If *drag* is specified, sets the drag factor to the specified number in [0,1] and returns this simulation. If *drag* is not specified, returns the current drag factor, which defaults to 0.4. The drag factor affects how quickly nodes’ velocities decay; at each [tick](#simulation_tick), each node’s velocity is multiplied by 1 - *drag*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less drag may converge on a better solution, but it also risks numerical instabilities and oscillations.
+If *drag* is specified, sets the drag factor to the specified number in [0,1] and returns this simulation. If *drag* is not specified, returns the current drag factor, which defaults to 0.4. The drag factor affects how quickly nodes’ velocities decay; at the end of each [tick](#simulation_tick), after the application of any forces, each node’s velocity is multiplied by 1 - *drag*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less drag may converge on a better solution, but it also risks numerical instabilities and oscillations.
 
 <a name="simulation_force" href="#simulation_force">#</a> <i>simulation</i>.<b>force</b>(<i>name</i>[, <i>force</i>])
 
