@@ -343,7 +343,7 @@ If *distance* is specified, sets the maximum distance between nodes over which t
 
 #### Positioning
 
-The [*x*](#forceX)- and [*y*](#forceY)-positioning forces push nodes towards a desired position along the given dimension with a configurable strength. The strength of the force is proportional to the one-dimensional distance between the node’s position and the target position.
+The [*x*](#forceX)- and [*y*](#forceY)-positioning forces push nodes towards a desired position along the given dimension with a configurable strength. The strength of the force is proportional to the one-dimensional distance between the node’s position and the target position. While these forces can be used to position individual nodes, they are intended primarily for global forces that apply to all (or most) nodes; see [*simulation*.fix](#simulation_fix).
 
 <a name="forceX" href="#forceX">#</a> d3.<b>forceX</b>([<i>x</i>])
 
