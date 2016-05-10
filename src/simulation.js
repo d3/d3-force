@@ -121,7 +121,7 @@ export default function(nodes) {
     },
 
     fix: function(node, x, y) {
-      return fixes[node.index] = {x: +x, y: +y}, simulation;
+      return fixes[node.index] = {x: x == null ? node.x : +x, y: y == null ? node.y : +y}, simulation;
     },
 
     unfix: function(node) {
