@@ -7,7 +7,7 @@ export default function() {
   var nodes,
       node,
       alpha,
-      strength = constant(-100),
+      strength = constant(-30),
       strengths,
       distanceMin2 = 1,
       distanceMax2 = Infinity,
