@@ -128,6 +128,29 @@ export default function(nodes) {
       return delete fixes[node.index], simulation;
     },
 
+    find: function(x, y, radius) {
+      var i = 0,
+          n = nodes.length,
+          dx,
+          dy,
+          d2,
+          node,
+          closest;
+
+      if (radius == null) radius = Infinity;
+      else radius *= radius;
+
+      for (i = 0; i < n; ++i) {
+        node = nodes[i];
+        dx = x - node.x;
+        dy = y - node.y;
+        d2 = dx * dx + dy * dy;
+        if (d2 < radius) closest = node, radius = d2;
+      }
+
+      return closest;
+    },
+
     on: function(name, _) {
       return arguments.length > 1 ? (event.on(name, _), simulation) : event.on(name);
     }
