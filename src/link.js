@@ -20,7 +20,7 @@ export default function(links) {
   if (links == null) links = [];
 
   function defaultStrength(link) {
-    return Math.min(1, 4 / (count[link.source.index] + count[link.target.index]));
+    return 1 / Math.min(count[link.source.index], count[link.target.index]);
   }
 
   function force(alpha) {
