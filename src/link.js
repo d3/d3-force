@@ -8,15 +8,20 @@ function index(d, i) {
 
 export default function(links) {
   var id = index,
-      strength = constant(0.7),
+      strength = defaultStrength,
       strengths,
       distance = constant(30),
       distances,
       nodes,
       count,
+      bias,
       iterations = 1;
 
   if (links == null) links = [];
+
+  function defaultStrength(link) {
+    return Math.min(1, 4 / (count[link.source.index] + count[link.target.index]));
+  }
 
   function force(alpha) {
     for (var k = 0, n = links.length; k < iterations; ++k) {
@@ -27,10 +32,10 @@ export default function(links) {
         l = Math.sqrt(x * x + y * y);
         l = (l - distances[i]) / l * alpha * strengths[i];
         x *= l, y *= l;
-        target.vx -= x / (b = count[target.index]);
-        target.vy -= y / b;
-        source.vx += x / (b = count[source.index]);
-        source.vy += y / b;
+        target.vx -= x * (b = bias[i]);
+        target.vy -= y * b;
+        source.vx += x * (b = 1 - b);
+        source.vy += y * b;
       }
     }
   }
@@ -55,6 +60,10 @@ export default function(links) {
       ++count[link.source.index], ++count[link.target.index];
     }
 
+    for (i = 0, bias = new Array(m); i < m; ++i) {
+      link = links[i], bias[i] = count[link.source.index] / (count[link.source.index] + count[link.target.index]);
+    }
+
     strengths = new Array(m), initializeStrength();
     distances = new Array(m), initializeDistance();
   }
@@ -63,7 +72,7 @@ export default function(links) {
     if (!nodes) return;
 
     for (var i = 0, n = links.length; i < n; ++i) {
-      strengths[i] = +strength(links[i]);
+      strengths[i] = +strength(links[i], i, links);
     }
   }
 
@@ -71,7 +80,7 @@ export default function(links) {
     if (!nodes) return;
 
     for (var i = 0, n = links.length; i < n; ++i) {
-      distances[i] = +distance(links[i]);
+      distances[i] = +distance(links[i], i, links);
     }
   }
 
