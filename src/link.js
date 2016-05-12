@@ -13,7 +13,7 @@ export default function(links) {
       distance = constant(30),
       distances,
       nodes,
-      bias,
+      count,
       iterations = 1;
 
   if (links == null) links = [];
@@ -27,10 +27,10 @@ export default function(links) {
         l = Math.sqrt(x * x + y * y);
         l = (l - distances[i]) / l * alpha * strengths[i];
         x *= l, y *= l;
-        target.vx -= x * (b = bias[i]);
-        target.vy -= y * b;
-        source.vx += x * (b = 1 - b);
-        source.vy += y * b;
+        target.vx -= x / (b = count[target.index]);
+        target.vy -= y / b;
+        source.vx += x / (b = count[source.index]);
+        source.vy += y / b;
       }
     }
   }
@@ -41,23 +41,18 @@ export default function(links) {
     var i,
         n = nodes.length,
         m = links.length,
-        count = new Array(n),
         nodeById = map(nodes, id),
         link;
 
-    for (i = 0; i < n; ++i) {
+    for (i = 0, count = new Array(n); i < n; ++i) {
       count[i] = 0;
     }
 
-    for (i = 0, bias = new Array(m); i < m; ++i) {
+    for (i = 0; i < m; ++i) {
       link = links[i], link.index = i;
       if (typeof link.source !== "object") link.source = nodeById.get(link.source);
       if (typeof link.target !== "object") link.target = nodeById.get(link.target);
       ++count[link.source.index], ++count[link.target.index];
-    }
-
-    for (i = 0; i < m; ++i) {
-      link = links[i], bias[i] = count[link.source.index] / (count[link.source.index] + count[link.target.index]);
     }
 
     strengths = new Array(m), initializeStrength();
