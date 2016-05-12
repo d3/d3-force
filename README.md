@@ -294,10 +294,12 @@ The distance accessor is invoked for each [link](#link_links), being passed the 
 If *strength* is specified, sets the strength accessor to the specified number or function, re-evaluates the strength accessor for each link, and returns this force. If *strength* is not specified, returns the current strength accessor, which defaults to:
 
 ```js
-function strength() {
-  return 0.7;
+function strength(link) {
+  return 1 / Math.min(count(link.source), count(link.target));
 }
 ```
+
+Where *count*(*node*) is a function that returns the number of links with the given node as a source or target. This default was chosen because it automatically reduces the strength of links connected to heavily-connected nodes, improving stability.
 
 The strength accessor is invoked for each [link](#link_links), being passed the *link* and its zero-based *index*. The resulting number is then stored internally, such that the strength of each link is only recomputed when the force is initialized or when this method is called, and not on every application of the force.
 
@@ -321,7 +323,7 @@ If *strength* is specified, sets the strength accessor to the specified number o
 
 ```js
 function strength() {
-  return -100;
+  return -30;
 }
 ```
 
