@@ -20,8 +20,7 @@ export default function(x) {
     strengths = new Array(n);
     xz = new Array(n);
     for (i = 0; i < n; ++i) {
-      strengths[i] = +strength(nodes[i], i, nodes);
-      xz[i] = +x(nodes[i], i, nodes);
+      strengths[i] = isNaN(xz[i] = +x(nodes[i], i, nodes)) ? 0 : +strength(nodes[i], i, nodes);
     }
   }
 
