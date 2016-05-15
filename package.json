@@ -36,6 +36,7 @@
     "d3-timer": "0.4"
   },
   "devDependencies": {
+    "eslint": "2",
     "json2module": "0.0",
     "rollup": "0.26",
     "tape": "4",
