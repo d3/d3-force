@@ -59,7 +59,9 @@ This method does not dispatch [events](#simulation_on); events are only dispatch
 
 <a name="simulation_nodes" href="#simulation_nodes">#</a> <i>simulation</i>.<b>nodes</b>([<i>nodes</i>])
 
-If *nodes* is specified, sets the simulation’s nodes to the specified array, initializing their positions and velocities if necessary, and then [re-initializes](#force_initialize) any bound [forces](#simulation_force); returns the simulation. If *nodes* is not specified, returns the simulation’s array of nodes as specified to the [constructor](#forceSimulation). Each *node* must be an object; the following properties are initialized by the simulation:
+If *nodes* is specified, sets the simulation’s nodes to the specified array of objects, initializing their positions and velocities if necessary, and then [re-initializes](#force_initialize) any bound [forces](#simulation_force); returns the simulation. If *nodes* is not specified, returns the simulation’s array of nodes as specified to the [constructor](#forceSimulation).
+
+Each *node* must be an object. The following properties are assigned by the simulation:
 
 * `index` - the node’s zero-based index into *nodes*
 * `x` - the node’s current *x*-position
