@@ -116,7 +116,7 @@ If the given *node* is currently [fixed](#simulation_fix), unfixes (frees) the *
 
 <a name="simulation_unfixAll" href="#simulation_unfixAll">#</a> <i>simulation</i>.<b>unfixAll</b>()
 
-If any nodes are currently [fixed](#simulation_fix), unfixes (frees) the position of all fixed nodes and returns this simulation.
+Unfixes (frees) the position of any [fixed](#simulation_fix) nodes and returns this simulation.
 
 <a name="simulation_find" href="#simulation_find">#</a> <i>simulation</i>.<b>find</b>(<i>x</i>, <i>y</i>[, <i>radius</i>])
 
