@@ -128,6 +128,10 @@ export default function(nodes) {
       return delete fixes[node.index], simulation;
     },
 
+    unfixAll: function() {
+      return fixes = {}, simulation;
+    },
+
     find: function(x, y, radius) {
       var i = 0,
           n = nodes.length,

@@ -114,6 +114,10 @@ Fixes the given *node*’s position to ⟨*x*,*y*⟩ and the velocity to zero, a
 
 If the given *node* is currently [fixed](#simulation_fix), unfixes (frees) the *node*’s position and returns this simulation.
 
+<a name="simulation_unfixAll" href="#simulation_unfixAll">#</a> <i>simulation</i>.<b>unfixAll</b>()
+
+If any nodes are currently [fixed](#simulation_fix), unfixes (frees) the position of all fixed nodes and returns this simulation.
+
 <a name="simulation_find" href="#simulation_find">#</a> <i>simulation</i>.<b>find</b>(<i>x</i>, <i>y</i>[, <i>radius</i>])
 
 Returns the node closest to the position ⟨*x*,*y*⟩ with the given search *radius*. If *radius* is not specified, it defaults to infinity. If there is no node within the search area, returns undefined.
