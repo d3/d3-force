@@ -1,4 +1,3 @@
-export {version} from "./build/package";
 export {default as forceCenter} from "./src/center";
 export {default as forceCollide} from "./src/collide";
 export {default as forceLink} from "./src/link";
