@@ -118,6 +118,10 @@ If the given *node* is currently [fixed](#simulation_fix), unfixes (frees) the *
 
 Unfixes (frees) the position of any [fixed](#simulation_fix) nodes and returns this simulation.
 
+<a name="simulation_isFixed" href="#simulation_isFixed">#</a> <i>simulation</i>.<b>isFixed</b>()
+
+Returns `true` if the node is [fixed](#simulation_fix) and false otherwise.
+
 <a name="simulation_find" href="#simulation_find">#</a> <i>simulation</i>.<b>find</b>(<i>x</i>, <i>y</i>[, <i>radius</i>])
 
 Returns the node closest to the position ⟨*x*,*y*⟩ with the given search *radius*. If *radius* is not specified, it defaults to infinity. If there is no node within the search area, returns undefined.
