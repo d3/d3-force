@@ -132,6 +132,10 @@ export default function(nodes) {
       return fixes = {}, simulation;
     },
 
+    isFixed: function(node) {
+      return !!fixes[node.index];
+    },
+
     find: function(x, y, radius) {
       var i = 0,
           n = nodes.length,
