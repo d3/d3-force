@@ -19,7 +19,7 @@ export default function(nodes) {
       alphaMin = 0.001,
       alphaDecay = 1 - Math.pow(alphaMin, 1 / 300),
       alphaTarget = 0,
-      drag = 0.6,
+      velocityDecay = 0.6,
       forces = map(),
       stepper = timer(step),
       event = dispatch("tick", "end");
@@ -46,9 +46,9 @@ export default function(nodes) {
 
     for (i = 0; i < n; ++i) {
       node = nodes[i];
-      if (node.fx == null) node.x += node.vx *= drag;
+      if (node.fx == null) node.x += node.vx *= velocityDecay;
       else node.x = node.fx, node.vx = 0;
-      if (node.fy == null) node.y += node.vy *= drag;
+      if (node.fy == null) node.y += node.vy *= velocityDecay;
       else node.y = node.fy, node.vy = 0;
     }
   }
@@ -105,8 +105,8 @@ export default function(nodes) {
       return arguments.length ? (alphaTarget = +_, simulation) : alphaTarget;
     },
 
-    drag: function(_) {
-      return arguments.length ? (drag = 1 - _, simulation) : 1 - drag;
+    velocityDecay: function(_) {
+      return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
     },
 
     force: function(name, _) {

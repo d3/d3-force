@@ -53,7 +53,7 @@ Stops the simulation’s internal timer, if it is running, and returns the simul
 
 <a name="simulation_tick" href="#simulation_tick">#</a> <i>simulation</i>.<b>tick</b>()
 
-Increments the current [*alpha*](#simulation_alpha) by ([*alphaTarget*](#simulation_alphaTarget) - *alpha*) × [*alphaDecay*](#simulation_alphaDecay); then invokes each registered [force](#simulation_force), passing the new *alpha*; then decrements each [node](#simulation_nodes)’s velocity by *velocity* × [*drag*](#simulation_drag); lastly increments each node’s position by *velocity*.
+Increments the current [*alpha*](#simulation_alpha) by ([*alphaTarget*](#simulation_alphaTarget) - *alpha*) × [*alphaDecay*](#simulation_alphaDecay); then invokes each registered [force](#simulation_force), passing the new *alpha*; then decrements each [node](#simulation_nodes)’s velocity by *velocity* × [*velocityDecay*](#simulation_velocityDecay); lastly increments each node’s position by *velocity*.
 
 This method does not dispatch [events](#simulation_on); events are only dispatched by the internal timer when the simulation is started automatically upon [creation](#forceSimulation) or by calling [*simulation*.restart](#simulation_restart). The natural number of ticks when the simulation is started is ⌈*log*([*alphaMin*](#simulation_alphaMin)) / *log*(1 - [*alphaDecay*](#simulation_alphaDecay))⌉; by default, this is 300.
 
@@ -98,9 +98,9 @@ The alpha decay rate determines how quickly the current alpha interpolates towar
 
 If *target* is specified, sets the current target [*alpha*](#simulation_alpha) to the specified number in [0,1] and returns this simulation. If *target* is not specified, returns the current target alpha value, which defaults to 0.
 
-<a name="simulation_drag" href="#simulation_drag">#</a> <i>simulation</i>.<b>drag</b>([<i>drag</i>])
+<a name="simulation_velocityDecay" href="#simulation_velocityDecay">#</a> <i>simulation</i>.<b>velocityDecay</b>([<i>decay</i>])
 
-If *drag* is specified, sets the drag factor to the specified number in [0,1] and returns this simulation. If *drag* is not specified, returns the current drag factor, which defaults to 0.4. The drag factor affects how quickly nodes’ velocities decay; after the application of any forces during a [tick](#simulation_tick), each node’s velocity is multiplied by 1 - *drag*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less drag may converge on a better solution, but it also risks numerical instabilities and oscillations.
+If *decay* is specified, sets the velocity decay factor to the specified number in [0,1] and returns this simulation. If *decay* is not specified, returns the current velocity decay factor, which defaults to 0.4. The decay factor is akin to atmospheric friction; after the application of any forces during a [tick](#simulation_tick), each node’s velocity is multiplied by 1 - *decay*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less velocity decay may converge on a better solution, but risks numerical instabilities and oscillation.
 
 <a name="simulation_force" href="#simulation_force">#</a> <i>simulation</i>.<b>force</b>(<i>name</i>[, <i>force</i>])
 
