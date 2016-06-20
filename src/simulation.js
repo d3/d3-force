@@ -21,7 +21,6 @@ export default function(nodes) {
       alphaTarget = 0,
       drag = 0.6,
       forces = map(),
-      fixes = {},
       stepper = timer(step),
       event = dispatch("tick", "end");
 
@@ -37,7 +36,7 @@ export default function(nodes) {
   }
 
   function tick() {
-    var i, n = nodes.length, node, fix;
+    var i, n = nodes.length, node;
 
     alpha += (alphaTarget - alpha) * alphaDecay;
 
@@ -47,16 +46,10 @@ export default function(nodes) {
 
     for (i = 0; i < n; ++i) {
       node = nodes[i];
-      node.x += node.vx *= drag;
-      node.y += node.vy *= drag;
-    }
-
-    for (i in fixes) {
-      fix = fixes[i], node = nodes[i];
-      node.x = fix.x;
-      node.y = fix.y;
-      node.vx =
-      node.vy = 0;
+      if (node.fx == null) node.x += node.vx *= drag;
+      else node.x = node.fx, node.vx = 0;
+      if (node.fy == null) node.y += node.vy *= drag;
+      else node.y = node.fy, node.vy = 0;
     }
   }
 
@@ -118,18 +111,6 @@ export default function(nodes) {
 
     force: function(name, _) {
       return arguments.length > 1 ? ((_ == null ? forces.remove(name) : forces.set(name, initializeForce(_))), simulation) : forces.get(name);
-    },
-
-    fix: function(node, x, y) {
-      return fixes[node.index] = {x: x == null ? node.x : +x, y: y == null ? node.y : +y}, simulation;
-    },
-
-    unfix: function(node) {
-      return delete fixes[node.index], simulation;
-    },
-
-    unfixAll: function() {
-      return fixes = {}, simulation;
     },
 
     find: function(x, y, radius) {

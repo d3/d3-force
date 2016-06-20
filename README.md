@@ -71,6 +71,13 @@ Each *node* must be an object. The following properties are assigned by the simu
 
 The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modified by [forces](#forces) and by the simulation. If either *vx* or *vy* is NaN, the velocity is initialized to ⟨0,0⟩. If either *x* or *y* is NaN, the position is initialized in a [phyllotaxis arrangement](http://bl.ocks.org/mbostock/11478058), so chosen to ensure a deterministic, uniform distribution around the origin.
 
+To fix a node in a given position, you may specify two additional properties:
+
+* `fx` - the node’s fixed *x*-position
+* `fy` - the node’s fixed *y*-position
+
+At the end of each [tick](#simulation_tick), after the application of any forces, a node with a defined *node*.fx has *node*.x reset to this value and *node*.vx set to zero; likewise, a node with a defined *node*.fy has *node*.y reset to this value and *node*.vy set to zero.
+
 If the specified array of *nodes* is modified, such as when nodes are added to or removed from the simulation, this method must be called again with the new (or changed) array to notify the simulation and bound forces of the change; the simulation does not make a defensive copy of the specified array.
 
 <a name="simulation_alpha" href="#simulation_alpha">#</a> <i>simulation</i>.<b>alpha</b>([<i>alpha</i>])
@@ -105,18 +112,6 @@ var simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links))
     .force("center", d3.forceCenter());
 ```
-
-<a name="simulation_fix" href="#simulation_fix">#</a> <i>simulation</i>.<b>fix</b>(<i>node</i>[, <i>x</i>, <i>y</i>])
-
-Fixes the given *node*’s position to ⟨*x*,*y*⟩ and the velocity to zero, and returns this simulation. If *x* and *y* are not specified, the fixed position defaults to the node’s current position. When a node is fixed, its position is reset to ⟨*x*,*y*⟩ and its velocity is reset to zero at the end of each tick, after the application of any forces. This method is intended to temporarily freeze the position of one or more nodes during interaction, such as when dragging or hovering. After the interaction completes, use [*simulation*.unfix](#simulation_unfix) to release the node.
-
-<a name="simulation_unfix" href="#simulation_unfix">#</a> <i>simulation</i>.<b>unfix</b>(<i>node</i>)
-
-If the given *node* is currently [fixed](#simulation_fix), unfixes (frees) the *node*’s position and returns this simulation.
-
-<a name="simulation_unfixAll" href="#simulation_unfixAll">#</a> <i>simulation</i>.<b>unfixAll</b>()
-
-Unfixes (frees) the position of any [fixed](#simulation_fix) nodes and returns this simulation.
 
 <a name="simulation_find" href="#simulation_find">#</a> <i>simulation</i>.<b>find</b>(<i>x</i>, <i>y</i>[, <i>radius</i>])
 
@@ -355,7 +350,7 @@ If *distance* is specified, sets the maximum distance between nodes over which t
 
 #### Positioning
 
-The [*x*](#forceX)- and [*y*](#forceY)-positioning forces push nodes towards a desired position along the given dimension with a configurable strength. The strength of the force is proportional to the one-dimensional distance between the node’s position and the target position. While these forces can be used to position individual nodes, they are intended primarily for global forces that apply to all (or most) nodes; see [*simulation*.fix](#simulation_fix).
+The [*x*](#forceX)- and [*y*](#forceY)-positioning forces push nodes towards a desired position along the given dimension with a configurable strength. The strength of the force is proportional to the one-dimensional distance between the node’s position and the target position. While these forces can be used to position individual nodes, they are intended primarily for global forces that apply to all (or most) nodes.
 
 <a name="forceX" href="#forceX">#</a> d3.<b>forceX</b>([<i>x</i>])
 
