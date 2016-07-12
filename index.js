@@ -1,5 +1,6 @@
 export {default as forceCenter} from "./src/center";
 export {default as forceCollide} from "./src/collide";
+export {default as forceRectCollide} from "./src/rectCollide";
 export {default as forceLink} from "./src/link";
 export {default as forceManyBody} from "./src/manyBody";
 export {default as forceSimulation} from "./src/simulation";
