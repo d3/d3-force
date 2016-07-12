@@ -61,8 +61,8 @@ export default function(bbox) {
               dny2 = data.y + data.vy + bbj[1][1],
               dWidth = bbLength(bbj, 0),
               dHeight = bbLength(bbj, 1),
-              x = node.x - data.x,
-              y = node.y - data.y,
+              x = node.x + node.vx - data.x - data.vx,
+              y = node.y + node.vy - data.y - data.vy,
               lx = Math.abs(x),
               ly = Math.abs(y);
 
