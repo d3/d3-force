@@ -123,8 +123,10 @@ If *listener* is specified, sets the event *listener* for the specified *typenam
 
 The *typenames* is a string containing one or more *typename* separated by whitespace. Each *typename* is a *type*, optionally followed by a period (`.`) and a *name*, such as `tick.foo` and `tick.bar`; the name allows multiple listeners to be registered for the same *type*. The *type* must be one of the following:
 
-* `tick` - after each [tick](#simulation_tick) of the simulation.
-* `end` - after the simulation ends, when *alpha* < [*alphaMin*](#simulation_alphaMin).
+* `tick` - after each tick of the simulation’s internal timer.
+* `end` - after the simulation’s timer stops when *alpha* < [*alphaMin*](#simulation_alphaMin).
+
+Note that *tick* events are not dispatched when [*simulation*.tick](#simulation_tick) is called manually; events are only dispatched by the internal timer and are intended for interactive rendering of the simulation. To affect the simulation, register [forces](#simulation_force) instead of modifying nodes’ positions or velocities inside a tick event listener.
 
 See [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) for details.
 
