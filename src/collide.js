@@ -71,7 +71,7 @@ export default function(radius) {
   }
 
   force.initialize = function(_) {
-    var i, n = (nodes = _).length; radii = new Array(n);
+    var i, n = (nodes = arguments.length ? _ : nodes).length; radii = new Array(n);
     for (i = 0; i < n; ++i) radii[i] = +radius(nodes[i], i, nodes);
   };
 

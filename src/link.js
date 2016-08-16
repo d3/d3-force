@@ -85,7 +85,7 @@ export default function(links) {
   }
 
   force.initialize = function(_) {
-    nodes = _;
+    nodes = arguments.length ? _ : nodes;
     initialize();
   };
 
