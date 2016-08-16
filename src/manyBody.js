@@ -90,7 +90,7 @@ export default function() {
   }
 
   force.initialize = function(_) {
-    nodes = _;
+    nodes = arguments.length ? _ : nodes;
     initialize();
   };
 

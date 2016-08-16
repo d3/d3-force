@@ -25,7 +25,7 @@ export default function(y) {
   }
 
   force.initialize = function(_) {
-    nodes = _;
+    nodes = arguments.length ? _ : nodes;
     initialize();
   };
 
