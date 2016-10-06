@@ -6,6 +6,12 @@ function index(d, i) {
   return i;
 }
 
+function find(nodeById, nodeId) {
+  var node = nodeById.get(nodeId);
+  if (!node) throw new Error("missing: " + nodeId);
+  return node;
+}
+
 export default function(links) {
   var id = index,
       strength = defaultStrength,
@@ -55,8 +61,8 @@ export default function(links) {
 
     for (i = 0; i < m; ++i) {
       link = links[i], link.index = i;
-      if (typeof link.source !== "object") link.source = nodeById.get(link.source);
-      if (typeof link.target !== "object") link.target = nodeById.get(link.target);
+      if (typeof link.source !== "object") link.source = find(nodeById, link.source);
+      if (typeof link.target !== "object") link.target = find(nodeById, link.target);
       ++count[link.source.index], ++count[link.target.index];
     }
 
