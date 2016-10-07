@@ -70,9 +70,16 @@ export default function(radius) {
     }
   }
 
-  force.initialize = function(_) {
-    var i, n = (nodes = _).length; radii = new Array(n);
+  function initialize() {
+    if (!nodes) return;
+    var i, n = nodes.length;
+    radii = new Array(n);
     for (i = 0; i < n; ++i) radii[i] = +radius(nodes[i], i, nodes);
+  }
+
+  force.initialize = function(_) {
+    nodes = _;
+    initialize();
   };
 
   force.iterations = function(_) {
@@ -84,7 +91,7 @@ export default function(radius) {
   };
 
   force.radius = function(_) {
-    return arguments.length ? (radius = typeof _ === "function" ? _ : constant(+_), force) : radius;
+    return arguments.length ? (radius = typeof _ === "function" ? _ : constant(+_), initialize(), force) : radius;
   };
 
   return force;
