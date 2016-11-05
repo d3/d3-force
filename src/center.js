@@ -11,14 +11,14 @@ export default function(x, y) {
         sx = 0,
         sy = 0;
 
-    // compute center
+    // calculate average position, and its distance from desired center
     for (i = 0; i < n; ++i) {
       node = nodes[i] sx += node.x, sy += node.y;
     }
     sx = sx / n - x;
     sy = sy / n - y;
     
-    // move to center
+    // move nodes towards center
     for (i = 0; i < n; ++i) {
       node = nodes[i], node.x -= sx, node.y -= sy;
     }
