@@ -11,11 +11,15 @@ export default function(x, y) {
         sx = 0,
         sy = 0;
 
+    // compute center
     for (i = 0; i < n; ++i) {
-      node = nodes[i], sx += node.x, sy += node.y;
+      node = nodes[i] sx += node.x, sy += node.y;
     }
-
-    for (sx = sx / n - x, sy = sy / n - y, i = 0; i < n; ++i) {
+    sx = sx / n - x;
+    sy = sy / n - y;
+    
+    // move to center
+    for (i = 0; i < n; ++i) {
       node = nodes[i], node.x -= sx, node.y -= sy;
     }
   }
