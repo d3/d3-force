@@ -31,7 +31,7 @@ export default function(radius) {
       tree = quadtree(nodes, x, y).visitAfter(prepare);
       for (i = 0; i < n; ++i) {
         node = nodes[i];
-        ri = radii[i], ri2 = ri * ri;
+        ri = radii[node.index], ri2 = ri * ri;
         xi = node.x + node.vx;
         yi = node.y + node.vy;
         tree.visit(apply);
@@ -41,7 +41,7 @@ export default function(radius) {
     function apply(quad, x0, y0, x1, y1) {
       var data = quad.data, rj = quad.r, r = ri + rj;
       if (data) {
-        if (data.index > i) {
+        if (data.index > node.index) {
           var x = xi - data.x - data.vx,
               y = yi - data.y - data.vy,
               l = x * x + y * y;
@@ -72,9 +72,9 @@ export default function(radius) {
 
   function initialize() {
     if (!nodes) return;
-    var i, n = nodes.length;
+    var i, n = nodes.length, node;
     radii = new Array(n);
-    for (i = 0; i < n; ++i) radii[i] = +radius(nodes[i], i, nodes);
+    for (i = 0; i < n; ++i) node = nodes[i], radii[node.index] = +radius(node, i, nodes);
   }
 
   force.initialize = function(_) {
