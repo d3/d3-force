@@ -2,8 +2,8 @@ import constant from "./constant";
 import jiggle from "./jiggle";
 import {map} from "d3-collection";
 
-function index(d, i) {
-  return i;
+function index(d) {
+  return d.index;
 }
 
 function find(nodeById, nodeId) {
@@ -55,15 +55,12 @@ export default function(links) {
         nodeById = map(nodes, id),
         link;
 
-    for (i = 0, count = new Array(n); i < n; ++i) {
-      count[i] = 0;
-    }
-
-    for (i = 0; i < m; ++i) {
+    for (i = 0, count = new Array(n); i < m; ++i) {
       link = links[i], link.index = i;
       if (typeof link.source !== "object") link.source = find(nodeById, link.source);
       if (typeof link.target !== "object") link.target = find(nodeById, link.target);
-      ++count[link.source.index], ++count[link.target.index];
+      count[link.source.index] = (count[link.source.index] || 0) + 1;
+      count[link.target.index] = (count[link.target.index] || 0) + 1;
     }
 
     for (i = 0, bias = new Array(m); i < m; ++i) {
