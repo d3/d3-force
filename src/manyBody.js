@@ -20,9 +20,9 @@ export default function() {
 
   function initialize() {
     if (!nodes) return;
-    var i, n = nodes.length;
+    var i, n = nodes.length, node;
     strengths = new Array(n);
-    for (i = 0; i < n; ++i) strengths[i] = +strength(nodes[i], i, nodes);
+    for (i = 0; i < n; ++i) node = nodes[i], strengths[node.index] = +strength(node, i, nodes);
   }
 
   function accumulate(quad) {
