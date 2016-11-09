@@ -234,11 +234,11 @@ If the specified array of *links* is modified, such as when links are added to o
 
 <a name="link_id" href="#link_id">#</a> <i>link</i>.<b>id</b>([<i>id</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/link.js#L96 "Source")
 
-If *id* is specified, sets the node id accessor to the specified function and returns this force. If *id* is not specified, returns the current node id accessor, which defaults to the numeric index of the node:
+If *id* is specified, sets the node id accessor to the specified function and returns this force. If *id* is not specified, returns the current node id accessor, which defaults to the numeric *node*.index:
 
 ```js
-function id(d, i) {
-  return i;
+function id(d) {
+  return d.index;
 }
 ```
 
