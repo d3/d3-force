@@ -115,6 +115,14 @@ var simulation = d3.forceSimulation(nodes)
     .force("center", d3.forceCenter());
 ```
 
+If *name* specified, but *force* equals `null`, then the force with *name* will be removed:
+
+```js
+var simulation = d3.forceSimulation(nodes)
+    .force("charge", d3.forceManyBody())
+simulation.force("charge", null) // now it is removed
+```
+
 <a name="simulation_find" href="#simulation_find">#</a> <i>simulation</i>.<b>find</b>(<i>x</i>, <i>y</i>[, <i>radius</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L116 "Source")
 
 Returns the node closest to the position ⟨*x*,*y*⟩ with the given search *radius*. If *radius* is not specified, it defaults to infinity. If there is no node within the search area, returns undefined.
