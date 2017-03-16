@@ -19,6 +19,7 @@ export default function(links) {
       distance = constant(30),
       distances,
       nodes,
+      nDim,
       count,
       bias,
       iterations = 1;
@@ -31,17 +32,22 @@ export default function(links) {
 
   function force(alpha) {
     for (var k = 0, n = links.length; k < iterations; ++k) {
-      for (var i = 0, link, source, target, x, y, l, b; i < n; ++i) {
+      for (var i = 0, link, source, target, x = 0, y = 0, z = 0, l, b; i < n; ++i) {
         link = links[i], source = link.source, target = link.target;
         x = target.x + target.vx - source.x - source.vx || jiggle();
-        y = target.y + target.vy - source.y - source.vy || jiggle();
-        l = Math.sqrt(x * x + y * y);
+        if (nDim > 1) { y = target.y + target.vy - source.y - source.vy || jiggle(); }
+        if (nDim > 2) { z = target.z + target.vz - source.z - source.vz || jiggle(); }
+        l = Math.sqrt(x * x + y * y + z * z);
         l = (l - distances[i]) / l * alpha * strengths[i];
-        x *= l, y *= l;
+        x *= l, y *= l, z *= l;
+
         target.vx -= x * (b = bias[i]);
-        target.vy -= y * b;
+        if (nDim > 1) { target.vy -= y * b; }
+        if (nDim > 2) { target.vz -= z * b; }
+
         source.vx += x * (b = 1 - b);
-        source.vy += y * b;
+        if (nDim > 1) { source.vy += y * b; }
+        if (nDim > 2) { source.vz += z * b; }
       }
     }
   }
@@ -87,8 +93,9 @@ export default function(links) {
     }
   }
 
-  force.initialize = function(_) {
-    nodes = _;
+  force.initialize = function(initNodes, numDimensions) {
+    nodes = initNodes;
+    nDim = numDimensions;
     initialize();
   };
 
