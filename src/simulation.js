@@ -22,7 +22,7 @@ var initialRadius = 10,
 export default function(nodes, numDimensions) {
   numDimensions = numDimensions || 2;
 
-  var dim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(numDimensions))),
+  var nDim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(numDimensions))),
       simulation,
       alpha = 1,
       alphaMin = 0.001,
@@ -57,11 +57,11 @@ export default function(nodes, numDimensions) {
       node = nodes[i];
       if (node.fx == null) node.x += node.vx *= velocityDecay;
       else node.x = node.fx, node.vx = 0;
-      if (dim > 1) {
+      if (nDim > 1) {
         if (node.fy == null) node.y += node.vy *= velocityDecay;
         else node.y = node.fy, node.vy = 0;
       }
-      if (dim > 2) {
+      if (nDim > 2) {
         if (node.fz == null) node.z += node.vz *= velocityDecay;
         else node.z = node.fz, node.vz = 0;
       }
@@ -71,22 +71,22 @@ export default function(nodes, numDimensions) {
   function initializeNodes() {
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i], node.index = i;
-      if (isNaN(node.x) || (dim > 1 && isNaN(node.y)) || (dim > 2 && isNaN(node.z))) {
+      if (isNaN(node.x) || (nDim > 1 && isNaN(node.y)) || (nDim > 2 && isNaN(node.z))) {
         var radius = initialRadius * Math.sqrt(i), angle = i * initialAngle;
         node.x = radius * Math.cos(angle);
-        if (dim > 1) { node.y = radius * Math.sin(angle); }
-        if (dim > 2) { node.z = radius * Math.sin(angle); }
+        if (nDim > 1) { node.y = radius * Math.sin(angle); }
+        if (nDim > 2) { node.z = radius * Math.sin(angle); }
       }
-      if (isNaN(node.vx) || (dim > 1 && isNaN(node.vy)) || (dim > 2 && isNaN(node.vz))) {
+      if (isNaN(node.vx) || (nDim > 1 && isNaN(node.vy)) || (nDim > 2 && isNaN(node.vz))) {
         node.vx = 0;
-        if (dim > 1) { node.vy = 0; }
-        if (dim > 2) { node.vz = 0; }
+        if (nDim > 1) { node.vy = 0; }
+        if (nDim > 2) { node.vz = 0; }
       }
     }
   }
 
   function initializeForce(force) {
-    if (force.initialize) force.initialize(nodes);
+    if (force.initialize) force.initialize(nodes, nDim);
     return force;
   }
 
@@ -105,8 +105,8 @@ export default function(nodes, numDimensions) {
 
     numDimensions: function(_) {
       return arguments.length
-          ? (dim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(_))), initializeNodes(), forces.each(initializeForce), simulation)
-          : dim;
+          ? (nDim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(_))), initializeNodes(), forces.each(initializeForce), simulation)
+          : nDim;
     },
 
     nodes: function(_) {
