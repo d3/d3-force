@@ -87,8 +87,8 @@ export default function(radius) {
         return;
       }
       return x0 > xi + r || x1 < xi - r
-          || (numDim > 1 && (y0 > yi + r || y1 < yi - r))
-          || (numDim > 2 && (z0 > zi + r || z1 < zi - r));
+          || (nDim > 1 && (y0 > yi + r || y1 < yi - r))
+          || (nDim > 2 && (z0 > zi + r || z1 < zi - r));
     }
   }
 
