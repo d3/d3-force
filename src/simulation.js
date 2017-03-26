@@ -17,7 +17,8 @@ export function z(d) {
 }
 
 var initialRadius = 10,
-    initialAngle = Math.PI * (3 - Math.sqrt(5));
+    initialAngleRoll = Math.PI * (3 - Math.sqrt(5)), // Golden angle
+    initialAngleYaw = Math.PI / 24; // Sequential
 
 export default function(nodes, numDimensions) {
   numDimensions = numDimensions || 2;
@@ -72,10 +73,12 @@ export default function(nodes, numDimensions) {
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i], node.index = i;
       if (isNaN(node.x) || (nDim > 1 && isNaN(node.y)) || (nDim > 2 && isNaN(node.z))) {
-        var radius = initialRadius * Math.sqrt(i), angle = i * initialAngle;
-        node.x = radius * Math.cos(angle);
-        if (nDim > 1) { node.y = radius * Math.sin(angle); }
-        if (nDim > 2) { node.z = radius * Math.sin(angle); }
+        var radius = initialRadius * (nDim > 2 ? Math.cbrt(i) : (nDim > 1 ? Math.sqrt(i) : i)),
+          rollAngle = i * initialAngleRoll,
+          yawAngle = i * initialAngleYaw;
+        node.x = radius * Math.cos(rollAngle);
+        if (nDim > 1) { node.y = radius * Math.sin(rollAngle); }
+        if (nDim > 2) { node.z = radius * Math.sin(yawAngle); }
       }
       if (isNaN(node.vx) || (nDim > 1 && isNaN(node.vy)) || (nDim > 2 && isNaN(node.vz))) {
         node.vx = 0;
