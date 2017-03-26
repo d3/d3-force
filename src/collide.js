@@ -53,14 +53,8 @@ export default function(radius) {
       }
     }
 
-    function apply(treeNode) {
-      var args = Array.prototype.slice.call(arguments);
-      if (nDim > 2) { var z1 = args.pop(); }
-      if (nDim > 1) { var y1 = args.pop(); }
-      var x1 = args.pop();
-      if (nDim > 2) { var z0 = args.pop(); }
-      if (nDim > 1) { var y0 = args.pop(); }
-      var x0 = args.pop();
+    function apply(treeNode, x0, arg1, arg2, arg3) {
+      var x1 = [arg1, arg2, arg3][nDim-1];
 
       var data = treeNode.data, rj = treeNode.r, r = ri + rj;
       if (data) {

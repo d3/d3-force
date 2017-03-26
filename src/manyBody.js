@@ -64,16 +64,9 @@ export default function() {
     treeNode.value = strength;
   }
 
-  function apply(treeNode) {
-    var args = Array.prototype.slice.call(arguments);
-    if (nDim > 2) { args.pop(); }
-    if (nDim > 1) { args.pop(); }
-    var x2 = args.pop();
-    if (nDim > 2) { args.pop(); }
-    if (nDim > 1) { args.pop(); }
-    var x1 = args.pop();
-
+  function apply(treeNode, x1, arg1, arg2, arg3) {
     if (!treeNode.value) return true;
+    var x2 = [arg1, arg2, arg3][nDim-1];
 
     var x = treeNode.x - node.x,
         y = (nDim > 1 ? treeNode.y - node.y : 0),
