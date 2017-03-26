@@ -53,8 +53,14 @@ export default function(radius) {
       }
     }
 
-    function apply(treeNode, x0, arg1, arg2, arg3) {
-      var x1 = [arg1, arg2, arg3][nDim-1];
+    function apply(treeNode, arg1, arg2, arg3, arg4, arg5, arg6) {
+      var args = [arg1, arg2, arg3, arg4, arg5, arg6];
+      var x0 = args[0],
+          y0 = args[1],
+          z0 = args[2],
+          x1 = args[nDim],
+          y1 = args[nDim+1],
+          z1 = args[nDim+2];
 
       var data = treeNode.data, rj = treeNode.r, r = ri + rj;
       if (data) {
