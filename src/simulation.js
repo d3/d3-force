@@ -108,7 +108,7 @@ export default function(nodes, numDimensions) {
 
     numDimensions: function(_) {
       return arguments.length
-          ? (nDim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(_))), initializeNodes(), forces.each(initializeForce), simulation)
+          ? (nDim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(_))), forces.each(initializeForce), simulation)
           : nDim;
     },
 

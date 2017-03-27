@@ -59,6 +59,12 @@ This method does not dispatch [events](#simulation_on); events are only dispatch
 
 This method can be used in conjunction with [*simulation*.stop](#simulation_stop) to compute a [static force layout](https://bl.ocks.org/mbostock/1667139). For large graphs, static layouts should be computed [in a web worker](https://bl.ocks.org/mbostock/01ab2e85e8727d6529d20391c0fd9a16) to avoid freezing the user interface.
 
+<a name="simulation_numDimensions" href="#simulation_numDimensions">#</a> <i>simulation</i>.<b>numDimensions</b>([<i>numDimensions</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L109 "Source")
+
+If *numDimensions* is specified, sets the simulation’s number of dimensions to use (1, 2 or 3), [re-initializes](#force_initialize) any bound [forces](#simulation_force) and returns the simulation. If *numSimulations* is not specified, returns the current simulation’s number of dimensions, which defauts to 2.
+
+A one-dimensional simulation will only consider and manipulate the `x` and `vx` coordinate attributes, while a two-dimensional will extend the domain to `y` and `vy`, and a three-dimensional to `z` and `vz`.
+
 <a name="simulation_nodes" href="#simulation_nodes">#</a> <i>simulation</i>.<b>nodes</b>([<i>nodes</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L115 "Source")
 
 If *nodes* is specified, sets the simulation’s nodes to the specified array of objects, initializing their positions and velocities if necessary, and then [re-initializes](#force_initialize) any bound [forces](#simulation_force); returns the simulation. If *nodes* is not specified, returns the simulation’s array of nodes as specified to the [constructor](#forceSimulation).
