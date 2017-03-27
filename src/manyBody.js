@@ -1,10 +1,13 @@
 import constant from "./constant";
 import jiggle from "./jiggle";
+import {binarytree} from "d3-binarytree";
 import {quadtree} from "d3-quadtree";
-import {x, y} from "./simulation";
+import {octree} from "d3-octree";
+import {x, y, z} from "./simulation";
 
 export default function() {
   var nodes,
+      nDim,
       node,
       alpha,
       strength = constant(-30),
@@ -14,7 +17,15 @@ export default function() {
       theta2 = 0.81;
 
   function force(_) {
-    var i, n = nodes.length, tree = quadtree(nodes, x, y).visitAfter(accumulate);
+    var i,
+        n = nodes.length,
+        tree =
+            (nDim === 1 ? binarytree(nodes, x)
+            :(nDim === 2 ? quadtree(nodes, x, y)
+            :(nDim === 3 ? octree(nodes, x, y, z)
+            :null
+        ))).visitAfter(accumulate);
+
     for (alpha = _, i = 0; i < n; ++i) node = nodes[i], tree.visit(apply);
   }
 
@@ -25,72 +36,81 @@ export default function() {
     for (i = 0; i < n; ++i) node = nodes[i], strengths[node.index] = +strength(node, i, nodes);
   }
 
-  function accumulate(quad) {
-    var strength = 0, q, c, x, y, i;
+  function accumulate(treeNode) {
+    var strength = 0, q, c, x, y, z, i;
 
-    // For internal nodes, accumulate forces from child quadrants.
-    if (quad.length) {
-      for (x = y = i = 0; i < 4; ++i) {
-        if ((q = quad[i]) && (c = q.value)) {
-          strength += c, x += c * q.x, y += c * q.y;
+    // For internal nodes, accumulate forces from children.
+    if (treeNode.length) {
+      for (x = y = z = i = 0; i < 4; ++i) {
+        if ((q = treeNode[i]) && (c = q.value)) {
+          strength += c, x += c * (q.x || 0), y += c * (q.y || 0), z += c * (q.z || 0);
         }
       }
-      quad.x = x / strength;
-      quad.y = y / strength;
+      treeNode.x = x / strength;
+      if (nDim > 1) { treeNode.y = y / strength; }
+      if (nDim > 2) { treeNode.z = z / strength; }
     }
 
-    // For leaf nodes, accumulate forces from coincident quadrants.
+    // For leaf nodes, accumulate forces from coincident nodes.
     else {
-      q = quad;
+      q = treeNode;
       q.x = q.data.x;
-      q.y = q.data.y;
+      if (nDim > 1) { q.y = q.data.y; }
+      if (nDim > 2) { q.z = q.data.z; }
       do strength += strengths[q.data.index];
       while (q = q.next);
     }
 
-    quad.value = strength;
+    treeNode.value = strength;
   }
 
-  function apply(quad, x1, _, x2) {
-    if (!quad.value) return true;
+  function apply(treeNode, x1, arg1, arg2, arg3) {
+    if (!treeNode.value) return true;
+    var x2 = [arg1, arg2, arg3][nDim-1];
 
-    var x = quad.x - node.x,
-        y = quad.y - node.y,
+    var x = treeNode.x - node.x,
+        y = (nDim > 1 ? treeNode.y - node.y : 0),
+        z = (nDim > 2 ? treeNode.z - node.z : 0),
         w = x2 - x1,
-        l = x * x + y * y;
+        l = x * x + y * y + z * z;
 
     // Apply the Barnes-Hut approximation if possible.
     // Limit forces for very close nodes; randomize direction if coincident.
     if (w * w / theta2 < l) {
       if (l < distanceMax2) {
         if (x === 0) x = jiggle(), l += x * x;
-        if (y === 0) y = jiggle(), l += y * y;
+        if (nDim > 1 && y === 0) y = jiggle(), l += y * y;
+        if (nDim > 2 && z === 0) z = jiggle(), l += z * z;
         if (l < distanceMin2) l = Math.sqrt(distanceMin2 * l);
-        node.vx += x * quad.value * alpha / l;
-        node.vy += y * quad.value * alpha / l;
+        node.vx += x * treeNode.value * alpha / l;
+        if (nDim > 1) { node.vy += y * treeNode.value * alpha / l; }
+        if (nDim > 2) { node.vz += z * treeNode.value * alpha / l; }
       }
       return true;
     }
 
     // Otherwise, process points directly.
-    else if (quad.length || l >= distanceMax2) return;
+    else if (treeNode.length || l >= distanceMax2) return;
 
     // Limit forces for very close nodes; randomize direction if coincident.
-    if (quad.data !== node || quad.next) {
+    if (treeNode.data !== node || treeNode.next) {
       if (x === 0) x = jiggle(), l += x * x;
-      if (y === 0) y = jiggle(), l += y * y;
+      if (nDim > 1 && y === 0) y = jiggle(), l += y * y;
+      if (nDim > 2 && z === 0) z = jiggle(), l += z * z;
       if (l < distanceMin2) l = Math.sqrt(distanceMin2 * l);
     }
 
-    do if (quad.data !== node) {
-      w = strengths[quad.data.index] * alpha / l;
+    do if (treeNode.data !== node) {
+      w = strengths[treeNode.data.index] * alpha / l;
       node.vx += x * w;
-      node.vy += y * w;
-    } while (quad = quad.next);
+      if (nDim > 1) { node.vy += y * w; }
+      if (nDim > 2) { node.vz += z * w; }
+    } while (treeNode = treeNode.next);
   }
 
-  force.initialize = function(_) {
-    nodes = _;
+  force.initialize = function(initNodes, numDimensions) {
+    nodes = initNodes;
+    nDim = numDimensions;
     initialize();
   };
 
