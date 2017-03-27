@@ -1,6 +1,6 @@
 {
   "name": "d3-force",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Force-directed graph layout using velocity Verlet integration.",
   "keywords": [
     "d3",
@@ -44,6 +44,6 @@
     "package-preamble": "0.0",
     "rollup": "0.41",
     "tape": "4",
-    "uglify-js": "2"
+    "uglify-js": "^2.8.11"
   }
 }
