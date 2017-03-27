@@ -61,7 +61,7 @@ This method can be used in conjunction with [*simulation*.stop](#simulation_stop
 
 <a name="simulation_numDimensions" href="#simulation_numDimensions">#</a> <i>simulation</i>.<b>numDimensions</b>([<i>numDimensions</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L109 "Source")
 
-If *numDimensions* is specified, sets the simulation’s number of dimensions to use (1, 2 or 3), [re-initializes](#force_initialize) any bound [forces](#simulation_force) and returns the simulation. If *numSimulations* is not specified, returns the current simulation’s number of dimensions, which defauts to 2.
+If *numDimensions* is specified, sets the simulation’s number of dimensions to use (1, 2 or 3), [re-initializes](#force_initialize) any bound [forces](#simulation_force) and returns the simulation. If *numSimulations* is not specified, returns the current simulation’s number of dimensions, which defaults to 2.
 
 A one-dimensional simulation will only consider and manipulate the `x` and `vx` coordinate attributes, while a two-dimensional will extend the domain to `y` and `vy`, and a three-dimensional to `z` and `vz`.
 
