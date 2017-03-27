@@ -140,13 +140,12 @@ export default function(nodes, numDimensions) {
       return arguments.length > 1 ? ((_ == null ? forces.remove(name) : forces.set(name, initializeForce(_))), simulation) : forces.get(name);
     },
 
-    find: function(x, y, radius) {
-      return this.findClosest(radius, x, y);
-    },
-
-    findClosest: function(radius, x, y, z) {
-      y = y || 0,
-      z = z || 0;
+    find: function() {
+      var args = Array.prototype.slice.call(arguments);
+      var x = args.shift() || 0,
+          y = (nDim > 1 ? args.shift() : null) || 0,
+          z = (nDim > 2 ? args.shift() : null) || 0,
+          radius = args.shift() || Infinity;
 
       var i = 0,
           n = nodes.length,
@@ -157,8 +156,7 @@ export default function(nodes, numDimensions) {
           node,
           closest;
 
-      if (radius == null) radius = Infinity;
-      else radius *= radius;
+      radius *= radius;
 
       for (i = 0; i < n; ++i) {
         node = nodes[i];
