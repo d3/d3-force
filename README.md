@@ -115,12 +115,10 @@ var simulation = d3.forceSimulation(nodes)
     .force("center", d3.forceCenter());
 ```
 
-If *name* specified, but *force* equals `null`, then the force with *name* will be removed:
+To remove the force with the given *name*, pass null as the *force*. For example, to remove the charge force:
 
 ```js
-var simulation = d3.forceSimulation(nodes)
-    .force("charge", d3.forceManyBody())
-simulation.force("charge", null) // now it is removed
+simulation.force("charge", null);
 ```
 
 <a name="simulation_find" href="#simulation_find">#</a> <i>simulation</i>.<b>find</b>(<i>x</i>, <i>y</i>[, <i>radius</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L116 "Source")
