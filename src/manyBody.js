@@ -26,17 +26,17 @@ export default function() {
   }
 
   function accumulate(quad) {
-    var strength = 0, q, c, x, y, i;
+    var strength = 0, q, c, sumC = 0, x, y, i;
 
     // For internal nodes, accumulate forces from child quadrants.
     if (quad.length) {
       for (x = y = i = 0; i < 4; ++i) {
-        if ((q = quad[i]) && (c = q.value)) {
-          strength += c, x += c * q.x, y += c * q.y;
+        if ((q = quad[i]) && (c = Math.abs(q.value))) {
+          strength += q.value, sumC += c, x += c * q.x, y += c * q.y;
         }
       }
-      quad.x = x / strength;
-      quad.y = y / strength;
+      quad.x = x / sumC;
+      quad.y = y / sumC;
     }
 
     // For leaf nodes, accumulate forces from coincident quadrants.
