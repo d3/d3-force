@@ -424,7 +424,7 @@ The *y*-accessor is invoked for each [node](#simulation_nodes) in the simulation
 
 <a name="forceRadial" href="#forceRadial">#</a> d3.<b>forceRadial</b>(<i>radius</i>[, <i>x</i>][, <i>y</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/radial.js "Source")
 
-Creates a new positioning force towards a circle of the specified [*radius*](#radial_radius) centered at [[*x*](#radial_x), [*y*](#radial_y)]. If *x* and *y* are not specified, they default to ⟨0,0⟩.
+Creates a new positioning force towards a circle of the specified [*radius*](#radial_radius) centered at ⟨[*x*](#radial_x),[*y*](#radial_y)⟩. If *x* and *y* are not specified, they default to ⟨0,0⟩.
 
 <a name="radial_strength" href="#radial_strength">#</a> <i>radial</i>.<b>strength</b>([<i>strength</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/radial.js "Source")
 
