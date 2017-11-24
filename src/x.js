@@ -16,10 +16,10 @@ export default function(x) {
 
   function initialize() {
     if (!nodes) return;
-    var i, n = nodes.length;
+    var n = nodes.length;
     strengths = new Array(n);
     xz = new Array(n);
-    for (i = 0; i < n; ++i) {
+    for (var i = 0; i < n; ++i) {
       strengths[i] = isNaN(xz[i] = +x(nodes[i], i, nodes)) ? 0 : +strength(nodes[i], i, nodes);
     }
   }
