@@ -4,17 +4,19 @@ export default function(radius, x, y) {
   var nodes,
       strength = constant(0.1),
       strengths,
-      radiuses;
+      radiuses,
+      xs,
+      ys;
 
   if (typeof radius !== "function") radius = constant(+radius);
-  if (x == null) x = 0;
-  if (y == null) y = 0;
+  if (typeof x !== "function") x = constant(x == null ? 0 : +x);
+  if (typeof y !== "function") y = constant(y == null ? 0 : +y);
 
   function force(alpha) {
     for (var i = 0, n = nodes.length; i < n; ++i) {
       var node = nodes[i],
-          dx = node.x - x || 1e-6,
-          dy = node.y - y || 1e-6,
+          dx = node.x - xs[i] || 1e-6,
+          dy = node.y - ys[i] || 1e-6,
           r = Math.sqrt(dx * dx + dy * dy),
           k = (radiuses[i] - r) * strengths[i] * alpha / r;
       node.vx += dx * k;
@@ -27,8 +29,12 @@ export default function(radius, x, y) {
     var i, n = nodes.length;
     strengths = new Array(n);
     radiuses = new Array(n);
+    xs = new Array(n);
+    ys = new Array(n);
     for (i = 0; i < n; ++i) {
       radiuses[i] = +radius(nodes[i], i, nodes);
+      xs[i] = +x(nodes[i], i, nodes);
+      ys[i] = +y(nodes[i], i, nodes);
       strengths[i] = isNaN(radiuses[i]) ? 0 : +strength(nodes[i], i, nodes);
     }
   }
@@ -46,11 +52,11 @@ export default function(radius, x, y) {
   };
 
   force.x = function(_) {
-    return arguments.length ? (x = +_, force) : x;
+    return arguments.length ? (x = typeof _ === "function" ? _ : constant(+_), initialize(), force) : x;
   };
 
   force.y = function(_) {
-    return arguments.length ? (y = +_, force) : y;
+    return arguments.length ? (y = typeof _ === "function" ? _ : constant(+_), initialize(), force) : y;
   };
 
   return force;
