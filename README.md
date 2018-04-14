@@ -496,6 +496,14 @@ If *y1* is specified, sets the ending *y*-coordinate of the boundary as an acces
 
 If *border* is specified, the force would work only at a *border* distance from the boundary. If *border* is not specified, returns the current *border* that defaults to the middle point of the border. Setting a border is useful when you only want to apply the force on the nodes that are reaching the boundary.
 
+Boundary Forces with a border of 100 pixels
+
+[<img alt="Boundary Forces with Border" src="https://raw.githubusercontent.com/d3/d3-force/master/img/boundaryForcesWithBorder.png" width="420" height="219">](https://bl.ocks.org/mbostock/cd98bf52e9067e26945edd95e8cf6ef9)
+
+Boundary Forces with default border
+
+[<img alt="Boundary Forces without Border" src="https://raw.githubusercontent.com/d3/d3-force/master/img/boundaryForcesWithoutBorder.png" width="420" height="219">](https://bl.ocks.org/mbostock/cd98bf52e9067e26945edd95e8cf6ef9)
+
 <a name="boundary_hardBoundary" href="#boundary_hardBoundary">#</a> <i>boundary</i>.<b>hardBoundary</b>([<i>hardBoundary</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/boundary.js "Source")
 
 If *hardBoundary* is specified and is a falsifiable value it will determine if the nodes are going to be forced to be inside the boundary. A false value will try to send the nodes inside the boundary, but won't force them. If *hardBoundary* is not specified, returns the current *hardBoundary* that defaults to true.
