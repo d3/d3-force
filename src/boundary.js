@@ -19,18 +19,12 @@ export default function(x0, y0, x1, y1) {
   if (typeof y1 !== "function") y1 = constant(y1 == null ? 100 : +y1);
 
   function getVx(halfX, x, strengthX, border, alpha) {
-    // var targetX = x > halfX ? (x0 + border) : (x1 - border);
     return (halfX - x) *  Math.min(2, Math.abs( halfX - x) / halfX) * strengthX * alpha;
   }
 
   function force(alpha) {
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i];
-
-      // node.vx += (halfX[i] - node.x) * strengthsX[i] * alpha;
-      // node.vy += (halfY[i] - node.y) * strengthsY[i] * alpha;
-      // node.vx += (halfX[i] - node.x) * Math.min(2, Math.abs( (halfX[i]-node.x)/halfX[i]*0.1 )) * alpha;
-      // node.vy += (halfY[i] - node.y) * Math.min(2, Math.abs( (halfY[i]-node.y)/halfY[i]*0.1 )) * alpha;
 
       if ((node.x < (x0z[i] + borderz[i]) || node.x > (x1z[i] - borderz[i])) ||
           (node.y < (y0z[i] + borderz[i]) || node.y > (y1z[i] - borderz[i])) ) {

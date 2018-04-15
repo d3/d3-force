@@ -458,7 +458,7 @@ If *y* is specified, sets the *y*-coordinate of the circle center to the specifi
 
 <a name="forceBoundary" href="#forceBoundary">#</a> d3.<b>forceBoundary</b>(<i>x0</i>, <i>y0</i>, <i>x1</i>, <i>x1</i>) [<>](https://github.com/d3/d3-force/blob/master/src/boundary.js "Source")
 
-[<img alt="Boundary Force" src="https://raw.githubusercontent.com/john-guerra/d3-force/master/img/boundaryBorder.gif" width="420" height="219">](https://bl.ocks.org/mbostock/cd98bf52e9067e26945edd95e8cf6ef9)
+[<img alt="Boundary Force" src="https://raw.githubusercontent.com/john-guerra/d3-force/master/img/boundaryBorder.gif" width="420" height="219">](http://bl.ocks.org/john-guerra/784de2b8b15590f7e568029142075ad3/b61279c87e92bfe2ab6fd56371a1301a6d2f47ad)
 
 Creates a new positioning force that tries to keep elements inside a defined boundary defined by [*x0*](#boundary_x0),[*y0*](#boundary_y0) and [*x1*](#boundary_x1),[*y1*](#boundary_y1). This is useful when you want to guarantee that all nodes remain visible inside the visualization.
 
@@ -498,11 +498,11 @@ If *border* is specified, the force would work only at a *border* distance from 
 
 Boundary Forces with a border of 100 pixels
 
-[<img alt="Boundary Forces with Border" src="https://raw.githubusercontent.com/john-guerra/d3-force/master/img/boundaryForcesWithBorder.png" width="420" height="219">](https://bl.ocks.org/mbostock/cd98bf52e9067e26945edd95e8cf6ef9)
+[<img alt="Boundary Forces with Border" src="https://raw.githubusercontent.com/john-guerra/d3-force/master/img/boundaryForcesWithBorder.png" width="420" height="219">](http://bl.ocks.org/john-guerra/a7cb6691ab063726ffc1c7f29b9a6578)
 
 Boundary Forces with default border
 
-[<img alt="Boundary Forces without Border" src="https://raw.githubusercontent.com/john-guerra/d3-force/master/img/boundaryForcesWithoutBorder.png" width="420" height="219">](https://bl.ocks.org/mbostock/cd98bf52e9067e26945edd95e8cf6ef9)
+[<img alt="Boundary Forces without Border" src="https://raw.githubusercontent.com/john-guerra/d3-force/master/img/boundaryForcesWithoutBorder.png" width="420" height="219">](http://bl.ocks.org/john-guerra/9268633948b4e826e16c02a2e6858094)
 
 <a name="boundary_hardBoundary" href="#boundary_hardBoundary">#</a> <i>boundary</i>.<b>hardBoundary</b>([<i>hardBoundary</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/boundary.js "Source")
 
