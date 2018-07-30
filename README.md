@@ -460,7 +460,7 @@ If *y* is specified, sets the *y*-coordinate of the circle center to the specifi
 
 [<img alt="Boundary Force" src="https://raw.githubusercontent.com/john-guerra/d3-force/master/img/boundaryBorder.gif" width="420" height="219">](http://bl.ocks.org/john-guerra/784de2b8b15590f7e568029142075ad3/b61279c87e92bfe2ab6fd56371a1301a6d2f47ad)
 
-Creates a new positioning force that tries to keep elements inside a defined boundary defined by [*x0*](#boundary_x0),[*y0*](#boundary_y0) and [*x1*](#boundary_x1),[*y1*](#boundary_y1). This is useful when you want to guarantee that all nodes remain visible inside the visualization. All the parameters [*x0*](#boundary_x0),[*y0*](#boundary_y0),[*x1*](#boundary_x1),[*y1*](#boundary_y1) all must be positive values.
+Creates a new positioning force that tries to keep elements inside a defined boundary defined by [*x0*](#boundary_x0),[*y0*](#boundary_y0) and [*x1*](#boundary_x1),[*y1*](#boundary_y1). This is useful when you want to guarantee that all nodes remain visible inside the visualization.
 
 <a name="boundary_strength" href="#boundary_strength">#</a> <i>boundary</i>.<b>strength</b>([<i>strength</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/boundary.js "Source")
 
