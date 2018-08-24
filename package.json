@@ -1,6 +1,6 @@
 {
   "name": "d3-force",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Force-directed graph layout using velocity Verlet integration.",
   "keywords": [
     "d3",
