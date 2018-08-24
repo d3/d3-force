@@ -187,20 +187,20 @@ cross-spawn@^6.0.5:
     which "^1.2.9"
 
 d3-collection@1:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.6.tgz#5279545ae9bae249c8de71f4708e71d7b9062dc9"
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.7.tgz#349bd2aa9977db071091c13144d5e4f16b5b310e"
 
 d3-dispatch@1:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/d3-dispatch/-/d3-dispatch-1.0.4.tgz#d8f284e77ed69d2b35aedaf768a227a4c83d9dc0"
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/d3-dispatch/-/d3-dispatch-1.0.5.tgz#e25c10a186517cd6c82dd19ea018f07e01e39015"
 
 d3-quadtree@1:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/d3-quadtree/-/d3-quadtree-1.0.4.tgz#c70688356a62a7d3761ab640fa430dedac384e09"
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/d3-quadtree/-/d3-quadtree-1.0.5.tgz#305394840b01f51a341a0da5008585e837fe7e9b"
 
 d3-timer@1:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-1.0.8.tgz#717a4560baf809966e782cdb18c3ccd4c4787290"
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-1.0.9.tgz#f7bb8c0d597d792ff7131e1c24a36dd471a471ba"
 
 debug@^3.1.0:
   version "3.1.0"
