@@ -1,14 +1,36 @@
-const definition = require("./package.json");
-const dependencies = Object.keys(definition.dependencies);
+import {terser} from "rollup-plugin-terser";
+import * as meta from "./package.json";
 
-export default {
-  input: "index",
-  external: dependencies,
+const config = {
+  input: "index.js",
+  external: Object.keys(meta.dependencies || {}),
   output: {
-    extend: true,
-    file: `build/${definition.name}.js`,
+    file: `dist/${meta.name}.js`,
+    name: "d3",
     format: "umd",
-    globals: dependencies.reduce((p, v) => (p[v] = "d3", p), {}),
-    name: "d3"
-  }
+    indent: false,
+    extend: true,
+    banner: `// ${meta.homepage} v${meta.version} Copyright ${(new Date).getFullYear()} ${meta.author.name}`,
+    globals: Object.assign({}, ...Object.keys(meta.dependencies || {}).map(key => ({[key]: "d3"})))
+  },
+  plugins: []
 };
+
+export default [
+  config,
+  {
+    ...config,
+    output: {
+      ...config.output,
+      file: `dist/${meta.name}.min.js`
+    },
+    plugins: [
+      ...config.plugins,
+      terser({
+        output: {
+          preamble: config.output.banner
+        }
+      })
+    ]
+  }
+];
