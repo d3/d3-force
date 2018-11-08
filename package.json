@@ -26,6 +26,9 @@
     "type": "git",
     "url": "https://github.com/d3/d3-force.git"
   },
+  "bugs": {
+    "url": "https://d3js.org/d3-force/issues"
+  },
   "scripts": {
     "pretest": "rollup -c",
     "test": "tape 'test/**/*-test.js' && eslint src",
