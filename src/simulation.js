@@ -1,5 +1,4 @@
 import {dispatch} from "d3-dispatch";
-import {map} from "d3-collection";
 import {timer} from "d3-timer";
 
 export function x(d) {
@@ -20,7 +19,7 @@ export default function(nodes) {
       alphaDecay = 1 - Math.pow(alphaMin, 1 / 300),
       alphaTarget = 0,
       velocityDecay = 0.6,
-      forces = map(),
+      forces = new Map(),
       stepper = timer(step),
       event = dispatch("tick", "end");
 
@@ -43,7 +42,7 @@ export default function(nodes) {
     for (var k = 0; k < iterations; ++k) {
       alpha += (alphaTarget - alpha) * alphaDecay;
 
-      forces.each(function (force) {
+      forces.forEach(function(force) {
         force(alpha);
       });
 
@@ -94,7 +93,7 @@ export default function(nodes) {
     },
 
     nodes: function(_) {
-      return arguments.length ? (nodes = _, initializeNodes(), forces.each(initializeForce), simulation) : nodes;
+      return arguments.length ? (nodes = _, initializeNodes(), forces.forEach(initializeForce), simulation) : nodes;
     },
 
     alpha: function(_) {
@@ -118,7 +117,7 @@ export default function(nodes) {
     },
 
     force: function(name, _) {
-      return arguments.length > 1 ? ((_ == null ? forces.remove(name) : forces.set(name, initializeForce(_))), simulation) : forces.get(name);
+      return arguments.length > 1 ? ((_ == null ? forces.delete(name) : forces.set(name, initializeForce(_))), simulation) : forces.get(name);
     },
 
     find: function(x, y, radius) {
