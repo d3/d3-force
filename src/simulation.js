@@ -35,22 +35,28 @@ export default function(nodes) {
     }
   }
 
-  function tick() {
+  function tick(iterations) {
     var i, n = nodes.length, node;
 
-    alpha += (alphaTarget - alpha) * alphaDecay;
+    if (iterations === undefined) iterations = 1;
 
-    forces.each(function(force) {
-      force(alpha);
-    });
+    for (var k = 0; k < iterations; ++k) {
+      alpha += (alphaTarget - alpha) * alphaDecay;
 
-    for (i = 0; i < n; ++i) {
-      node = nodes[i];
-      if (node.fx == null) node.x += node.vx *= velocityDecay;
-      else node.x = node.fx, node.vx = 0;
-      if (node.fy == null) node.y += node.vy *= velocityDecay;
-      else node.y = node.fy, node.vy = 0;
+      forces.each(function (force) {
+        force(alpha);
+      });
+
+      for (i = 0; i < n; ++i) {
+        node = nodes[i];
+        if (node.fx == null) node.x += node.vx *= velocityDecay;
+        else node.x = node.fx, node.vx = 0;
+        if (node.fy == null) node.y += node.vy *= velocityDecay;
+        else node.y = node.fy, node.vy = 0;
+      }
     }
+
+    return simulation;
   }
 
   function initializeNodes() {
