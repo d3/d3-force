@@ -1,6 +1,6 @@
-import constant from "./constant";
-import jiggle from "./jiggle";
 import {quadtree} from "d3-quadtree";
+import constant from "./constant.js";
+import jiggle from "./jiggle.js";
 
 function x(d) {
   return d.x + d.vx;

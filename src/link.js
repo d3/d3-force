@@ -1,5 +1,5 @@
-import constant from "./constant";
-import jiggle from "./jiggle";
+import constant from "./constant.js";
+import jiggle from "./jiggle.js";
 
 function index(d) {
   return d.index;
