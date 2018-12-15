@@ -64,7 +64,7 @@ export default function(nodes) {
       if (!isNaN(node.fx)) node.x = node.fx;
       if (!isNaN(node.fy)) node.y = node.fy;
       if (isNaN(node.x) || isNaN(node.y)) {
-        var radius = initialRadius * Math.sqrt(i), angle = i * initialAngle;
+        var radius = initialRadius * Math.sqrt(0.5 + i), angle = i * initialAngle;
         node.x = radius * Math.cos(angle);
         node.y = radius * Math.sin(angle);
       }
