@@ -18,13 +18,13 @@ To use this module, create a [simulation](#simulation) for an array of [nodes](#
 
 ## Installing
 
-If you use NPM, `npm install d3-force`. Otherwise, download the [latest release](https://github.com/d3/d3-force/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-force.v1.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3_force` global is exported:
+If you use NPM, `npm install d3-force`. Otherwise, download the [latest release](https://github.com/d3/d3-force/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-force.v2.min.js) or as part of [D3](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3_force` global is exported:
 
 ```html
 <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
 <script src="https://d3js.org/d3-quadtree.v1.min.js"></script>
 <script src="https://d3js.org/d3-timer.v1.min.js"></script>
-<script src="https://d3js.org/d3-force.v1.min.js"></script>
+<script src="https://d3js.org/d3-force.v2.min.js"></script>
 <script>
 
 var simulation = d3.forceSimulation(nodes);
@@ -32,7 +32,7 @@ var simulation = d3.forceSimulation(nodes);
 </script>
 ```
 
-[Try d3-force in your browser.](https://tonicdev.com/npm/d3-force)
+[Try d3-force in your browser.](https://beta.observablehq.com/@mbostock/d3-force-directed-graph)
 
 ## API Reference
 
