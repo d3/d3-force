@@ -51,7 +51,9 @@ export default function(links) {
     var i,
         n = nodes.length,
         m = links.length,
-        nodeById = new Map(nodes.map((d, i) => [id(d, i, nodes), d])),
+        nodeById = new Map(nodes.map(function(d, i) {
+          return [id(d, i, nodes), d];
+        })),
         link;
 
     for (i = 0, count = new Array(n); i < m; ++i) {
