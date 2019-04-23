@@ -1,7 +1,7 @@
-import constant from "./constant";
-import jiggle from "./jiggle";
 import {quadtree} from "d3-quadtree";
-import {x, y} from "./simulation";
+import constant from "./constant.js";
+import jiggle from "./jiggle.js";
+import {x, y} from "./simulation.js";
 
 export default function() {
   var nodes,

@@ -1,4 +1,4 @@
-import constant from "./constant";
+import constant from "./constant.js";
 
 export default function(x) {
   var strength = constant(0.1),
