@@ -32,7 +32,7 @@ var simulation = d3.forceSimulation(nodes);
 </script>
 ```
 
-[Try d3-force in your browser.](https://beta.observablehq.com/@mbostock/d3-force-directed-graph)
+[Try d3-force in your browser.](https://observablehq.com/@mbostock/d3-force-directed-graph)
 
 ## API Reference
 
