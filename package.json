@@ -41,6 +41,7 @@
     "d3-quadtree": "1",
     "d3-timer": "1"
   },
+  "sideEffects": false,
   "devDependencies": {
     "eslint": "6",
     "rollup": "1",
