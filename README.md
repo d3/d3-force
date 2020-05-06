@@ -72,7 +72,7 @@ Each *node* must be an object. The following properties are assigned by the simu
 * `vx` - the node’s current *x*-velocity
 * `vy` - the node’s current *y*-velocity
 
-The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modified by [forces](#forces) and by the simulation. If either *vx* or *vy* is NaN, the velocity is initialized to ⟨0,0⟩. If either *x* or *y* is NaN, the position is initialized in a [phyllotaxis arrangement](http://bl.ocks.org/mbostock/11478058), so chosen to ensure a deterministic, uniform distribution around the origin.
+The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modified by [forces](#forces) and by the simulation. If either *vx* or *vy* is NaN, the velocity is initialized to ⟨0,0⟩. If either *x* or *y* is NaN, the position is initialized in a [phyllotaxis arrangement](https://observablehq.com/@d3/force-layout-phyllotaxis), so chosen to ensure a deterministic, uniform distribution.
 
 To fix a node in a given position, you may specify two additional properties:
 
