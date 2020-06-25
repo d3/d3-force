@@ -21,6 +21,7 @@ export default function(nodes) {
       velocityDecay = 0.6,
       forces = new Map(),
       stepper = timer(step),
+      started = stepper.stop() || 0,
       event = dispatch("tick", "end");
 
   if (nodes == null) nodes = [];
@@ -144,7 +145,9 @@ export default function(nodes) {
     },
 
     on: function(name, _) {
-      return arguments.length > 1 ? (event.on(name, _), simulation) : event.on(name);
+      return arguments.length > 1
+        ? (event.on(name, _), started++ || stepper.restart(step), simulation)
+        : event.on(name);
     }
   };
 }
