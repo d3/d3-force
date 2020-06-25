@@ -189,6 +189,14 @@ If *x* is specified, sets the *x*-coordinate of the centering position to the sp
 
 If *y* is specified, sets the *y*-coordinate of the centering position to the specified number and returns this force. If *y* is not specified, returns the current *y*-coordinate, which defaults to zero.
 
+<a name="forceExtent" href="#forceExtent">#</a> d3.<b>forceExtent</b>([<i>extent</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/extent.js#L1 "Source")
+
+Creates a new extent force with the specified extent as [[xmin, ymin], [xmax, ymax]]. If *extent* is not specified, its defaults to [⟨0,0⟩, ⟨960,500⟩]. This force maintains the nodes inside the extent, taking into account their radius (if the property is set).
+
+<a name="extent_extent" href="#extent_extent">#</a> <i>extent</i>.<b>extent</b>([<i>extent</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/extent.js#L1 "Source")
+
+If *extent* is specified, sets the extent and returns this force. If *extent* is not specified, returns the current extent.
+
 #### Collision
 
 The collision force treats nodes as circles with a given [radius](#collide_radius), rather than points, and prevents nodes from overlapping. More formally, two nodes *a* and *b* are separated so that the distance between *a* and *b* is at least *radius*(*a*) + *radius*(*b*). To reduce jitter, this is by default a “soft” constraint with a configurable [strength](#collide_strength) and [iteration count](#collide_iterations).
