@@ -191,6 +191,10 @@ If *x* is specified, sets the *x*-coordinate of the centering position to the sp
 
 If *y* is specified, sets the *y*-coordinate of the centering position to the specified number and returns this force. If *y* is not specified, returns the current *y*-coordinate, which defaults to zero.
 
+<a name="center_strength" href="#center_strength">#</a> <i>center</i>.<b>strength</b>([<i>strength</i>]) · [Source](https://github.com/d3/d3-force/blob/master/src/center.js)
+
+If *strength* is specified, sets the centering force’s strength. A reduced strength of e.g. 0.05 softens the movements on interactive graphs in which new nodes enter or exit the graph. If *strength* is not specified, returns the force’s current strength, which defaults to 1.
+
 #### Collision
 
 The collision force treats nodes as circles with a given [radius](#collide_radius), rather than points, and prevents nodes from overlapping. More formally, two nodes *a* and *b* are separated so that the distance between *a* and *b* is at least *radius*(*a*) + *radius*(*b*). To reduce jitter, this is by default a “soft” constraint with a configurable [strength](#collide_strength) and [iteration count](#collide_iterations).
