@@ -54,7 +54,7 @@ Stops the simulation’s internal timer, if it is running, and returns the simul
 
 Manually steps the simulation by the specified number of *iterations*, and returns the simulation. If *iterations* is not specified, it defaults to 1 (single step).
 
-For each iteration, it increments the current [*alpha*](#simulation_alpha) by ([*alphaTarget*](#simulation_alphaTarget) - *alpha*) × [*alphaDecay*](#simulation_alphaDecay); then invokes each registered [force](#simulation_force), passing the new *alpha*; then decrements each [node](#simulation_nodes)’s velocity by *velocity* × [*velocityDecay*](#simulation_velocityDecay); lastly increments each node’s position by *velocity*.
+For each iteration, it increments the current [*alpha*](#simulation_alpha) by ([*alphaTarget*](#simulation_alphaTarget) - *alpha*) × [*alphaDecay*](#simulation_alphaDecay); then invokes each registered [force](#simulation_force), passing the new *alpha*; then decrements each [node](#simulation_nodes)’s velocity by *velocity* × [*viscosity*](#simulation_viscosity); lastly increments each node’s position by *velocity*.
 
 This method does not dispatch [events](#simulation_on); events are only dispatched by the internal timer when the simulation is started automatically upon [creation](#forceSimulation) or by calling [*simulation*.restart](#simulation_restart). The natural number of ticks when the simulation is started is ⌈*log*([*alphaMin*](#simulation_alphaMin)) / *log*(1 - [*alphaDecay*](#simulation_alphaDecay))⌉; by default, this is 300.
 
@@ -101,9 +101,9 @@ The alpha decay rate determines how quickly the current alpha interpolates towar
 
 If *target* is specified, sets the current target [*alpha*](#simulation_alpha) to the specified number in the range [0,1] and returns this simulation. If *target* is not specified, returns the current target alpha value, which defaults to 0.
 
-<a name="simulation_velocityDecay" href="#simulation_velocityDecay">#</a> <i>simulation</i>.<b>velocityDecay</b>([<i>decay</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L114 "Source")
+<a name="simulation_viscosity" href="#simulation_viscosity">#</a> <i>simulation</i>.<b>viscosity</b>([<i>viscosity</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L114 "Source")
 
-If *decay* is specified, sets the velocity decay factor to the specified number in the range [0,1] and returns this simulation. If *decay* is not specified, returns the current velocity decay factor, which defaults to 0.4. The decay factor is akin to atmospheric friction; after the application of any forces during a [tick](#simulation_tick), each node’s velocity is multiplied by 1 - *decay*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less velocity decay may converge on a better solution, but risks numerical instabilities and oscillation.
+If *viscosity* is specified, sets the viscosity to the specified number in the range [0,1] and returns this simulation. If *viscosity* is not specified, returns the current viscosity, which defaults to 0.4. After the application of any forces during a [tick](#simulation_tick), each node’s velocity is multiplied by 1 - *viscosity*. As with lowering the [alpha decay rate](#simulation_alphaDecay), less viscosity may converge on a better solution, but risks numerical instabilities and oscillation.
 
 <a name="simulation_force" href="#simulation_force">#</a> <i>simulation</i>.<b>force</b>(<i>name</i>[, <i>force</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L118 "Source")
 
