@@ -1,10 +1,10 @@
 export default function(x, y) {
-  var nodes;
+  var nodes, strength = 0.05;
 
   if (x == null) x = 0;
   if (y == null) y = 0;
 
-  function force() {
+  function force(alpha) {
     var i,
         n = nodes.length,
         node,
@@ -15,8 +15,10 @@ export default function(x, y) {
       node = nodes[i], sx += node.x, sy += node.y;
     }
 
-    for (sx = sx / n - x, sy = sy / n - y, i = 0; i < n; ++i) {
-      node = nodes[i], node.x -= sx, node.y -= sy;
+    sx = (sx / n - x) * alpha * strength;
+    sy = (sy / n - y) * alpha * strength;
+    for (i = 0; i < n; ++i) {
+      node = nodes[i], node.vx -= sx, node.vy -= sy;
     }
   }
 
