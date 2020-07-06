@@ -425,11 +425,11 @@ function y() {
 
 The *y*-accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target *y*-coordinate of each node is only recomputed when the force is initialized or when this method is called with a new *y*, and not on every application of the force.
 
-<a name="forceRadial" href="#forceRadial">#</a> d3.<b>forceRadial</b>(<i>radius</i>[, <i>x</i>][, <i>y</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/radial.js "Source")
+<a name="forceRadial" href="#forceRadial">#</a> d3.<b>forceRadial</b>(<i>radius</i>[, <i>x</i>][, <i>y</i>][, <i>angle</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/radial.js "Source")
 
 [<img alt="Radial Force" src="https://raw.githubusercontent.com/d3/d3-force/master/img/radial.png" width="420" height="219">](https://bl.ocks.org/mbostock/cd98bf52e9067e26945edd95e8cf6ef9)
 
-Creates a new positioning force towards a circle of the specified [*radius*](#radial_radius) centered at ⟨[*x*](#radial_x),[*y*](#radial_y)⟩. If *x* and *y* are not specified, they default to ⟨0,0⟩.
+Creates a new positioning force towards a circle of the specified [*radius*](#radial_radius) centered at ⟨[*x*](#radial_x),[*y*](#radial_y)⟩, and with a preferred [*angle*](#radial_angle). If *x* and *y* are not specified, they default to ⟨0,0⟩. If *radius* or *angle* are not specified (or null), they are ignored.
 
 <a name="radial_strength" href="#radial_strength">#</a> <i>radial</i>.<b>strength</b>([<i>strength</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/radial.js "Source")
 
@@ -447,7 +447,7 @@ The strength accessor is invoked for each [node](#simulation_nodes) in the simul
 
 <a name="radial_radius" href="#radial_radius">#</a> <i>radial</i>.<b>radius</b>([<i>radius</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/radial.js "Source")
 
-If *radius* is specified, sets the circle *radius* to the specified number or function, re-evaluates the *radius* accessor for each node, and returns this force. If *radius* is not specified, returns the current *radius* accessor.
+If *radius* is specified, sets the circle *radius* to the specified number or function, re-evaluates the *radius* accessor for each node, and returns this force. If *radius* is not specified, returns the current *radius* accessor. If *angle* is null, the force ignores the radius (see [*radial*.angle](#radial_angle)).
 
 The *radius* accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target radius of each node is only recomputed when the force is initialized or when this method is called with a new *radius*, and not on every application of the force.
 
@@ -474,4 +474,10 @@ function y() {
 ```
 
 The *y*-accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target *y*-coordinate of each node is only recomputed when the force is initialized or when this method is called with a new *y*, and not on every application of the force.
+
+<a name="radial_angle" href="#radial_angle">#</a> <i>radial</i>.<b>angle</b>([<i>angle</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/radial.js "Source")
+
+If *angle* is specified, sets the preferred *angle* to the specified number or function, re-evaluates the *angle* accessor for each node, and returns this force. If *angle* is not specified, returns the current *angle* accessor. If *angle* is null, the force ignores the preferred angle.
+
+The *angle* accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target angle of each node is only recomputed when the force is initialized or when this method is called with a new *angle*, and not on every application of the force.
 
