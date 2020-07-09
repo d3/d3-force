@@ -85,7 +85,7 @@ If the specified array of *nodes* is modified, such as when nodes are added to o
 
 <a name="simulation_alpha" href="#simulation_alpha">#</a> <i>simulation</i>.<b>alpha</b>([<i>alpha</i>]) [<>](https://github.com/d3/d3-force/blob/master/src/simulation.js#L98 "Source")
 
-The *alpha* is the “energy” of the graph at a particular moment in time. Alpha starts high and decreases over time, and when alpha goes past a certain number, the graph stops moving. 
+The *alpha* is the current “heat” of the simulation. It decreases over time, as the simulation "cools down". When *alpha* reaches *alphaMin*, the simulation stops. See also [Simulation Restart](#simulation_restart)
 
 If *alpha* is specified, sets the current alpha to the specified number in the range [0,1] and returns this simulation. If *alpha* is not specified, returns the current alpha value, which defaults to 1.
 
