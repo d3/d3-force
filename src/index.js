@@ -1,5 +1,6 @@
 export {default as forceCenter} from "./center.js";
 export {default as forceCollide} from "./collide.js";
+export {default as forceExtent} from "./extent.js";
 export {default as forceLink} from "./link.js";
 export {default as forceManyBody} from "./manyBody.js";
 export {default as forceRadial} from "./radial.js";
