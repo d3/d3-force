@@ -169,20 +169,20 @@ cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-d3-dispatch@1:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/d3-dispatch/-/d3-dispatch-1.0.5.tgz#e25c10a186517cd6c82dd19ea018f07e01e39015"
-  integrity sha512-vwKx+lAqB1UuCeklr6Jh1bvC4SZgbSqbkGBLClItFBIYH4vqDJCA7qfoy14lXmJdnBOdxndAMxjCbImJYW7e6g==
+d3-dispatch@>=2.0.0-rc.1:
+  version "2.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/d3-dispatch/-/d3-dispatch-2.0.0-rc.1.tgz#cb7a29779b4dd4241ccef5b8a19f46a5e727f47b"
+  integrity sha512-JRzTbYPZ1GDu+eGZPOVyyhveu49PEL3msPVXBFEUDk0xCqhX7Eu2tCVcl+1gculBCkj6LEW2f725QmxWVsOPaA==
 
-d3-quadtree@1:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/d3-quadtree/-/d3-quadtree-1.0.6.tgz#d1ab2a95a7f27bbde88582c94166f6ae35f32056"
-  integrity sha512-NUgeo9G+ENQCQ1LsRr2qJg3MQ4DJvxcDNCiohdJGHt5gRhBW6orIB5m5FJ9kK3HNL8g9F4ERVoBzcEwQBfXWVA==
+d3-quadtree@>=2.0.0-rc.1:
+  version "2.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/d3-quadtree/-/d3-quadtree-2.0.0-rc.1.tgz#afc76b7ca3f63c3e0cb88fc246b30276beab0623"
+  integrity sha512-rt2PaorxXzxZYHw1nSM82nJjIj91VU3/r40LPNBGqIhRXlTuAlgspOH8/w85OOCqxSsV0c1qKwbzYIu/8bwD7A==
 
-d3-timer@1:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-1.0.9.tgz#f7bb8c0d597d792ff7131e1c24a36dd471a471ba"
-  integrity sha512-rT34J5HnQUHhcLvhSB9GjCkN0Ddd5Y8nCwDBG2u6wQEeYxT/Lf51fTFFkldeib/sE/J0clIe0pnCfs6g/lRbyg==
+d3-timer@>=2.0.0-rc.1:
+  version "2.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-2.0.0-rc.1.tgz#8afc777810198f28d9b2ac1ef8765b767ce4bc22"
+  integrity sha512-Kfi4LnjFC1t1MnnjCrHh3TyQIJr9/mMjmjeTFYwG364CtTKtv8snI/juT5zoiCCsMwrxdzwrM7Kmpj24p/AClw==
 
 debug@^4.0.1:
   version "4.1.1"
