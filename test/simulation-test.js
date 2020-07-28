@@ -5,7 +5,7 @@ require("./nodeEqual.js");
 
 tape("forceSimulation() returns a simulation", function(test) {
   const f = force.forceSimulation().stop();
-  test.deepEqual(Object.keys(f).sort(), [ 'alpha', 'alphaDecay', 'alphaMin', 'alphaTarget', 'find', 'force', 'nodes', 'on', 'restart', 'stop', 'tick', 'velocityDecay' ]);
+  test.deepEqual(Object.keys(f).sort(), [ 'alpha', 'alphaDecay', 'alphaMin', 'alphaTarget', 'find', 'force', 'nodes', 'on', 'restart', 'start', 'stop', 'tick', 'velocityDecay' ]);
   test.end();
 });
 
@@ -17,5 +17,20 @@ tape("simulation.nodes(nodes) initializes a simulation with indices & phyllotaxi
   test.nodeEqual(b, { index: 1, x: -9.03088751750192, y: 8.27303273571596, vy: 0, vx: 0 });
   test.nodeEqual(c, { index: 2, x: 1.3823220809823638, y: -15.750847141167634, vy: 0, vx: 0 });
   test.end();
+});
+
+tape("simulation.nodes(nodes).start() starts the simulator", function(test) {
+  const f = force.forceSimulation();
+  const a = {}, b = {}, c = {};
+  f.nodes([a, b, c]);
+  setTimeout(() => {
+    test.equal(f.alpha(), 1);
+    f.start();
+    setTimeout(() => {
+      test.assert(f.alpha() < 1);
+      f.stop();
+      test.end();
+    }, 100);
+  }, 100);
 });
 
