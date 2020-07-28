@@ -87,7 +87,7 @@ export default function(radius, x, y, angle) {
     return arguments.length ? (y = value(_) || constant(0), initialize(), force) : y;
   };
 
-force.angle = function(_) {
+  force.angle = function(_) {
     return arguments.length ? (angle = value(_), initialize(), force) : y;
   };
 
