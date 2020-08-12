@@ -21,7 +21,8 @@ export default function(nodes) {
       velocityDecay = 0.6,
       forces = new Map(),
       stepper = timer(step),
-      event = dispatch("tick", "end");
+      event = dispatch("tick", "end"),
+      random = Math.random;
 
   if (nodes == null) nodes = [];
 
@@ -75,7 +76,7 @@ export default function(nodes) {
   }
 
   function initializeForce(force) {
-    if (force.initialize) force.initialize(nodes);
+    if (force.initialize) force.initialize(nodes, random);
     return force;
   }
 
@@ -114,6 +115,10 @@ export default function(nodes) {
 
     velocityDecay: function(_) {
       return arguments.length ? (velocityDecay = 1 - _, simulation) : 1 - velocityDecay;
+    },
+
+    randomSource: function(_) {
+      return arguments.length ? (random = _, simulation) : random;
     },
 
     force: function(name, _) {
