@@ -1,5 +1,6 @@
 import {dispatch} from "d3-dispatch";
 import {timer} from "d3-timer";
+import lcg from "./lcg.js";
 
 export function x(d) {
   return d.x;
@@ -22,7 +23,7 @@ export default function(nodes) {
       forces = new Map(),
       stepper = timer(step),
       event = dispatch("tick", "end"),
-      random = Math.random;
+      random = lcg();
 
   if (nodes == null) nodes = [];
 
