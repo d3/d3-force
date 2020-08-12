@@ -118,7 +118,7 @@ export default function(nodes) {
     },
 
     randomSource: function(_) {
-      return arguments.length ? (random = _, simulation) : random;
+      return arguments.length ? (random = _, forces.forEach(initializeForce), simulation) : random;
     },
 
     force: function(name, _) {
