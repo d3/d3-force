@@ -13,6 +13,7 @@ function y(d) {
 export default function(radius) {
   var nodes,
       radii,
+      random,
       strength = 1,
       iterations = 1;
 
@@ -46,8 +47,8 @@ export default function(radius) {
               y = yi - data.y - data.vy,
               l = x * x + y * y;
           if (l < r * r) {
-            if (x === 0) x = jiggle(), l += x * x;
-            if (y === 0) y = jiggle(), l += y * y;
+            if (x === 0) x = jiggle(random), l += x * x;
+            if (y === 0) y = jiggle(random), l += y * y;
             l = (r - (l = Math.sqrt(l))) / l * strength;
             node.vx += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
             node.vy += (y *= l) * r;
@@ -77,8 +78,9 @@ export default function(radius) {
     for (i = 0; i < n; ++i) node = nodes[i], radii[node.index] = +radius(node, i, nodes);
   }
 
-  force.initialize = function(_) {
-    nodes = _;
+  force.initialize = function(_nodes, _random) {
+    nodes = _nodes;
+    random = _random;
     initialize();
   };
 

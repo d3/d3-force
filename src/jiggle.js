@@ -1,3 +1,3 @@
-export default function() {
-  return (Math.random() - 0.5) * 1e-6;
+export default function(random) {
+  return (random() - 0.5) * 1e-6;
 }
