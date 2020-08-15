@@ -46,3 +46,12 @@ tape("forceCollide jiggles equal positions", function(test) {
   test.equal(a.vy, -b.vy);
   test.end();
 });
+
+tape("forceCollide jiggles in a reproducible way", function(test) {
+  const nodes = Array.from({length:10}, () => ({x:0,y:0}));
+  force.forceSimulation()
+    .nodes(nodes)
+    .force("collide", force.forceCollide()).stop().tick(50);
+  test.nodeEqual(nodes[0], {x: -5.371433857229194, y: -2.6644608278592576, index: 0, vy: 0, vx: 0});
+  test.end();
+});
