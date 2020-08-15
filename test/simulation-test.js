@@ -5,7 +5,7 @@ require("./nodeEqual.js");
 
 tape("forceSimulation() returns a simulation", function(test) {
   const f = force.forceSimulation().stop();
-  test.deepEqual(Object.keys(f).sort(), [ 'alpha', 'alphaDecay', 'alphaMin', 'alphaTarget', 'find', 'force', 'nodes', 'on', 'restart', 'stop', 'tick', 'velocityDecay' ]);
+  test.deepEqual(Object.keys(f).sort(), [ 'alpha', 'alphaDecay', 'alphaMin', 'alphaTarget', 'find', 'force', 'nodes', 'on', 'randomSource', 'restart', 'stop', 'tick', 'velocityDecay' ]);
   test.end();
 });
 
