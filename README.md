@@ -195,7 +195,7 @@ If *x* is specified, sets the *x*-coordinate of the centering position to the sp
 
 If *y* is specified, sets the *y*-coordinate of the centering position to the specified number and returns this force. If *y* is not specified, returns the current *y*-coordinate, which defaults to zero.
 
-<a name="center_strength" href="#center_strength">#</a> <i>center</i>.<b>strength</b>([<i>strength</i>]) · [<>](https://github.com/d3/d3-force/blob/master/src/center.js "Source")
+<a name="center_strength" href="#center_strength">#</a> <i>center</i>.<b>strength</b>([<i>strength</i>]) · [<>](https://github.com/d3/d3-force/blob/master/src/center.js "Source"), [Examples](https://observablehq.com/@d3/forcecenter-strength)
 
 If *strength* is specified, sets the centering force’s strength. A reduced strength of e.g. 0.05 softens the movements on interactive graphs in which new nodes enter or exit the graph. If *strength* is not specified, returns the force’s current strength, which defaults to 1.
 
