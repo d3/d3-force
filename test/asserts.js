@@ -1,15 +1,10 @@
-var tape = require("tape");
+import assert from "assert";
 
-tape.Test.prototype.nodeEqual = nodeEqual;
-
-function nodeEqual(actual, expected, delta) {
+export function assertNodeEqual(actual, expected, delta) {
   delta = delta || 1e-6;
-  this._assert(nodeEqual(actual, expected, delta), {
-    message: "should be similar",
-    operator: "nodeEqual",
-    actual: actual,
-    expected: expected
-  });
+  assert(nodeEqual(actual, expected, delta),
+    `${actual} and ${expected} should be similar`
+  );
   
   function nodeEqual(actual, expected, delta) {
     return actual.index == expected.index

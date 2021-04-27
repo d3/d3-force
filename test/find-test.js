@@ -1,24 +1,20 @@
-var tape = require("tape"),
-    force = require("../");
+import assert from "assert";
+import * as d3 from "../src/index.js";
 
-require("./nodeEqual.js");
-
-tape("simulation.find finds a node", function(test) {
-  const f = force.forceSimulation().stop();
+it("simulation.find finds a node", () => {
+  const f = d3.forceSimulation().stop();
   const a = { x: 5, y: 0 }, b = { x: 10, y: 16 }, c = { x: -10, y: -4};
   f.nodes([a, b, c]);
-  test.equal(f.find(0, 0), a);
-  test.equal(f.find(0, 20), b);
-  test.end();
+  assert.strictEqual(f.find(0, 0), a);
+  assert.strictEqual(f.find(0, 20), b);
 });
 
-tape("simulation.find(x, y, radius) finds a node within radius", function(test) {
-  const f = force.forceSimulation().stop();
+it("simulation.find(x, y, radius) finds a node within radius", () => {
+  const f = d3.forceSimulation().stop();
   const a = { x: 5, y: 0 }, b = { x: 10, y: 16 }, c = { x: -10, y: -4};
   f.nodes([a, b, c]);
-  test.equal(f.find(0, 0), a);
-  test.equal(f.find(0, 0, 1), undefined);
-  test.equal(f.find(0, 20), b);
-  test.end();
+  assert.strictEqual(f.find(0, 0), a);
+  assert.strictEqual(f.find(0, 0, 1), undefined);
+  assert.strictEqual(f.find(0, 20), b);
 });
 
