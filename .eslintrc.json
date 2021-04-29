@@ -4,8 +4,10 @@
     "sourceType": "module",
     "ecmaVersion": 8
   },
+  "env": {
+    "es6": true
+  },
   "rules": {
-    "no-cond-assign": 0,
-    "no-undef": 0
+    "no-cond-assign": 0
   }
 }
