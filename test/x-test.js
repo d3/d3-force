@@ -1,10 +1,10 @@
 import assert from "assert";
-import * as d3 from "../src/index.js";
+import {forceSimulation, forceX, forceY} from "../src/index.js";
 import {assertNodeEqual} from "./asserts.js";
 
 it("forceX centers nodes", () => {
-  const x = d3.forceX(200);
-  const f = d3.forceSimulation().force("x", x).stop();
+  const x = forceX(200);
+  const f = forceSimulation().force("x", x).stop();
   const a = { x: 100, y: 0 }, b = { x: 200, y: 0 }, c = { x: 300, y: 0 };
   f.nodes([a, b, c]);
   f.tick(30);
@@ -17,8 +17,8 @@ it("forceX centers nodes", () => {
 });
 
 it("forceY centers nodes", () => {
-  const y = d3.forceY(200);
-  const f = d3.forceSimulation().force("y", y).stop();
+  const y = forceY(200);
+  const f = forceSimulation().force("y", y).stop();
   const a = { y: 100, x: 0 }, b = { y: 200, x: 0 }, c = { y: 300, x: 0 };
   f.nodes([a, b, c]);
   f.tick(30);
@@ -31,8 +31,8 @@ it("forceY centers nodes", () => {
 });
 
 it("forceX respects fixed positions", () => {
-  const x = d3.forceX(200);
-  const f = d3.forceSimulation().force("x", x).stop();
+  const x = forceX(200);
+  const f = forceSimulation().force("x", x).stop();
   const a = { fx: 0, fy:0 }, b = {}, c = {};
   f.nodes([a, b, c]);
   f.tick();
@@ -40,8 +40,8 @@ it("forceX respects fixed positions", () => {
 });
 
 it("forceY respects fixed positions", () => {
-  const y = d3.forceX(200);
-  const f = d3.forceSimulation().force("y", y).stop();
+  const y = forceX(200);
+  const f = forceSimulation().force("y", y).stop();
   const a = { fx: 0, fy:0 }, b = {}, c = {};
   f.nodes([a, b, c]);
   f.tick();
@@ -49,8 +49,8 @@ it("forceY respects fixed positions", () => {
 });
 
 it("forceX.x() accessor", () => {
-  const x = d3.forceX().x(d => d.x0);
-  const f = d3.forceSimulation().force("x", x).stop();
+  const x = forceX().x(d => d.x0);
+  const f = forceSimulation().force("x", x).stop();
   const a = { x: 100, y: 0, x0: 300 }, b = { x: 200, y: 0, x0: 200 }, c = { x: 300, y: 0, x0: 100 };
   f.nodes([a, b, c]);
   f.tick(30);
@@ -63,8 +63,8 @@ it("forceX.x() accessor", () => {
 });
 
 it("forceY.y() accessor", () => {
-  const y = d3.forceY().y(d => d.y0);
-  const f = d3.forceSimulation().force("y", y).stop();
+  const y = forceY().y(d => d.y0);
+  const f = forceSimulation().force("y", y).stop();
   const a = { y: 100, x: 0, y0: 300 }, b = { y: 200, x: 0, y0: 200 }, c = { y: 300, x: 0, y0: 100 };
   f.nodes([a, b, c]);
   f.tick(30);
