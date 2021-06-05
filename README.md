@@ -18,16 +18,28 @@ To use this module, create a [simulation](#simulation) for an array of [nodes](#
 
 ## Installing
 
-If you use NPM, `npm install d3-force`. Otherwise, download the [latest release](https://github.com/d3/d3-force/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-force.v2.min.js) or as part of [D3](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3_force` global is exported:
+If you use npm, `npm install d3-force`. You can also download the [latest release on GitHub](https://github.com/d3/d3-force/releases/latest). For vanilla HTML in modern browsers, import d3-force from Skypack:
 
 ```html
-<script src="https://d3js.org/d3-dispatch.v2.min.js"></script>
-<script src="https://d3js.org/d3-quadtree.v2.min.js"></script>
-<script src="https://d3js.org/d3-timer.v2.min.js"></script>
-<script src="https://d3js.org/d3-force.v2.min.js"></script>
+<script type="module">
+
+import {forceSimulation} from "https://cdn.skypack.dev/d3-force@3";
+
+const simulation = forceSimulation(nodes);
+
+</script>
+```
+
+For legacy environments, you can load d3-force’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/d3-dispatch@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-quadtree@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-timer@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-force@3"></script>
 <script>
 
-var simulation = d3.forceSimulation(nodes);
+const simulation = d3.forceSimulation(nodes);
 
 </script>
 ```
