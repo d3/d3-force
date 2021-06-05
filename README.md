@@ -22,9 +22,11 @@ If you use npm, `npm install d3-force`. You can also download the [latest releas
 
 ```html
 <script type="module">
+
 import {forceSimulation} from "https://cdn.skypack.dev/d3-force@3";
 
 const simulation = forceSimulation(nodes);
+
 </script>
 ```
 
