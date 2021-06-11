@@ -124,7 +124,7 @@ If *decay* is specified, sets the velocity decay factor to the specified number 
 If *force* is specified, assigns the [force](#forces) for the specified *name* and returns this simulation. If *force* is not specified, returns the force with the specified name, or undefined if there is no such force. (By default, new simulations have no forces.) For example, to create a new simulation to layout a graph, you might say:
 
 ```js
-var simulation = d3.forceSimulation(nodes)
+const simulation = d3.forceSimulation(nodes)
     .force("charge", d3.forceManyBody())
     .force("link", d3.forceLink(links))
     .force("center", d3.forceCenter());
@@ -163,7 +163,7 @@ A *force* is simply a function that modifies nodes’ positions or velocities; i
 
 ```js
 function force(alpha) {
-  for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
+  for (let i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
     node = nodes[i];
     node.vx -= node.x * k;
     node.vy -= node.y * k;
@@ -276,13 +276,13 @@ function id(d) {
 The default id accessor allows each link’s source and target to be specified as a zero-based index into the [nodes](#simulation_nodes) array. For example:
 
 ```js
-var nodes = [
+const nodes = [
   {"id": "Alice"},
   {"id": "Bob"},
   {"id": "Carol"}
 ];
 
-var links = [
+const links = [
   {"source": 0, "target": 1}, // Alice → Bob
   {"source": 1, "target": 2} // Bob → Carol
 ];
@@ -299,13 +299,13 @@ function id(d) {
 With this accessor, you can use named sources and targets:
 
 ```js
-var nodes = [
+const nodes = [
   {"id": "Alice"},
   {"id": "Bob"},
   {"id": "Carol"}
 ];
 
-var links = [
+const links = [
   {"source": "Alice", "target": "Bob"},
   {"source": "Bob", "target": "Carol"}
 ];
