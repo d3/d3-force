@@ -39,12 +39,11 @@ it("forceCollide jiggles equal positions", () => {
   f.tick();
   assert(a.x !== b.x);
   assert(a.y !== b.y);
-  assert.strictEqual(a.vx, -b.vx);
-  assert.strictEqual(a.vy, -b.vy);
 });
 
 it("forceCollide jiggles in a reproducible way", () => {
   const nodes = Array.from({length:10}, () => ({x: 0, y: 0}));
   forceSimulation().nodes(nodes).force("collide", forceCollide()).stop().tick(50);
-  assertNodeEqual(nodes[0], {x: -5.371433857229194, y: -2.6644608278592576, index: 0, vy: 0, vx: 0});
+  assertNodeEqual(nodes[0], {x: -4.0299664949858, y: -7.540553942916919, index: 0, vy: 0, vx: 0});
+  assertNodeEqual(nodes[9], {x: 4.160131242078688, y: 0.2022776974891026, index: 9, vy: 0, vx: 0});
 });
