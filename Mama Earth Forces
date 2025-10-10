@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    { "id": "Consumer (Target Flexitarian)", "group": 1, "radius": 15, "label": "Consumer (Flexitarian)" },
+    { "id": "Mama Earth (Solution)", "group": 2, "radius": 20, "label": "Mama Earth (Solution)" },
+    { "id": "Affordability Pressure (High Cost)", "group": 3, "radius": 10, "label": "High Cost / Inflation" },
+    { "id": "Time Scarcity", "group": 4, "radius": 12, "label": "Time Scarcity" },
+    { "id": "Existing OGS/Retailers", "group": 5, "radius": 15, "label": "Existing OGS (Gaps)" },
+    { "id": "Meat Consumption (Traditional)", "group": 6, "radius": 10, "label": "Traditional High Meat Diet" }
+  ],
+  "links": [
+    {
+      "source": "Affordability Pressure (High Cost)",
+      "target": "Consumer (Target Flexitarian)",
+      "value": 15,
+      "forceType": "Repulsion",
+      "dataNote": "Very High Repulsion: Driven by 32.3% Beef Inflation and budget cuts."
+    },
+    {
+      "source": "Time Scarcity",
+      "target": "Consumer (Target Flexitarian)",
+      "value": 12,
+      "forceType": "Attraction",
+      "dataNote": "High Attraction: Consumer desire for meal planning/shopping time savings."
+    },
+    {
+      "source": "Existing OGS/Retailers",
+      "target": "Consumer (Target Flexitarian)",
+      "value": 5,
+      "forceType": "Repulsion",
+      "dataNote": "Medium Repulsion: Driven by high delivery fees and logistical/pricing gaps."
+    },
+    {
+      "source": "Meat Consumption (Traditional)",
+      "target": "Consumer (Target Flexitarian)",
+      "value": 8,
+      "forceType": "Repulsion",
+      "dataNote": "Growing Repulsion: 2/3 of consumers are interested in plant-based alternatives."
+    },
+    {
+      "source": "Mama Earth (Solution)",
+      "target": "Consumer (Target Flexitarian)",
+      "value": 20,
+      "forceType": "Attraction",
+      "dataNote": "Very High Attraction: Solves Affordability ('Buy-by-Price') & Health ('Conscious Meat') pain points."
+    },
+    {
+      "source": "Mama Earth (Solution)",
+      "target": "Affordability Pressure (High Cost)",
+      "value": 15,
+      "forceType": "Attraction",
+      "dataNote": "Direct Counter-Force: Solution pulls the high-cost barrier towards itself to resolve it."
+    }
+  ]
+}
