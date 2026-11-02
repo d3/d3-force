@@ -7,7 +7,7 @@ This module implements a [velocity Verlet](https://en.wikipedia.org/wiki/Verlet_
 ## Resources
 
 * [Documentation](https://d3js.org/d3-force)
-* [Examples](https://observablehq.com/collection/@d3/d3-force)
+* [Examples](https://observablehq.com/@d3/-/collection/d3-force)
 * [Releases](https://github.com/d3/d3-force/releases)
 * [Getting help](https://d3js.org/community)
 
