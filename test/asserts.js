@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "node:assert";
 
 export function assertNodeEqual(actual, expected, delta = 1e-6) {
   assert(nodeEqual(actual, expected, delta), `${actual} and ${expected} should be similar`);

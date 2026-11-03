@@ -1,5 +1,5 @@
+import assert from "node:assert";
 import {it} from "vitest";
-import assert from "assert";
 import {forceCollide, forceSimulation} from "../src/index.js";
 import {assertNodeEqual} from "./asserts.js";
 
