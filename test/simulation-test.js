@@ -1,14 +1,14 @@
-import {test} from "vitest";
+import {it} from "vitest";
 import assert from "assert";
 import {forceSimulation} from "../src/index.js";
 import {assertNodeEqual} from "./asserts.js";
 
-test("forceSimulation() returns a simulation", () => {
+it("forceSimulation() returns a simulation", () => {
   const f = forceSimulation().stop();
   assert.deepStrictEqual(Object.keys(f).sort(), [ 'alpha', 'alphaDecay', 'alphaMin', 'alphaTarget', 'find', 'force', 'nodes', 'on', 'randomSource', 'restart', 'stop', 'tick', 'velocityDecay' ]);
 });
 
-test("simulation.nodes(nodes) initializes a simulation with indices & phyllotaxis positions, 0 speed", () => {
+it("simulation.nodes(nodes) initializes a simulation with indices & phyllotaxis positions, 0 speed", () => {
   const f = forceSimulation().stop();
   const a = {}, b = {}, c = {};
   f.nodes([a, b, c]);

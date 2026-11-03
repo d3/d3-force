@@ -1,9 +1,9 @@
-import {test} from "vitest";
+import {it} from "vitest";
 import assert from "assert";
 import {forceCollide, forceSimulation} from "../src/index.js";
 import {assertNodeEqual} from "./asserts.js";
 
-test("forceCollide collides nodes", () => {
+it("forceCollide collides nodes", () => {
   const collide = forceCollide(1);
   const f = forceSimulation().force("collide", collide).stop();
   const a = {}, b = {}, c = {};
@@ -20,7 +20,7 @@ test("forceCollide collides nodes", () => {
 });
 
 
-test("forceCollide respects fixed positions", () => {
+it("forceCollide respects fixed positions", () => {
   const collide = forceCollide(1);
   const f = forceSimulation().force("collide", collide).stop();
   const a = {fx: 0, fy: 0}, b = {}, c = {};
@@ -32,7 +32,7 @@ test("forceCollide respects fixed positions", () => {
   assertNodeEqual(a, {fx: 0, fy: 0, index: 0, x: 0, y: 0, vy: 0, vx: 0});
 });
 
-test("forceCollide jiggles equal positions", () => {
+it("forceCollide jiggles equal positions", () => {
   const collide = forceCollide(1);
   const f = forceSimulation().force("collide", collide).stop();
   const a = {x: 0, y: 0}, b = {x: 0, y: 0};
@@ -44,7 +44,7 @@ test("forceCollide jiggles equal positions", () => {
   assert.strictEqual(a.vy, -b.vy);
 });
 
-test("forceCollide jiggles in a reproducible way", () => {
+it("forceCollide jiggles in a reproducible way", () => {
   const nodes = Array.from({length:10}, () => ({x: 0, y: 0}));
   forceSimulation().nodes(nodes).force("collide", forceCollide()).stop().tick(50);
   assertNodeEqual(nodes[0], {x: -5.371433857229194, y: -2.6644608278592576, index: 0, vy: 0, vx: 0});

@@ -1,8 +1,8 @@
-import {test} from "vitest";
+import {it} from "vitest";
 import {forceCenter, forceSimulation} from "../src/index.js";
 import {assertNodeEqual} from "./asserts.js";
 
-test("forceCenter repositions nodes", () => {
+it("forceCenter repositions nodes", () => {
   const center = forceCenter(0, 0);
   const f = forceSimulation().force("center", center).stop();
   const a = {x: 100, y: 0}, b = {x: 200, y: 0}, c = {x: 300, y: 0};
@@ -13,7 +13,7 @@ test("forceCenter repositions nodes", () => {
   assertNodeEqual(c, {index: 2, x: 100, y: 0, vy: 0, vx: 0});
 });
 
-test("forceCenter respects fixed positions", () => {
+it("forceCenter respects fixed positions", () => {
   const center = forceCenter();
   const f = forceSimulation().force("center", center).stop();
   const a = {fx: 0, fy: 0}, b = {}, c = {};

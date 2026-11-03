@@ -1,9 +1,9 @@
-import {test} from "vitest";
+import {it} from "vitest";
 import assert from "assert";
 import {forceSimulation, forceX, forceY} from "../src/index.js";
 import {assertNodeEqual} from "./asserts.js";
 
-test("forceX centers nodes", () => {
+it("forceX centers nodes", () => {
   const x = forceX(200);
   const f = forceSimulation().force("x", x).stop();
   const a = { x: 100, y: 0 }, b = { x: 200, y: 0 }, c = { x: 300, y: 0 };
@@ -17,7 +17,7 @@ test("forceX centers nodes", () => {
   assert(c.vx < 0);
 });
 
-test("forceY centers nodes", () => {
+it("forceY centers nodes", () => {
   const y = forceY(200);
   const f = forceSimulation().force("y", y).stop();
   const a = { y: 100, x: 0 }, b = { y: 200, x: 0 }, c = { y: 300, x: 0 };
@@ -31,7 +31,7 @@ test("forceY centers nodes", () => {
   assert(c.vy < 0);
 });
 
-test("forceX respects fixed positions", () => {
+it("forceX respects fixed positions", () => {
   const x = forceX(200);
   const f = forceSimulation().force("x", x).stop();
   const a = { fx: 0, fy:0 }, b = {}, c = {};
@@ -40,7 +40,7 @@ test("forceX respects fixed positions", () => {
   assertNodeEqual(a, { fx: 0, fy: 0, index: 0, x: 0, y: 0, vy: 0, vx: 0 });
 });
 
-test("forceY respects fixed positions", () => {
+it("forceY respects fixed positions", () => {
   const y = forceX(200);
   const f = forceSimulation().force("y", y).stop();
   const a = { fx: 0, fy:0 }, b = {}, c = {};
@@ -49,7 +49,7 @@ test("forceY respects fixed positions", () => {
   assertNodeEqual(a, { fx: 0, fy: 0, index: 0, x: 0, y: 0, vy: 0, vx: 0 });
 });
 
-test("forceX.x() accessor", () => {
+it("forceX.x() accessor", () => {
   const x = forceX().x(d => d.x0);
   const f = forceSimulation().force("x", x).stop();
   const a = { x: 100, y: 0, x0: 300 }, b = { x: 200, y: 0, x0: 200 }, c = { x: 300, y: 0, x0: 100 };
@@ -63,7 +63,7 @@ test("forceX.x() accessor", () => {
   assert(c.vx < 0);
 });
 
-test("forceY.y() accessor", () => {
+it("forceY.y() accessor", () => {
   const y = forceY().y(d => d.y0);
   const f = forceSimulation().force("y", y).stop();
   const a = { y: 100, x: 0, y0: 300 }, b = { y: 200, x: 0, y0: 200 }, c = { y: 300, x: 0, y0: 100 };
