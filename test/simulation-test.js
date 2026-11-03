@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {it} from "vitest";
-import {forceSimulation} from "../src/index.js";
+import {forceSimulation} from "d3-force";
 import {assertNodeEqual} from "./asserts.js";
 
 it("forceSimulation() returns a simulation", () => {
@@ -16,4 +16,3 @@ it("simulation.nodes(nodes) initializes a simulation with indices & phyllotaxis 
   assertNodeEqual(b, {index: 1, x: -9.03088751750192, y: 8.27303273571596, vy: 0, vx: 0});
   assertNodeEqual(c, {index: 2, x: 1.3823220809823638, y: -15.750847141167634, vy: 0, vx: 0});
 });
-

@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {it} from "vitest";
-import {forceSimulation} from "../src/index.js";
+import {forceSimulation} from "d3-force";
 
 it("simulation.find finds a node", () => {
   const f = forceSimulation().stop();

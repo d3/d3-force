@@ -1,5 +1,5 @@
 import {it} from "vitest";
-import {forceCenter, forceSimulation} from "../src/index.js";
+import {forceCenter, forceSimulation} from "d3-force";
 import {assertNodeEqual} from "./asserts.js";
 
 it("forceCenter repositions nodes", () => {
