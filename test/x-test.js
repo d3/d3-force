@@ -1,5 +1,6 @@
-import assert from "assert";
-import {forceSimulation, forceX, forceY} from "../src/index.js";
+import assert from "node:assert";
+import {it} from "vitest";
+import {forceSimulation, forceX, forceY} from "d3-force";
 import {assertNodeEqual} from "./asserts.js";
 
 it("forceX centers nodes", () => {

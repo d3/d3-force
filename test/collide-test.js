@@ -1,5 +1,6 @@
-import assert from "assert";
-import {forceCollide, forceSimulation} from "../src/index.js";
+import assert from "node:assert";
+import {it} from "vitest";
+import {forceCollide, forceSimulation} from "d3-force";
 import {assertNodeEqual} from "./asserts.js";
 
 it("forceCollide collides nodes", () => {
