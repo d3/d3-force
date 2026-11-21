@@ -20,7 +20,7 @@ it("forceLink jiggles coincident linked nodes in a reproducible way", () => {
   const run = () => {
     const nodes = [{x: 0, y: 0}, {x: 0, y: 0}];
     forceSimulation(nodes).force("link", forceLink([{source: 0, target: 1}])).stop().tick(10);
-    return nodes.map(({x, y, vx, vy}) => [x, y, vx, vy]);
+    return nodes;
   };
   assert.deepStrictEqual(run(), run());
 });
