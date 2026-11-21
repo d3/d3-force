@@ -26,16 +26,31 @@ export default function(radius) {
         xi,
         yi,
         ri,
-        ri2;
+        ri2,
+        root, x0, y0, x1, y1,
+        quads = [], extents = [], quad, child, j, e,
+        qx0, qy0, qx1, qy1, xm, ym;
 
     for (var k = 0; k < iterations; ++k) {
       tree = quadtree(nodes, x, y).visitAfter(prepare);
+      if (!(root = tree.root())) return;
+      [[x0, y0], [x1, y1]] = tree.extent();
       for (i = 0; i < n; ++i) {
         node = nodes[i];
         ri = radii[node.index], ri2 = ri * ri;
         xi = node.x + node.vx;
         yi = node.y + node.vy;
-        tree.visit(apply);
+        quads[0] = root, extents[0] = x0, extents[1] = y0, extents[2] = x1, extents[3] = y1, j = 1, e = 4;
+        while (j) {
+          quad = quads[--j], qy1 = extents[--e], qx1 = extents[--e], qy0 = extents[--e], qx0 = extents[--e];
+          if (!apply(quad, qx0, qy0, qx1, qy1) && quad.length) {
+            xm = (qx0 + qx1) / 2, ym = (qy0 + qy1) / 2;
+            if (child = quad[3]) quads[j++] = child, extents[e++] = xm, extents[e++] = ym, extents[e++] = qx1, extents[e++] = qy1;
+            if (child = quad[2]) quads[j++] = child, extents[e++] = qx0, extents[e++] = ym, extents[e++] = xm, extents[e++] = qy1;
+            if (child = quad[1]) quads[j++] = child, extents[e++] = xm, extents[e++] = qy0, extents[e++] = qx1, extents[e++] = ym;
+            if (child = quad[0]) quads[j++] = child, extents[e++] = qx0, extents[e++] = qy0, extents[e++] = xm, extents[e++] = ym;
+          }
+        }
       }
     }
 
