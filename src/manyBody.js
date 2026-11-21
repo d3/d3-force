@@ -15,8 +15,40 @@ export default function() {
       theta2 = 0.81;
 
   function force(_) {
-    var i, n = nodes.length, tree = quadtree(nodes, x, y).visitAfter(accumulate);
-    for (alpha = _, i = 0; i < n; ++i) node = nodes[i], tree.visit(apply);
+    var i, n = nodes.length, tree = quadtree(nodes, x, y).visitAfter(accumulate), root = tree.root();
+    if (!root) return;
+    var quads = [], extents = [], quad, j, k, [[x0], [x1]] = tree.extent(), qx0, qx1, xm, child, dx, dy, l, w;
+    for (alpha = _, i = 0; i < n; ++i) {
+      node = nodes[i], quads[0] = root, extents[0] = x0, extents[1] = x1, j = 1, k = 2;
+      while (j) {
+        quad = quads[--j], qx1 = extents[--k], qx0 = extents[--k];
+        if (!quad.value) continue;
+        dx = quad.x - node.x, dy = quad.y - node.y, w = qx1 - qx0, l = dx * dx + dy * dy;
+
+        // Apply the Barnes-Hut approximation if possible.
+        // Limit forces for very close nodes; randomize direction if coincident.
+        if (w * w / theta2 < l) {
+          if (l < distanceMax2) {
+            if (dx === 0) dx = jiggle(random), l += dx * dx;
+            if (dy === 0) dy = jiggle(random), l += dy * dy;
+            if (l < distanceMin2) l = Math.sqrt(distanceMin2 * l);
+            node.vx += dx * quad.value * alpha / l;
+            node.vy += dy * quad.value * alpha / l;
+          }
+        }
+
+        // Otherwise, process points directly.
+        else if (quad.length) {
+          xm = (qx0 + qx1) / 2;
+          if (child = quad[3]) quads[j++] = child, extents[k++] = xm, extents[k++] = qx1;
+          if (child = quad[2]) quads[j++] = child, extents[k++] = qx0, extents[k++] = xm;
+          if (child = quad[1]) quads[j++] = child, extents[k++] = xm, extents[k++] = qx1;
+          if (child = quad[0]) quads[j++] = child, extents[k++] = qx0, extents[k++] = xm;
+        } else if (l < distanceMax2) {
+          apply(quad, dx, dy, l);
+        }
+      }
+    }
   }
 
   function initialize() {
@@ -52,29 +84,8 @@ export default function() {
     quad.value = strength;
   }
 
-  function apply(quad, x1, _, x2) {
-    if (!quad.value) return true;
-
-    var x = quad.x - node.x,
-        y = quad.y - node.y,
-        w = x2 - x1,
-        l = x * x + y * y;
-
-    // Apply the Barnes-Hut approximation if possible.
-    // Limit forces for very close nodes; randomize direction if coincident.
-    if (w * w / theta2 < l) {
-      if (l < distanceMax2) {
-        if (x === 0) x = jiggle(random), l += x * x;
-        if (y === 0) y = jiggle(random), l += y * y;
-        if (l < distanceMin2) l = Math.sqrt(distanceMin2 * l);
-        node.vx += x * quad.value * alpha / l;
-        node.vy += y * quad.value * alpha / l;
-      }
-      return true;
-    }
-
-    // Otherwise, process points directly.
-    else if (quad.length || l >= distanceMax2) return;
+  function apply(quad, x, y, l) {
+    var w;
 
     // Limit forces for very close nodes; randomize direction if coincident.
     if (quad.data !== node || quad.next) {
