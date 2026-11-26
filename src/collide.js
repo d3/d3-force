@@ -26,7 +26,9 @@ export default function(radius) {
         xi,
         yi,
         ri,
-        ri2;
+        ri2,
+        ax,
+        ay;
 
     for (var k = 0; k < iterations; ++k) {
       tree = quadtree(nodes, x, y).visitAfter(prepare);
@@ -36,6 +38,12 @@ export default function(radius) {
         xi = node.x + node.vx;
         yi = node.y + node.vy;
         tree.visit(apply);
+        if (ax) {
+          node.x += ax;
+          node.y += ay;
+          ax = 0;
+          ay = 0;
+        }
       }
     }
 
@@ -47,8 +55,8 @@ export default function(radius) {
               y = yi - data.y - data.vy,
               l = x * x + y * y;
           if (l < r * r) {
-            if (x === 0) x = jiggle(random), l += x * x;
-            if (y === 0) y = jiggle(random), l += y * y;
+            if (x === 0) ax = jiggle(random), l += ax * ax;
+            if (y === 0) ay = jiggle(random), l += ay * ay;
             l = (r - (l = Math.sqrt(l))) / l * strength;
             node.vx += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
             node.vy += (y *= l) * r;
