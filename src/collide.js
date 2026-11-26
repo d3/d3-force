@@ -28,6 +28,13 @@ export default function(radius) {
         ri,
         ri2;
 
+    // Remove effect of other forces on fixed positions.
+    for (i = 0; i < n; ++i) {
+      node = nodes[i];
+      if (node.fx !== null) node.vx = 0;
+      if (node.fy !== null) node.vy = 0;
+    }
+
     for (var k = 0; k < iterations; ++k) {
       tree = quadtree(nodes, x, y).visitAfter(prepare);
       for (i = 0; i < n; ++i) {
@@ -50,10 +57,14 @@ export default function(radius) {
             if (x === 0) x = jiggle(random), l += x * x;
             if (y === 0) y = jiggle(random), l += y * y;
             l = (r - (l = Math.sqrt(l))) / l * strength;
-            node.vx += (x *= l) * (r = (rj *= rj) / (ri2 + rj));
-            node.vy += (y *= l) * r;
-            data.vx -= x * (r = 1 - r);
-            data.vy -= y * r;
+            x *= l
+            y *= l
+            r = (rj *= rj) / (ri2 + rj)
+            if (node.fx == null) node.vx += x * r;
+            if (node.fy == null) node.vy += y * r;
+            r = 1 - r
+            if (data.fx == null) data.vx -= x * r;
+            if (data.fy == null) data.vy -= y * r;
           }
         }
         return;
